@@ -1,0 +1,6 @@
+SQL: select current_value from identifier where table_name = 'users';
+PLAN:
+RETURN RESULTS TO STORED PROCEDURE
+ INDEX SCAN of "IDENTIFIER" using its primary key index
+  uniquely match (TABLE_NAME = 'users')
+

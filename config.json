@@ -1,0 +1,30 @@
+{
+  "is_master_node":1,
+  "is_ipv6":1,
+  "port":9000,
+  "is_worker_node":0,
+  "is_ipv6_node":0,
+  "node_port":12000,
+  "timeout":30000,
+  "retry":3,
+  "worker_thread_size":4,
+  "io_thread_size":4,
+  "scheduler_interval":20,
+  "connect_voltdb":0,
+  "connect_redis":0,
+  "variables":{
+    "flag":1
+  },
+  "cluster_nodes":[
+    {
+      "id":1,
+      "host":"0.0.0.0",
+      "port":12000
+    },
+    {
+      "id":2,
+      "host":"0.0.0.0",
+      "port":12001
+    }
+  ]
+}

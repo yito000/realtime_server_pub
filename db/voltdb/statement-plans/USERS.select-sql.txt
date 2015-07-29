@@ -1,0 +1,6 @@
+SQL: SELECT * FROM USERS WHERE (ID = ?);
+PLAN:
+RETURN RESULTS TO STORED PROCEDURE
+ INDEX SCAN of "USERS" using its primary key index
+  uniquely match (ID = ?0)
+

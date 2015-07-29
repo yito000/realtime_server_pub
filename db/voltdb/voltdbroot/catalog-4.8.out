@@ -1,0 +1,82 @@
+------------------------------------------
+Successfully created voltdbroot/catalog-4.8.jar
+Includes schema: autogen-ddl.sql
+
+[MP][WRITE] UserAdd
+  insert into users (id, uiid) values (?, ?);
+  [TABLE SCAN] select count(id) as cnt, max(id) as max_id from users;
+
+[MP][WRITE] UserDeleteAll
+  delete from users;
+
+[MP][READ] UserList
+  [TABLE SCAN] select id, uiid from users order by id;
+
+[SP][WRITE] USERS.delete
+  DELETE FROM USERS WHERE (ID = ?);
+
+[SP][WRITE] USERS.insert
+  INSERT INTO USERS VALUES (?, ?);
+
+[SP][READ] USERS.select
+  SELECT * FROM USERS WHERE (ID = ?);
+
+[SP][WRITE] USERS.update
+  UPDATE USERS SET ID = ?, UIID = ? WHERE (ID = ?);
+
+[SP][WRITE] USERS.upsert
+  UPSERT INTO USERS VALUES (?, ?);
+
+[MP][READ] UserSelect
+  select id, uiid from users where id = ? order by id;
+
+[MP][WRITE] UserUpdate
+  insert into users (id, uiid) values (?, ?);
+  select id, uiid from users where id = ? order by id;
+  update users set uiid = ? where id = ?;
+
+------------------------------------------
+
+Catalog contains 5 built-in CRUD procedures.
+	Simple insert, update, delete, upsert and select procedures are created
+	automatically for convenience.
+
+[MP] Catalog contains 5 multi-partition procedures.
+	Multi-partition procedures run globally at all partitions
+	and do not run in parallel with other procedures.
+
+[TABLE SCAN] Catalog contains 2 procedures that use a table scan:
+
+		UserAdd
+		UserList
+
+	Table scans do not use indexes and may become slower as tables grow.
+
+ALL MULTI-PARTITION WARNING:
+	All of the user procedures are multi-partition. This often
+	indicates that the application is not utilizing VoltDB partitioning
+	for best performance. For information on VoltDB partitioning, see:
+	http://voltdb.com/docs/UsingVoltDB/ChapAppDesign.php
+
+------------------------------------------
+
+Full catalog report can be found at file:///Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/catalog-report.html
+	 or can be viewed at "http://localhost:8080" when the server is running.
+
+------------------------------------------
+
+[null]: Created index: VOLTDB_AUTOGEN_IDX_PK_USERS_ID on table: USERS of type: BALANCED_TREE
+[USERS.insert]: Compiling Statement: INSERT INTO USERS VALUES (?, ?);
+[USERS.select]: Compiling Statement: SELECT * FROM USERS WHERE (ID = ?);
+[USERS.delete]: Compiling Statement: DELETE FROM USERS WHERE (ID = ?);
+[USERS.update]: Compiling Statement: UPDATE USERS SET ID = ?, UIID = ? WHERE (ID = ?);
+[USERS.upsert]: Compiling Statement: UPSERT INTO USERS VALUES (?, ?);
+[UserList.class]: Compiling Statement: select id, uiid from users order by id;
+[UserUpdate.class]: Compiling Statement: select id, uiid from users where id = ? order by id;
+[UserUpdate.class]: Compiling Statement: update users set uiid = ? where id = ?;
+[UserUpdate.class]: Compiling Statement: insert into users (id, uiid) values (?, ?);
+[UserSelect.class]: Compiling Statement: select id, uiid from users where id = ? order by id;
+[UserSelect.class]: This procedure might benefit from an @ProcInfo annotation designating parameter 0 of statement 'select id, uiid from users where id = ? order by id;'
+[UserDeleteAll.class]: Compiling Statement: delete from users;
+[UserAdd.class]: Compiling Statement: select count(id) as cnt, max(id) as max_id from users;
+[UserAdd.class]: Compiling Statement: insert into users (id, uiid) values (?, ?);

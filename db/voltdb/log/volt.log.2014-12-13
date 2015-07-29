@@ -1,0 +1,556 @@
+2014-12-13 10:04:24,796   INFO  [main] CONSOLE: Initializing VoltDB...
+
+ _    __      ____  ____  ____ 
+| |  / /___  / / /_/ __ \/ __ )
+| | / / __ \/ / __/ / / / __  |
+| |/ / /_/ / / /_/ /_/ / /_/ / 
+|___/\____/_/\__/_____/_____/
+
+--------------------------------
+
+2014-12-13 10:04:24,804   INFO  [main] HOST: Generating default deployment file "/Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/voltdbroot/deployment.xml"
+2014-12-13 10:04:24,816   INFO  [main] CONSOLE: Build: 4.8 voltdb-4.7-193-gf65c029 Community Edition
+2014-12-13 10:04:24,816   INFO  [main] HOST: Command line arguments: org.voltdb.VoltDB create catalog jikken.jar host localhost:3021
+2014-12-13 10:04:24,844   INFO  [main] HOST: Command line JVM arguments: -Xmx2048m -Djava.awt.headless=true -Dsun.net.inetaddr.ttl=300 -Dsun.net.inetaddr.negative.ttl=3600 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseTLAB -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCondCardMark -Dsun.rmi.dgc.server.gcInterval=9223372036854775807 -Dsun.rmi.dgc.client.gcInterval=9223372036854775807 -XX:CMSWaitDuration=120000 -XX:CMSMaxAbortablePrecleanTime=120000 -XX:+ExplicitGCInvokesConcurrent -XX:+CMSScavengeBeforeRemark -XX:+CMSClassUnloadingEnabled -XX:PermSize=64m -Dlog4j.configuration=file:///Users/jaianism/voltdb/voltdb/log4j.xml -Djava.library.path=/Users/jaianism/voltdb/voltdb
+2014-12-13 10:04:24,844   INFO  [main] HOST: Command line JVM classpath: /Users/jaianism/voltdb/voltdb/voltdb-4.8.jar:/Users/jaianism/voltdb/lib/avro-1.7.7.jar:/Users/jaianism/voltdb/lib/commons-cli-1.2.jar:/Users/jaianism/voltdb/lib/commons-codec-1.6.jar:/Users/jaianism/voltdb/lib/commons-lang3-3.0.jar:/Users/jaianism/voltdb/lib/commons-logging-1.1.3.jar:/Users/jaianism/voltdb/lib/groovy-all-2.1.7-indy.jar:/Users/jaianism/voltdb/lib/httpasyncclient-4.0.1.jar:/Users/jaianism/voltdb/lib/httpclient-4.3.2.jar:/Users/jaianism/voltdb/lib/httpcore-4.3.2.jar:/Users/jaianism/voltdb/lib/httpcore-nio-4.3.2.jar:/Users/jaianism/voltdb/lib/jackson-core-asl-1.9.13.jar:/Users/jaianism/voltdb/lib/jackson-mapper-asl-1.9.13.jar:/Users/jaianism/voltdb/lib/jetty-continuation-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-http-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-io-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-server-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-util-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jline-2.10.jar:/Users/jaianism/voltdb/lib/jna.jar:/Users/jaianism/voltdb/lib/jsch-0.1.51.jar:/Users/jaianism/voltdb/lib/kafka_2.8.0-0.8.1.jar:/Users/jaianism/voltdb/lib/log4j-1.2.16.jar:/Users/jaianism/voltdb/lib/metrics-core-2.2.0.jar:/Users/jaianism/voltdb/lib/protobuf-java-2.4.1.jar:/Users/jaianism/voltdb/lib/scala-library.jar:/Users/jaianism/voltdb/lib/servlet-api-2.5.jar:/Users/jaianism/voltdb/lib/slf4j-api-1.6.2.jar:/Users/jaianism/voltdb/lib/slf4j-nop-1.6.2.jar:/Users/jaianism/voltdb/lib/snappy-java-1.1.0.1.jar:/Users/jaianism/voltdb/lib/super-csv-2.1.0.jar:/Users/jaianism/voltdb/lib/tomcat-jdbc.jar:/Users/jaianism/voltdb/lib/tomcat-juli.jar:/Users/jaianism/voltdb/lib/zmq-2.1.11.jar
+2014-12-13 10:04:24,858   INFO  [main] NETWORK: Default network thread count: 2
+2014-12-13 10:04:24,897   INFO  [main] HOST: Beginning inter-node communication on port 3021.
+2014-12-13 10:04:24,898   INFO  [main] HOST: Attempting to bind to leader ip localhost/127.0.0.1:3021
+2014-12-13 10:04:24,917   INFO  [main] CONSOLE: Connecting to VoltDB cluster as the leader...
+2014-12-13 10:04:24,980   INFO  [main] ZK-SERVER: binding to port /127.0.0.1:2181
+2014-12-13 10:04:25,012   INFO  [main] ZK-SERVER: Created server with tickTime 3000 minSessionTimeout 6000 maxSessionTimeout 60000
+2014-12-13 10:04:25,136   INFO  [main] ZK-SERVER: Initiating client connection, connectString=127.0.0.1:2181 sessionTimeout=2000 watcher=org.voltcore.zk.ZKUtil$1@75be18e2
+2014-12-13 10:04:25,143   INFO  [main-SendThread()] ZK-CLIENT: Opening socket connection to server /127.0.0.1:2181
+2014-12-13 10:04:25,147   INFO  [main-SendThread(localhost:2181)] ZK-CLIENT: Socket connection established to localhost/127.0.0.1:2181, initiating session
+2014-12-13 10:04:25,147   INFO  [NIOServerCxn.Factory:/127.0.0.1:2181] ZK-SERVER: Accepted socket connection from /127.0.0.1:60316
+2014-12-13 10:04:25,150   INFO  [NIOServerCxn.Factory:/127.0.0.1:2181] ZK-SERVER: Client attempting to establish new session at /127.0.0.1:60316
+2014-12-13 10:04:25,162   INFO  [ZooKeeperServer] ZK-SERVER: Established session 0x19883aba5f800000 with negotiated timeout 6000 for client /127.0.0.1:60316
+2014-12-13 10:04:25,163   INFO  [main-SendThread(localhost:2181)] ZK-CLIENT: Session establishment complete on server localhost/127.0.0.1:2181, sessionid = 0x19883aba5f800000, negotiated timeout = 6000
+2014-12-13 10:04:25,206   INFO  [Socket Joiner] HOST: Attempting to bind to internal ip 0.0.0.0/0.0.0.0:3021
+2014-12-13 10:04:25,232   INFO  [main] HOST: Host id of this node is: 0
+2014-12-13 10:04:25,232   INFO  [main] CONSOLE: Host id of this node is: 0
+2014-12-13 10:04:25,310   INFO  [main] HOST: URL of deployment: /Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/voltdbroot/deployment.xml
+2014-12-13 10:04:25,940   INFO  [main] HOST: Dead host timeout set to 90000 milliseconds
+2014-12-13 10:04:26,510   INFO  [main] HOST: Searching for license file located /Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/license.xml
+2014-12-13 10:04:26,535   INFO  [Leader elector-/db/leaders/globalservice] HOST: Host 0 promoted to be the global service provider
+2014-12-13 10:04:30,381   INFO  [main] CONSOLE: Version 4.9 catalog will be automatically upgraded to version 4.8.
+2014-12-13 10:04:30,510   INFO  [main] COMPILER: [null]: Created index: VOLTDB_AUTOGEN_IDX_PK_USERS_ID on table: USERS of type: BALANCED_TREE
+2014-12-13 10:04:30,519   INFO  [main] COMPILER: [USERS.insert]: Compiling Statement: INSERT INTO USERS VALUES (?, ?);
+2014-12-13 10:04:30,577   INFO  [main] COMPILER: [USERS.select]: Compiling Statement: SELECT * FROM USERS WHERE (ID = ?);
+2014-12-13 10:04:30,591   INFO  [main] COMPILER: [USERS.delete]: Compiling Statement: DELETE FROM USERS WHERE (ID = ?);
+2014-12-13 10:04:30,594   INFO  [main] COMPILER: [USERS.update]: Compiling Statement: UPDATE USERS SET ID = ?, UIID = ? WHERE (ID = ?);
+2014-12-13 10:04:30,596   INFO  [main] COMPILER: [USERS.upsert]: Compiling Statement: UPSERT INTO USERS VALUES (?, ?);
+2014-12-13 10:04:30,652   INFO  [main] COMPILER: [UserList.class]: Compiling Statement: select id, uiid from users order by id;
+2014-12-13 10:04:30,657   INFO  [main] org.voltdb.compiler.VoltCompiler: org.voltdb.utils.InMemoryJarfile.JarLoader
+2014-12-13 10:04:30,657   INFO  [main] COMPILER: [UserUpdate.class]: Compiling Statement: select id, uiid from users where id = ? order by id;
+2014-12-13 10:04:30,662   INFO  [main] COMPILER: [UserUpdate.class]: Compiling Statement: update users set uiid = ? where id = ?;
+2014-12-13 10:04:30,665   INFO  [main] COMPILER: [UserUpdate.class]: Compiling Statement: insert into users (id, uiid) values (?, ?);
+2014-12-13 10:04:30,667   INFO  [main] org.voltdb.compiler.VoltCompiler: org.voltdb.utils.InMemoryJarfile.JarLoader
+2014-12-13 10:04:30,667   INFO  [main] COMPILER: [UserSelect.class]: Compiling Statement: select id, uiid from users where id = ? order by id;
+2014-12-13 10:04:30,670   INFO  [main] COMPILER: [UserSelect.class]: This procedure might benefit from an @ProcInfo annotation designating parameter 0 of statement 'select id, uiid from users where id = ? order by id;'
+2014-12-13 10:04:30,670   INFO  [main] org.voltdb.compiler.VoltCompiler: org.voltdb.utils.InMemoryJarfile.JarLoader
+2014-12-13 10:04:30,671   INFO  [main] COMPILER: [UserDeleteAll.class]: Compiling Statement: delete from users;
+2014-12-13 10:04:30,673   INFO  [main] org.voltdb.compiler.VoltCompiler: org.voltdb.utils.InMemoryJarfile.JarLoader
+2014-12-13 10:04:30,673   INFO  [main] COMPILER: [UserAdd.class]: Compiling Statement: select count(id) as cnt, max(id) as max_id from users;
+2014-12-13 10:04:30,679   INFO  [main] COMPILER: [UserAdd.class]: Compiling Statement: insert into users (id, uiid) values (?, ?);
+2014-12-13 10:04:30,681   INFO  [main] org.voltdb.compiler.VoltCompiler: org.voltdb.utils.InMemoryJarfile.JarLoader
+2014-12-13 10:04:30,755   INFO  [main] CONSOLE: The catalog was automatically upgraded from version 4.9 to 4.8 and saved to "voltdbroot/catalog-4.8.jar". Compiler output is available in "voltdbroot/catalog-4.8.out".
+2014-12-13 10:04:30,848   INFO  [main] EXPORT: System is not using any export functionality.
+2014-12-13 10:04:30,865   INFO  [main] CONSOLE: Initializing the database. This may take a moment...
+2014-12-13 10:04:30,930   INFO  [Iv2ExecutionSite: 0:0] HOST: Loading native VoltDB code (voltdb-4.8). A confirmation message will follow if the loading is successful.
+2014-12-13 10:04:30,994   INFO  [Iv2ExecutionSite: 0:0] HOST: Successfully loaded native VoltDB library voltdb-4.8.
+2014-12-13 10:04:30,996   WARN  [Iv2ExecutionSite: 0:0] DBBPOOL: Strict java memory checking is enabled, don't do release builds or performance runs with this enabled. Invoke "ant clean" and "ant -Djmemcheck=NO_MEMCHECK" to disable.
+2014-12-13 10:04:31,172   INFO  [main] TM: Setting maximum size of MPI read pool to: 20
+2014-12-13 10:04:31,227   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:0 as leader for partition 0
+2014-12-13 10:04:31,238   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:1 as leader for partition 1
+2014-12-13 10:04:31,243   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:2 as leader for partition 2
+2014-12-13 10:04:31,243   INFO  [LeaderCache] TM: SP 0:0 for partition 0 found (including self) 1 surviving replicas to repair.  Survivors: 0:0
+2014-12-13 10:04:31,244   INFO  [LeaderCache] TM: SP 0:1 for partition 1 found (including self) 1 surviving replicas to repair.  Survivors: 0:1
+2014-12-13 10:04:31,252   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:3 as leader for partition 3
+2014-12-13 10:04:31,254   INFO  [LeaderCache] TM: SP 0:2 for partition 2 found (including self) 1 surviving replicas to repair.  Survivors: 0:2
+2014-12-13 10:04:31,257   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:4 as leader for partition 4
+2014-12-13 10:04:31,258   INFO  [LeaderCache] TM: SP 0:3 for partition 3 found (including self) 1 surviving replicas to repair.  Survivors: 0:3
+2014-12-13 19:06:01,165   INFO  [main] COMPILER: [null]: Created index: VOLTDB_AUTOGEN_IDX_PK_USERS_ID on table: USERS of type: BALANCED_TREE
+2014-12-13 19:06:01,178   INFO  [main] COMPILER: [USERS.insert]: Compiling Statement: INSERT INTO USERS VALUES (?, ?);
+2014-12-13 19:06:01,222   INFO  [main] COMPILER: [USERS.select]: Compiling Statement: SELECT * FROM USERS WHERE (ID = ?);
+2014-12-13 19:06:01,236   INFO  [main] COMPILER: [USERS.delete]: Compiling Statement: DELETE FROM USERS WHERE (ID = ?);
+2014-12-13 19:06:01,240   INFO  [main] COMPILER: [USERS.update]: Compiling Statement: UPDATE USERS SET ID = ?, UIID = ? WHERE (ID = ?);
+2014-12-13 19:06:01,244   INFO  [main] COMPILER: [USERS.upsert]: Compiling Statement: UPSERT INTO USERS VALUES (?, ?);
+2014-12-13 19:06:01,268   INFO  [main] COMPILER: [UserList.class]: Compiling Statement: select id, uiid from users order by id;
+2014-12-13 19:06:01,274   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:06:01,275   INFO  [main] COMPILER: [UserUpdate.class]: Compiling Statement: select id, uiid from users where id = ? order by id;
+2014-12-13 19:06:01,279   INFO  [main] COMPILER: [UserUpdate.class]: Compiling Statement: update users set uiid = ? where id = ?;
+2014-12-13 19:06:01,283   INFO  [main] COMPILER: [UserUpdate.class]: Compiling Statement: insert into users (id, uiid) values (?, ?);
+2014-12-13 19:06:01,285   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:06:01,286   INFO  [main] COMPILER: [UserSelect.class]: Compiling Statement: select id, uiid from users where id = ? order by id;
+2014-12-13 19:06:01,290   INFO  [main] COMPILER: [UserSelect.class]: This procedure might benefit from an @ProcInfo annotation designating parameter 0 of statement 'select id, uiid from users where id = ? order by id;'
+2014-12-13 19:06:01,290   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:06:01,290   INFO  [main] COMPILER: [UserDeleteAll.class]: Compiling Statement: delete from users;
+2014-12-13 19:06:01,294   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:06:01,294   INFO  [main] COMPILER: [UserAdd.class]: Compiling Statement: select count(id) as cnt, max(id) as max_id from users;
+2014-12-13 19:06:01,301   INFO  [main] COMPILER: [UserAdd.class]: Compiling Statement: insert into users (id, uiid) values (?, ?);
+2014-12-13 19:06:01,304   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:06:13,243   INFO  [main] COMPILER: [null]: Created index: VOLTDB_AUTOGEN_IDX_PK_USERS_ID on table: USERS of type: BALANCED_TREE
+2014-12-13 19:06:13,257   INFO  [main] COMPILER: [USERS.insert]: Compiling Statement: INSERT INTO USERS VALUES (?, ?);
+2014-12-13 19:06:13,299   INFO  [main] COMPILER: [USERS.select]: Compiling Statement: SELECT * FROM USERS WHERE (ID = ?);
+2014-12-13 19:06:13,314   INFO  [main] COMPILER: [USERS.delete]: Compiling Statement: DELETE FROM USERS WHERE (ID = ?);
+2014-12-13 19:06:13,317   INFO  [main] COMPILER: [USERS.update]: Compiling Statement: UPDATE USERS SET ID = ?, UIID = ? WHERE (ID = ?);
+2014-12-13 19:06:13,321   INFO  [main] COMPILER: [USERS.upsert]: Compiling Statement: UPSERT INTO USERS VALUES (?, ?);
+2014-12-13 19:06:13,343   INFO  [main] COMPILER: [UserList.class]: Compiling Statement: select id, uiid from users order by id;
+2014-12-13 19:06:13,348   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:06:13,349   INFO  [main] COMPILER: [UserUpdate.class]: Compiling Statement: select id, uiid from users where id = ? order by id;
+2014-12-13 19:06:13,353   INFO  [main] COMPILER: [UserUpdate.class]: Compiling Statement: update users set uiid = ? where id = ?;
+2014-12-13 19:06:13,357   INFO  [main] COMPILER: [UserUpdate.class]: Compiling Statement: insert into users (id, uiid) values (?, ?);
+2014-12-13 19:06:13,360   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:06:13,361   INFO  [main] COMPILER: [UserSelect.class]: Compiling Statement: select id, uiid from users where id = ? order by id;
+2014-12-13 19:06:13,364   INFO  [main] COMPILER: [UserSelect.class]: This procedure might benefit from an @ProcInfo annotation designating parameter 0 of statement 'select id, uiid from users where id = ? order by id;'
+2014-12-13 19:06:13,364   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:06:13,365   INFO  [main] COMPILER: [UserDeleteAll.class]: Compiling Statement: delete from users;
+2014-12-13 19:06:13,368   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:06:13,369   INFO  [main] COMPILER: [UserAdd.class]: Compiling Statement: select count(id) as cnt, max(id) as max_id from users;
+2014-12-13 19:06:13,376   INFO  [main] COMPILER: [UserAdd.class]: Compiling Statement: insert into users (id, uiid) values (?, ?);
+2014-12-13 19:06:13,378   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:08:48,627   INFO  [main] COMPILER: [null]: Created index: VOLTDB_AUTOGEN_IDX_PK_USERS_ID on table: USERS of type: BALANCED_TREE
+2014-12-13 19:08:48,641   INFO  [main] COMPILER: [USERS.insert]: Compiling Statement: INSERT INTO USERS VALUES (?, ?);
+2014-12-13 19:08:48,684   INFO  [main] COMPILER: [USERS.select]: Compiling Statement: SELECT * FROM USERS WHERE (ID = ?);
+2014-12-13 19:08:48,698   INFO  [main] COMPILER: [USERS.delete]: Compiling Statement: DELETE FROM USERS WHERE (ID = ?);
+2014-12-13 19:08:48,702   INFO  [main] COMPILER: [USERS.update]: Compiling Statement: UPDATE USERS SET ID = ?, UIID = ? WHERE (ID = ?);
+2014-12-13 19:08:48,706   INFO  [main] COMPILER: [USERS.upsert]: Compiling Statement: UPSERT INTO USERS VALUES (?, ?);
+2014-12-13 19:08:48,730   INFO  [main] COMPILER: [UserList.class]: Compiling Statement: select id, uiid from users order by id;
+2014-12-13 19:08:48,736   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:08:48,737   INFO  [main] COMPILER: [UserUpdate.class]: Compiling Statement: select id, uiid from users where id = ? order by id;
+2014-12-13 19:08:48,741   INFO  [main] COMPILER: [UserUpdate.class]: Compiling Statement: update users set uiid = ? where id = ?;
+2014-12-13 19:08:48,745   INFO  [main] COMPILER: [UserUpdate.class]: Compiling Statement: insert into users (id, uiid) values (?, ?);
+2014-12-13 19:08:48,748   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:08:48,748   INFO  [main] COMPILER: [UserSelect.class]: Compiling Statement: select id, uiid from users where id = ? order by id;
+2014-12-13 19:08:48,752   INFO  [main] COMPILER: [UserSelect.class]: This procedure might benefit from an @ProcInfo annotation designating parameter 0 of statement 'select id, uiid from users where id = ? order by id;'
+2014-12-13 19:08:48,752   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:08:48,753   INFO  [main] COMPILER: [UserDeleteAll.class]: Compiling Statement: delete from users;
+2014-12-13 19:08:48,756   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 19:08:48,757   INFO  [main] COMPILER: [UserAdd.class]: Compiling Statement: select count(id) as cnt, max(id) as max_id from users;
+2014-12-13 19:08:48,764   INFO  [main] COMPILER: [UserAdd.class]: Compiling Statement: insert into users (id, uiid) values (?, ?);
+2014-12-13 19:08:48,766   INFO  [main] org.voltdb.compiler.VoltCompiler: sun.misc.Launcher.AppClassLoader
+2014-12-13 10:08:58,602   INFO  [main] CONSOLE: Initializing VoltDB...
+
+ _    __      ____  ____  ____ 
+| |  / /___  / / /_/ __ \/ __ )
+| | / / __ \/ / __/ / / / __  |
+| |/ / /_/ / / /_/ /_/ / /_/ / 
+|___/\____/_/\__/_____/_____/
+
+--------------------------------
+
+2014-12-13 10:08:58,604   INFO  [main] HOST: Generating default deployment file "/Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/voltdbroot/deployment.xml"
+2014-12-13 10:08:58,612   INFO  [main] CONSOLE: Build: 4.8 voltdb-4.7-193-gf65c029 Community Edition
+2014-12-13 10:08:58,612   INFO  [main] HOST: Command line arguments: org.voltdb.VoltDB create catalog jikken.jar host localhost:3021
+2014-12-13 10:08:58,614   INFO  [main] HOST: Command line JVM arguments: -Xmx2048m -Djava.awt.headless=true -Dsun.net.inetaddr.ttl=300 -Dsun.net.inetaddr.negative.ttl=3600 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseTLAB -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCondCardMark -Dsun.rmi.dgc.server.gcInterval=9223372036854775807 -Dsun.rmi.dgc.client.gcInterval=9223372036854775807 -XX:CMSWaitDuration=120000 -XX:CMSMaxAbortablePrecleanTime=120000 -XX:+ExplicitGCInvokesConcurrent -XX:+CMSScavengeBeforeRemark -XX:+CMSClassUnloadingEnabled -XX:PermSize=64m -Dlog4j.configuration=file:///Users/jaianism/voltdb/voltdb/log4j.xml -Djava.library.path=/Users/jaianism/voltdb/voltdb
+2014-12-13 10:08:58,614   INFO  [main] HOST: Command line JVM classpath: /Users/jaianism/voltdb/voltdb/voltdb-4.8.jar:/Users/jaianism/voltdb/lib/avro-1.7.7.jar:/Users/jaianism/voltdb/lib/commons-cli-1.2.jar:/Users/jaianism/voltdb/lib/commons-codec-1.6.jar:/Users/jaianism/voltdb/lib/commons-lang3-3.0.jar:/Users/jaianism/voltdb/lib/commons-logging-1.1.3.jar:/Users/jaianism/voltdb/lib/groovy-all-2.1.7-indy.jar:/Users/jaianism/voltdb/lib/httpasyncclient-4.0.1.jar:/Users/jaianism/voltdb/lib/httpclient-4.3.2.jar:/Users/jaianism/voltdb/lib/httpcore-4.3.2.jar:/Users/jaianism/voltdb/lib/httpcore-nio-4.3.2.jar:/Users/jaianism/voltdb/lib/jackson-core-asl-1.9.13.jar:/Users/jaianism/voltdb/lib/jackson-mapper-asl-1.9.13.jar:/Users/jaianism/voltdb/lib/jetty-continuation-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-http-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-io-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-server-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-util-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jline-2.10.jar:/Users/jaianism/voltdb/lib/jna.jar:/Users/jaianism/voltdb/lib/jsch-0.1.51.jar:/Users/jaianism/voltdb/lib/kafka_2.8.0-0.8.1.jar:/Users/jaianism/voltdb/lib/log4j-1.2.16.jar:/Users/jaianism/voltdb/lib/metrics-core-2.2.0.jar:/Users/jaianism/voltdb/lib/protobuf-java-2.4.1.jar:/Users/jaianism/voltdb/lib/scala-library.jar:/Users/jaianism/voltdb/lib/servlet-api-2.5.jar:/Users/jaianism/voltdb/lib/slf4j-api-1.6.2.jar:/Users/jaianism/voltdb/lib/slf4j-nop-1.6.2.jar:/Users/jaianism/voltdb/lib/snappy-java-1.1.0.1.jar:/Users/jaianism/voltdb/lib/super-csv-2.1.0.jar:/Users/jaianism/voltdb/lib/tomcat-jdbc.jar:/Users/jaianism/voltdb/lib/tomcat-juli.jar:/Users/jaianism/voltdb/lib/zmq-2.1.11.jar
+2014-12-13 10:08:58,623   INFO  [main] NETWORK: Default network thread count: 2
+2014-12-13 10:08:58,643   INFO  [main] HOST: Beginning inter-node communication on port 3021.
+2014-12-13 10:08:58,643   INFO  [main] HOST: Attempting to bind to leader ip localhost/127.0.0.1:3021
+2014-12-13 10:08:58,646   INFO  [main] CONSOLE: Connecting to VoltDB cluster as the leader...
+2014-12-13 10:08:58,694   INFO  [main] ZK-SERVER: binding to port /127.0.0.1:2181
+2014-12-13 10:08:58,704   INFO  [main] ZK-SERVER: Created server with tickTime 3000 minSessionTimeout 6000 maxSessionTimeout 60000
+2014-12-13 10:08:58,748   INFO  [main] ZK-SERVER: Initiating client connection, connectString=127.0.0.1:2181 sessionTimeout=2000 watcher=org.voltcore.zk.ZKUtil$1@75be18e2
+2014-12-13 10:08:58,753   INFO  [main-SendThread()] ZK-CLIENT: Opening socket connection to server /127.0.0.1:2181
+2014-12-13 10:08:58,755   INFO  [main-SendThread(localhost:2181)] ZK-CLIENT: Socket connection established to localhost/127.0.0.1:2181, initiating session
+2014-12-13 10:08:58,755   INFO  [NIOServerCxn.Factory:/127.0.0.1:2181] ZK-SERVER: Accepted socket connection from /127.0.0.1:60342
+2014-12-13 10:08:58,758   INFO  [NIOServerCxn.Factory:/127.0.0.1:2181] ZK-SERVER: Client attempting to establish new session at /127.0.0.1:60342
+2014-12-13 10:08:58,775   INFO  [ZooKeeperServer] ZK-SERVER: Established session 0x19883cd0c3000000 with negotiated timeout 6000 for client /127.0.0.1:60342
+2014-12-13 10:08:58,775   INFO  [main-SendThread(localhost:2181)] ZK-CLIENT: Session establishment complete on server localhost/127.0.0.1:2181, sessionid = 0x19883cd0c3000000, negotiated timeout = 6000
+2014-12-13 10:08:58,816   INFO  [Socket Joiner] HOST: Attempting to bind to internal ip 0.0.0.0/0.0.0.0:3021
+2014-12-13 10:08:58,843   INFO  [main] HOST: Host id of this node is: 0
+2014-12-13 10:08:58,843   INFO  [main] CONSOLE: Host id of this node is: 0
+2014-12-13 10:08:58,876   INFO  [main] HOST: URL of deployment: /Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/voltdbroot/deployment.xml
+2014-12-13 10:08:59,097   INFO  [main] HOST: Dead host timeout set to 90000 milliseconds
+2014-12-13 10:08:59,329   INFO  [main] HOST: Searching for license file located /Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/license.xml
+2014-12-13 10:08:59,358   INFO  [Leader elector-/db/leaders/globalservice] HOST: Host 0 promoted to be the global service provider
+2014-12-13 10:09:00,187   INFO  [main] EXPORT: System is not using any export functionality.
+2014-12-13 10:09:00,198   INFO  [main] CONSOLE: Initializing the database. This may take a moment...
+2014-12-13 10:09:00,239   INFO  [Iv2ExecutionSite: 0:0] HOST: Loading native VoltDB code (voltdb-4.8). A confirmation message will follow if the loading is successful.
+2014-12-13 10:09:00,241   INFO  [Iv2ExecutionSite: 0:0] HOST: Successfully loaded native VoltDB library voltdb-4.8.
+2014-12-13 10:09:00,242   WARN  [Iv2ExecutionSite: 0:0] DBBPOOL: Strict java memory checking is enabled, don't do release builds or performance runs with this enabled. Invoke "ant clean" and "ant -Djmemcheck=NO_MEMCHECK" to disable.
+2014-12-13 10:09:00,472   INFO  [main] TM: Setting maximum size of MPI read pool to: 20
+2014-12-13 10:09:00,525   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:0 as leader for partition 0
+2014-12-13 10:09:00,535   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:1 as leader for partition 1
+2014-12-13 10:09:00,541   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:2 as leader for partition 2
+2014-12-13 10:09:00,542   INFO  [LeaderCache] TM: SP 0:0 for partition 0 found (including self) 1 surviving replicas to repair.  Survivors: 0:0
+2014-12-13 10:09:00,542   INFO  [LeaderCache] TM: SP 0:1 for partition 1 found (including self) 1 surviving replicas to repair.  Survivors: 0:1
+2014-12-13 10:09:00,552   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:3 as leader for partition 3
+2014-12-13 10:09:00,553   INFO  [LeaderCache] TM: SP 0:2 for partition 2 found (including self) 1 surviving replicas to repair.  Survivors: 0:2
+2014-12-13 10:09:00,555   INFO  [LeaderCache] TM: SP 0:0 for partition 0 finished leader promotion. Took 20 ms.
+2014-12-13 10:09:00,555   INFO  [LeaderCache] TM: SP 0:2 for partition 2 finished leader promotion. Took 3 ms.
+2014-12-13 10:09:00,555   INFO  [LeaderCache] TM: SP 0:1 for partition 1 finished leader promotion. Took 15 ms.
+2014-12-13 10:09:00,564   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:4 as leader for partition 4
+2014-12-13 10:09:00,567   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:09:00,567   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:09:00,567   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:09:00,570   INFO  [LeaderCache] TM: SP 0:3 for partition 3 found (including self) 1 surviving replicas to repair.  Survivors: 0:3
+2014-12-13 10:09:00,570   INFO  [LeaderCache] TM: SP 0:3 for partition 3 finished leader promotion. Took 8 ms.
+2014-12-13 10:09:00,586   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:5 as leader for partition 5
+2014-12-13 10:09:00,589   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:09:00,593   INFO  [LeaderCache] TM: SP 0:4 for partition 4 found (including self) 1 surviving replicas to repair.  Survivors: 0:4
+2014-12-13 10:09:00,593   INFO  [LeaderCache] TM: SP 0:4 for partition 4 finished leader promotion. Took 8 ms.
+2014-12-13 10:09:00,607   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:6 as leader for partition 6
+2014-12-13 10:09:00,613   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:09:00,615   INFO  [LeaderCache] TM: SP 0:5 for partition 5 found (including self) 1 surviving replicas to repair.  Survivors: 0:5
+2014-12-13 10:09:00,615   INFO  [LeaderCache] TM: SP 0:5 for partition 5 finished leader promotion. Took 9 ms.
+2014-12-13 10:09:00,623   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:7 as leader for partition 7
+2014-12-13 10:09:00,628   INFO  [LeaderCache] TM: SP 0:6 for partition 6 found (including self) 1 surviving replicas to repair.  Survivors: 0:6
+2014-12-13 10:09:00,628   INFO  [LeaderCache] TM: SP 0:6 for partition 6 finished leader promotion. Took 5 ms.
+2014-12-13 10:09:00,635   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:09:00,648   INFO  [LeaderCache] TM: SP 0:7 for partition 7 found (including self) 1 surviving replicas to repair.  Survivors: 0:7
+2014-12-13 10:09:00,649   INFO  [LeaderCache] TM: SP 0:7 for partition 7 finished leader promotion. Took 7 ms.
+2014-12-13 10:09:00,652   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:09:00,664   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:09:00,689   INFO  [LeaderCache] TM: MP 0:8 for partition 16383 found 8 surviving leaders to repair.  Survivors: 0:0, 0:1, 0:2, 0:3, 0:4, 0:5, 0:6, 0:7
+2014-12-13 10:09:00,691   INFO  [LeaderCache] TM: MP 0:8 for partition 16383 finished leader promotion. Took 22 ms.
+2014-12-13 10:09:00,698   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:09:00,800   INFO  [main] HOST: Database start action is Create.
+2014-12-13 10:09:01,032   INFO  [main] HOST: PID of this Volt process is 2225
+2014-12-13 10:09:01,032   INFO  [main] HOST: Listening for native wire protocol clients on port 21212.
+2014-12-13 10:09:01,032   INFO  [main] HOST: Listening for admin wire protocol clients on port 21211.
+2014-12-13 10:09:01,032   INFO  [main] HOST: Local machine HTTP monitoring is listening on port 8080.
+2014-12-13 10:09:01,032   INFO  [main] HOST: Json API over HTTP enabled at path /api/1.0/, listening on port 8080.
+2014-12-13 10:09:01,032   INFO  [main] HOST: Maximum usable Java heap set to 1981 mb.
+2014-12-13 10:09:01,032   INFO  [main] HOST: Minimum required Java heap for catalog and server config is 394 MB.
+2014-12-13 10:09:01,033   INFO  [main] HOST: Cluster has 1 hosts with leader hostname: "localhost:3021". 8 sites per host. K = 0.
+2014-12-13 10:09:01,033   INFO  [main] HOST: The entire cluster has 1 copy of each of the 8 logical partitions.
+2014-12-13 10:09:01,033   INFO  [main] HOST: Detection of network partitions in the cluster is enabled.
+2014-12-13 10:09:01,033   INFO  [main] HOST: Client authentication is not enabled. Anonymous clients accepted.
+2014-12-13 10:09:01,033   INFO  [main] HOST: No schedule set for automated snapshots.
+2014-12-13 10:09:01,033   INFO  [main] HOST: Using "voltdbroot" for voltdbroot directory.
+2014-12-13 10:09:01,033   INFO  [main] HOST: CPU INFO:         4 Cores, 1 Sockets, 8 Hardware Threads
+2014-12-13 10:09:01,033   INFO  [main] HOST: CPU DESC:         Intel Core i7 3.4 GHz 256 KB L2/core 8 MB L3
+2014-12-13 10:09:01,033   INFO  [main] HOST: HOST MEMORY (MB): 8192
+2014-12-13 10:09:01,033   INFO  [main] HOST: OS PROFILE:       Mac OS X 10.9.5 x86_64 ja_JP
+2014-12-13 10:09:01,033   INFO  [main] HOST: JAVA VERSION:     1.7.0_45
+2014-12-13 10:09:01,033   INFO  [main] HOST: JAVA RUNTIME:     Java(TM) SE Runtime Environment (1.7.0_45-b18)
+2014-12-13 10:09:01,033   INFO  [main] HOST: JAVA VM:          Java HotSpot(TM) 64-Bit Server VM (24.45-b08, mixed mode)
+2014-12-13 10:09:01,033   INFO  [main] HOST: About to list cluster interfaces for all nodes with format [ip1 ip2 ... ipN] client-port:admin-port:http-port
+2014-12-13 10:09:01,034   INFO  [main] HOST:   Host id: 0 with interfaces: 192.168.0.2 21212,21211,8080 [SELF]
+2014-12-13 10:09:01,034   WARN  [main] CONSOLE: This is not a highly available cluster. K-Safety is set to 0.
+2014-12-13 10:09:01,034   WARN  [main] CONSOLE: Durability is turned off. Command logging is off.
+2014-12-13 10:09:01,063   INFO  [SnapshotDaemon] LOGGING: This node was selected as the leader for snapshot truncation
+2014-12-13 10:09:01,064   INFO  [Thread-15] HOST: Logging config info
+2014-12-13 10:09:01,087   INFO  [SnapshotDaemon] LOGGING: Checking for existence of snapshot truncation request
+2014-12-13 10:09:01,101   INFO  [Thread-16] CONSOLE: Server completed initialization.
+2014-12-13 10:34:55,768   WARN  [Thread-0] CONSOLE: The VoltDB server will shut down due to a control-C or other JVM exit.
+2014-12-13 10:34:59,439   INFO  [main] CONSOLE: Initializing VoltDB...
+
+ _    __      ____  ____  ____ 
+| |  / /___  / / /_/ __ \/ __ )
+| | / / __ \/ / __/ / / / __  |
+| |/ / /_/ / / /_/ /_/ / /_/ / 
+|___/\____/_/\__/_____/_____/
+
+--------------------------------
+
+2014-12-13 10:34:59,442   INFO  [main] HOST: Generating default deployment file "/Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/voltdbroot/deployment.xml"
+2014-12-13 10:34:59,449   INFO  [main] CONSOLE: Build: 4.8 voltdb-4.7-193-gf65c029 Community Edition
+2014-12-13 10:34:59,449   INFO  [main] HOST: Command line arguments: org.voltdb.VoltDB create catalog jikken.jar host localhost:3021
+2014-12-13 10:34:59,451   INFO  [main] HOST: Command line JVM arguments: -Xmx2048m -Djava.awt.headless=true -Dsun.net.inetaddr.ttl=300 -Dsun.net.inetaddr.negative.ttl=3600 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseTLAB -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCondCardMark -Dsun.rmi.dgc.server.gcInterval=9223372036854775807 -Dsun.rmi.dgc.client.gcInterval=9223372036854775807 -XX:CMSWaitDuration=120000 -XX:CMSMaxAbortablePrecleanTime=120000 -XX:+ExplicitGCInvokesConcurrent -XX:+CMSScavengeBeforeRemark -XX:+CMSClassUnloadingEnabled -XX:PermSize=64m -Dlog4j.configuration=file:///Users/jaianism/voltdb/voltdb/log4j.xml -Djava.library.path=/Users/jaianism/voltdb/voltdb
+2014-12-13 10:34:59,451   INFO  [main] HOST: Command line JVM classpath: /Users/jaianism/voltdb/voltdb/voltdb-4.8.jar:/Users/jaianism/voltdb/lib/avro-1.7.7.jar:/Users/jaianism/voltdb/lib/commons-cli-1.2.jar:/Users/jaianism/voltdb/lib/commons-codec-1.6.jar:/Users/jaianism/voltdb/lib/commons-lang3-3.0.jar:/Users/jaianism/voltdb/lib/commons-logging-1.1.3.jar:/Users/jaianism/voltdb/lib/groovy-all-2.1.7-indy.jar:/Users/jaianism/voltdb/lib/httpasyncclient-4.0.1.jar:/Users/jaianism/voltdb/lib/httpclient-4.3.2.jar:/Users/jaianism/voltdb/lib/httpcore-4.3.2.jar:/Users/jaianism/voltdb/lib/httpcore-nio-4.3.2.jar:/Users/jaianism/voltdb/lib/jackson-core-asl-1.9.13.jar:/Users/jaianism/voltdb/lib/jackson-mapper-asl-1.9.13.jar:/Users/jaianism/voltdb/lib/jetty-continuation-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-http-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-io-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-server-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-util-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jline-2.10.jar:/Users/jaianism/voltdb/lib/jna.jar:/Users/jaianism/voltdb/lib/jsch-0.1.51.jar:/Users/jaianism/voltdb/lib/kafka_2.8.0-0.8.1.jar:/Users/jaianism/voltdb/lib/log4j-1.2.16.jar:/Users/jaianism/voltdb/lib/metrics-core-2.2.0.jar:/Users/jaianism/voltdb/lib/protobuf-java-2.4.1.jar:/Users/jaianism/voltdb/lib/scala-library.jar:/Users/jaianism/voltdb/lib/servlet-api-2.5.jar:/Users/jaianism/voltdb/lib/slf4j-api-1.6.2.jar:/Users/jaianism/voltdb/lib/slf4j-nop-1.6.2.jar:/Users/jaianism/voltdb/lib/snappy-java-1.1.0.1.jar:/Users/jaianism/voltdb/lib/super-csv-2.1.0.jar:/Users/jaianism/voltdb/lib/tomcat-jdbc.jar:/Users/jaianism/voltdb/lib/tomcat-juli.jar:/Users/jaianism/voltdb/lib/zmq-2.1.11.jar
+2014-12-13 10:34:59,460   INFO  [main] NETWORK: Default network thread count: 2
+2014-12-13 10:34:59,480   INFO  [main] HOST: Beginning inter-node communication on port 3021.
+2014-12-13 10:34:59,481   INFO  [main] HOST: Attempting to bind to leader ip localhost/127.0.0.1:3021
+2014-12-13 10:34:59,484   INFO  [main] CONSOLE: Connecting to VoltDB cluster as the leader...
+2014-12-13 10:34:59,533   INFO  [main] ZK-SERVER: binding to port /127.0.0.1:2181
+2014-12-13 10:34:59,543   INFO  [main] ZK-SERVER: Created server with tickTime 3000 minSessionTimeout 6000 maxSessionTimeout 60000
+2014-12-13 10:34:59,587   INFO  [main] ZK-SERVER: Initiating client connection, connectString=127.0.0.1:2181 sessionTimeout=2000 watcher=org.voltcore.zk.ZKUtil$1@1353d9d2
+2014-12-13 10:34:59,592   INFO  [main-SendThread()] ZK-CLIENT: Opening socket connection to server /127.0.0.1:2181
+2014-12-13 10:34:59,595   INFO  [main-SendThread(localhost:2181)] ZK-CLIENT: Socket connection established to localhost/127.0.0.1:2181, initiating session
+2014-12-13 10:34:59,595   INFO  [NIOServerCxn.Factory:/127.0.0.1:2181] ZK-SERVER: Accepted socket connection from /127.0.0.1:60616
+2014-12-13 10:34:59,597   INFO  [NIOServerCxn.Factory:/127.0.0.1:2181] ZK-SERVER: Client attempting to establish new session at /127.0.0.1:60616
+2014-12-13 10:34:59,609   INFO  [ZooKeeperServer] ZK-SERVER: Established session 0x198848b947000000 with negotiated timeout 6000 for client /127.0.0.1:60616
+2014-12-13 10:34:59,609   INFO  [main-SendThread(localhost:2181)] ZK-CLIENT: Session establishment complete on server localhost/127.0.0.1:2181, sessionid = 0x198848b947000000, negotiated timeout = 6000
+2014-12-13 10:34:59,650   INFO  [Socket Joiner] HOST: Attempting to bind to internal ip 0.0.0.0/0.0.0.0:3021
+2014-12-13 10:34:59,682   INFO  [main] HOST: Host id of this node is: 0
+2014-12-13 10:34:59,682   INFO  [main] CONSOLE: Host id of this node is: 0
+2014-12-13 10:34:59,714   INFO  [main] HOST: URL of deployment: /Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/voltdbroot/deployment.xml
+2014-12-13 10:34:59,935   INFO  [main] HOST: Dead host timeout set to 90000 milliseconds
+2014-12-13 10:35:00,175   INFO  [main] HOST: Searching for license file located /Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/license.xml
+2014-12-13 10:35:00,205   INFO  [Leader elector-/db/leaders/globalservice] HOST: Host 0 promoted to be the global service provider
+2014-12-13 10:35:01,353   INFO  [main] EXPORT: System is not using any export functionality.
+2014-12-13 10:35:01,362   INFO  [main] CONSOLE: Initializing the database. This may take a moment...
+2014-12-13 10:35:01,404   INFO  [Iv2ExecutionSite: 0:0] HOST: Loading native VoltDB code (voltdb-4.8). A confirmation message will follow if the loading is successful.
+2014-12-13 10:35:01,405   INFO  [Iv2ExecutionSite: 0:0] HOST: Successfully loaded native VoltDB library voltdb-4.8.
+2014-12-13 10:35:01,407   WARN  [Iv2ExecutionSite: 0:0] DBBPOOL: Strict java memory checking is enabled, don't do release builds or performance runs with this enabled. Invoke "ant clean" and "ant -Djmemcheck=NO_MEMCHECK" to disable.
+2014-12-13 10:35:01,623   INFO  [main] TM: Setting maximum size of MPI read pool to: 20
+2014-12-13 10:35:01,681   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:0 as leader for partition 0
+2014-12-13 10:35:01,690   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:1 as leader for partition 1
+2014-12-13 10:35:01,697   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:2 as leader for partition 2
+2014-12-13 10:35:01,698   INFO  [LeaderCache] TM: SP 0:0 for partition 0 found (including self) 1 surviving replicas to repair.  Survivors: 0:0
+2014-12-13 10:35:01,698   INFO  [LeaderCache] TM: SP 0:1 for partition 1 found (including self) 1 surviving replicas to repair.  Survivors: 0:1
+2014-12-13 10:35:01,703   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:3 as leader for partition 3
+2014-12-13 10:35:01,703   INFO  [LeaderCache] TM: SP 0:2 for partition 2 found (including self) 1 surviving replicas to repair.  Survivors: 0:2
+2014-12-13 10:35:01,714   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:4 as leader for partition 4
+2014-12-13 10:35:01,715   INFO  [LeaderCache] TM: SP 0:0 for partition 0 finished leader promotion. Took 23 ms.
+2014-12-13 10:35:01,715   INFO  [LeaderCache] TM: SP 0:2 for partition 2 finished leader promotion. Took 14 ms.
+2014-12-13 10:35:01,715   INFO  [LeaderCache] TM: SP 0:1 for partition 1 finished leader promotion. Took 18 ms.
+2014-12-13 10:35:01,715   INFO  [LeaderCache] TM: SP 0:3 for partition 3 found (including self) 1 surviving replicas to repair.  Survivors: 0:3
+2014-12-13 10:35:01,715   INFO  [LeaderCache] TM: SP 0:3 for partition 3 finished leader promotion. Took 1 ms.
+2014-12-13 10:35:01,725   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:5 as leader for partition 5
+2014-12-13 10:35:01,734   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:35:01,734   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:35:01,734   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:35:01,734   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:35:01,735   INFO  [LeaderCache] TM: SP 0:4 for partition 4 found (including self) 1 surviving replicas to repair.  Survivors: 0:4
+2014-12-13 10:35:01,735   INFO  [LeaderCache] TM: SP 0:4 for partition 4 finished leader promotion. Took 13 ms.
+2014-12-13 10:35:01,745   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:6 as leader for partition 6
+2014-12-13 10:35:01,752   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:35:01,757   INFO  [LeaderCache] TM: SP 0:5 for partition 5 found (including self) 1 surviving replicas to repair.  Survivors: 0:5
+2014-12-13 10:35:01,757   INFO  [LeaderCache] TM: SP 0:5 for partition 5 finished leader promotion. Took 8 ms.
+2014-12-13 10:35:01,768   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:7 as leader for partition 7
+2014-12-13 10:35:01,771   INFO  [LeaderCache] TM: SP 0:6 for partition 6 found (including self) 1 surviving replicas to repair.  Survivors: 0:6
+2014-12-13 10:35:01,771   INFO  [LeaderCache] TM: SP 0:6 for partition 6 finished leader promotion. Took 6 ms.
+2014-12-13 10:35:01,775   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:35:01,793   INFO  [LeaderCache] TM: SP 0:7 for partition 7 found (including self) 1 surviving replicas to repair.  Survivors: 0:7
+2014-12-13 10:35:01,793   INFO  [LeaderCache] TM: SP 0:7 for partition 7 finished leader promotion. Took 7 ms.
+2014-12-13 10:35:01,801   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:35:01,814   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:35:01,821   INFO  [LeaderCache] TM: MP 0:8 for partition 16383 found 8 surviving leaders to repair.  Survivors: 0:0, 0:1, 0:2, 0:3, 0:4, 0:5, 0:6, 0:7
+2014-12-13 10:35:01,823   INFO  [LeaderCache] TM: MP 0:8 for partition 16383 finished leader promotion. Took 9 ms.
+2014-12-13 10:35:01,830   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 10:35:01,865   INFO  [main] HOST: Database start action is Create.
+2014-12-13 10:35:01,895   INFO  [main] HOST: PID of this Volt process is 4406
+2014-12-13 10:35:01,896   INFO  [main] HOST: Listening for native wire protocol clients on port 21212.
+2014-12-13 10:35:01,896   INFO  [main] HOST: Listening for admin wire protocol clients on port 21211.
+2014-12-13 10:35:01,896   INFO  [main] HOST: Local machine HTTP monitoring is listening on port 8080.
+2014-12-13 10:35:01,896   INFO  [main] HOST: Json API over HTTP enabled at path /api/1.0/, listening on port 8080.
+2014-12-13 10:35:01,896   INFO  [main] HOST: Maximum usable Java heap set to 1981 mb.
+2014-12-13 10:35:01,896   INFO  [main] HOST: Minimum required Java heap for catalog and server config is 394 MB.
+2014-12-13 10:35:01,896   INFO  [main] HOST: Cluster has 1 hosts with leader hostname: "localhost:3021". 8 sites per host. K = 0.
+2014-12-13 10:35:01,896   INFO  [main] HOST: The entire cluster has 1 copy of each of the 8 logical partitions.
+2014-12-13 10:35:01,896   INFO  [main] HOST: Detection of network partitions in the cluster is enabled.
+2014-12-13 10:35:01,896   INFO  [main] HOST: Client authentication is not enabled. Anonymous clients accepted.
+2014-12-13 10:35:01,896   INFO  [main] HOST: No schedule set for automated snapshots.
+2014-12-13 10:35:01,896   INFO  [main] HOST: Using "voltdbroot" for voltdbroot directory.
+2014-12-13 10:35:01,897   INFO  [main] HOST: CPU INFO:         4 Cores, 1 Sockets, 8 Hardware Threads
+2014-12-13 10:35:01,897   INFO  [main] HOST: CPU DESC:         Intel Core i7 3.4 GHz 256 KB L2/core 8 MB L3
+2014-12-13 10:35:01,897   INFO  [main] HOST: HOST MEMORY (MB): 8192
+2014-12-13 10:35:01,897   INFO  [main] HOST: OS PROFILE:       Mac OS X 10.9.5 x86_64 ja_JP
+2014-12-13 10:35:01,897   INFO  [main] HOST: JAVA VERSION:     1.7.0_45
+2014-12-13 10:35:01,897   INFO  [main] HOST: JAVA RUNTIME:     Java(TM) SE Runtime Environment (1.7.0_45-b18)
+2014-12-13 10:35:01,897   INFO  [main] HOST: JAVA VM:          Java HotSpot(TM) 64-Bit Server VM (24.45-b08, mixed mode)
+2014-12-13 10:35:01,897   INFO  [main] HOST: About to list cluster interfaces for all nodes with format [ip1 ip2 ... ipN] client-port:admin-port:http-port
+2014-12-13 10:35:01,897   INFO  [main] HOST:   Host id: 0 with interfaces: 192.168.0.2 21212,21211,8080 [SELF]
+2014-12-13 10:35:01,898   WARN  [main] CONSOLE: This is not a highly available cluster. K-Safety is set to 0.
+2014-12-13 10:35:01,898   WARN  [main] CONSOLE: Durability is turned off. Command logging is off.
+2014-12-13 10:35:01,913   INFO  [SnapshotDaemon] LOGGING: This node was selected as the leader for snapshot truncation
+2014-12-13 10:35:01,913   INFO  [Thread-15] HOST: Logging config info
+2014-12-13 10:35:01,915   INFO  [SnapshotDaemon] LOGGING: Checking for existence of snapshot truncation request
+2014-12-13 10:35:01,929   INFO  [Thread-16] CONSOLE: Server completed initialization.
+2014-12-13 12:12:10,221   WARN  [Thread-0] CONSOLE: The VoltDB server will shut down due to a control-C or other JVM exit.
+2014-12-13 12:12:12,511   INFO  [main] CONSOLE: Initializing VoltDB...
+
+ _    __      ____  ____  ____ 
+| |  / /___  / / /_/ __ \/ __ )
+| | / / __ \/ / __/ / / / __  |
+| |/ / /_/ / / /_/ /_/ / /_/ / 
+|___/\____/_/\__/_____/_____/
+
+--------------------------------
+
+2014-12-13 12:12:12,513   INFO  [main] HOST: Generating default deployment file "/Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/voltdbroot/deployment.xml"
+2014-12-13 12:12:12,521   INFO  [main] CONSOLE: Build: 4.8 voltdb-4.7-193-gf65c029 Community Edition
+2014-12-13 12:12:12,522   INFO  [main] HOST: Command line arguments: org.voltdb.VoltDB create catalog jikken.jar host localhost:3021
+2014-12-13 12:12:12,524   INFO  [main] HOST: Command line JVM arguments: -Xmx2048m -Djava.awt.headless=true -Dsun.net.inetaddr.ttl=300 -Dsun.net.inetaddr.negative.ttl=3600 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseTLAB -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCondCardMark -Dsun.rmi.dgc.server.gcInterval=9223372036854775807 -Dsun.rmi.dgc.client.gcInterval=9223372036854775807 -XX:CMSWaitDuration=120000 -XX:CMSMaxAbortablePrecleanTime=120000 -XX:+ExplicitGCInvokesConcurrent -XX:+CMSScavengeBeforeRemark -XX:+CMSClassUnloadingEnabled -XX:PermSize=64m -Dlog4j.configuration=file:///Users/jaianism/voltdb/voltdb/log4j.xml -Djava.library.path=/Users/jaianism/voltdb/voltdb
+2014-12-13 12:12:12,524   INFO  [main] HOST: Command line JVM classpath: /Users/jaianism/voltdb/voltdb/voltdb-4.8.jar:/Users/jaianism/voltdb/lib/avro-1.7.7.jar:/Users/jaianism/voltdb/lib/commons-cli-1.2.jar:/Users/jaianism/voltdb/lib/commons-codec-1.6.jar:/Users/jaianism/voltdb/lib/commons-lang3-3.0.jar:/Users/jaianism/voltdb/lib/commons-logging-1.1.3.jar:/Users/jaianism/voltdb/lib/groovy-all-2.1.7-indy.jar:/Users/jaianism/voltdb/lib/httpasyncclient-4.0.1.jar:/Users/jaianism/voltdb/lib/httpclient-4.3.2.jar:/Users/jaianism/voltdb/lib/httpcore-4.3.2.jar:/Users/jaianism/voltdb/lib/httpcore-nio-4.3.2.jar:/Users/jaianism/voltdb/lib/jackson-core-asl-1.9.13.jar:/Users/jaianism/voltdb/lib/jackson-mapper-asl-1.9.13.jar:/Users/jaianism/voltdb/lib/jetty-continuation-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-http-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-io-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-server-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-util-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jline-2.10.jar:/Users/jaianism/voltdb/lib/jna.jar:/Users/jaianism/voltdb/lib/jsch-0.1.51.jar:/Users/jaianism/voltdb/lib/kafka_2.8.0-0.8.1.jar:/Users/jaianism/voltdb/lib/log4j-1.2.16.jar:/Users/jaianism/voltdb/lib/metrics-core-2.2.0.jar:/Users/jaianism/voltdb/lib/protobuf-java-2.4.1.jar:/Users/jaianism/voltdb/lib/scala-library.jar:/Users/jaianism/voltdb/lib/servlet-api-2.5.jar:/Users/jaianism/voltdb/lib/slf4j-api-1.6.2.jar:/Users/jaianism/voltdb/lib/slf4j-nop-1.6.2.jar:/Users/jaianism/voltdb/lib/snappy-java-1.1.0.1.jar:/Users/jaianism/voltdb/lib/super-csv-2.1.0.jar:/Users/jaianism/voltdb/lib/tomcat-jdbc.jar:/Users/jaianism/voltdb/lib/tomcat-juli.jar:/Users/jaianism/voltdb/lib/zmq-2.1.11.jar
+2014-12-13 12:12:12,532   INFO  [main] NETWORK: Default network thread count: 2
+2014-12-13 12:12:12,554   INFO  [main] HOST: Beginning inter-node communication on port 3021.
+2014-12-13 12:12:12,554   INFO  [main] HOST: Attempting to bind to leader ip localhost/127.0.0.1:3021
+2014-12-13 12:12:12,558   INFO  [main] CONSOLE: Connecting to VoltDB cluster as the leader...
+2014-12-13 12:12:12,605   INFO  [main] ZK-SERVER: binding to port /127.0.0.1:2181
+2014-12-13 12:12:12,614   INFO  [main] ZK-SERVER: Created server with tickTime 3000 minSessionTimeout 6000 maxSessionTimeout 60000
+2014-12-13 12:12:12,659   INFO  [main] ZK-SERVER: Initiating client connection, connectString=127.0.0.1:2181 sessionTimeout=2000 watcher=org.voltcore.zk.ZKUtil$1@1353d9d2
+2014-12-13 12:12:12,664   INFO  [main-SendThread()] ZK-CLIENT: Opening socket connection to server /127.0.0.1:2181
+2014-12-13 12:12:12,667   INFO  [main-SendThread(localhost:2181)] ZK-CLIENT: Socket connection established to localhost/127.0.0.1:2181, initiating session
+2014-12-13 12:12:12,667   INFO  [NIOServerCxn.Factory:/127.0.0.1:2181] ZK-SERVER: Accepted socket connection from /127.0.0.1:61336
+2014-12-13 12:12:12,669   INFO  [NIOServerCxn.Factory:/127.0.0.1:2181] ZK-SERVER: Client attempting to establish new session at /127.0.0.1:61336
+2014-12-13 12:12:12,687   INFO  [ZooKeeperServer] ZK-SERVER: Established session 0x19887539ff000000 with negotiated timeout 6000 for client /127.0.0.1:61336
+2014-12-13 12:12:12,687   INFO  [main-SendThread(localhost:2181)] ZK-CLIENT: Session establishment complete on server localhost/127.0.0.1:2181, sessionid = 0x19887539ff000000, negotiated timeout = 6000
+2014-12-13 12:12:12,735   INFO  [Socket Joiner] HOST: Attempting to bind to internal ip 0.0.0.0/0.0.0.0:3021
+2014-12-13 12:12:12,757   INFO  [main] HOST: Host id of this node is: 0
+2014-12-13 12:12:12,757   INFO  [main] CONSOLE: Host id of this node is: 0
+2014-12-13 12:12:12,791   INFO  [main] HOST: URL of deployment: /Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/voltdbroot/deployment.xml
+2014-12-13 12:12:13,023   INFO  [main] HOST: Dead host timeout set to 90000 milliseconds
+2014-12-13 12:12:13,264   INFO  [main] HOST: Searching for license file located /Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/license.xml
+2014-12-13 12:12:13,289   INFO  [Leader elector-/db/leaders/globalservice] HOST: Host 0 promoted to be the global service provider
+2014-12-13 12:12:14,560   INFO  [main] EXPORT: System is not using any export functionality.
+2014-12-13 12:12:14,569   INFO  [main] CONSOLE: Initializing the database. This may take a moment...
+2014-12-13 12:12:14,609   INFO  [Iv2ExecutionSite: 0:0] HOST: Loading native VoltDB code (voltdb-4.8). A confirmation message will follow if the loading is successful.
+2014-12-13 12:12:14,611   INFO  [Iv2ExecutionSite: 0:0] HOST: Successfully loaded native VoltDB library voltdb-4.8.
+2014-12-13 12:12:14,612   WARN  [Iv2ExecutionSite: 0:0] DBBPOOL: Strict java memory checking is enabled, don't do release builds or performance runs with this enabled. Invoke "ant clean" and "ant -Djmemcheck=NO_MEMCHECK" to disable.
+2014-12-13 12:12:14,856   INFO  [main] TM: Setting maximum size of MPI read pool to: 20
+2014-12-13 12:12:14,915   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:0 as leader for partition 0
+2014-12-13 12:12:14,925   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:1 as leader for partition 1
+2014-12-13 12:12:14,930   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:2 as leader for partition 2
+2014-12-13 12:12:14,931   INFO  [LeaderCache] TM: SP 0:0 for partition 0 found (including self) 1 surviving replicas to repair.  Survivors: 0:0
+2014-12-13 12:12:14,933   INFO  [LeaderCache] TM: SP 0:1 for partition 1 found (including self) 1 surviving replicas to repair.  Survivors: 0:1
+2014-12-13 12:12:14,937   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:3 as leader for partition 3
+2014-12-13 12:12:14,940   INFO  [LeaderCache] TM: SP 0:2 for partition 2 found (including self) 1 surviving replicas to repair.  Survivors: 0:2
+2014-12-13 12:12:14,944   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:4 as leader for partition 4
+2014-12-13 12:12:14,946   INFO  [LeaderCache] TM: SP 0:3 for partition 3 found (including self) 1 surviving replicas to repair.  Survivors: 0:3
+2014-12-13 12:12:14,950   INFO  [LeaderCache] TM: SP 0:1 for partition 1 finished leader promotion. Took 19 ms.
+2014-12-13 12:12:14,950   INFO  [LeaderCache] TM: SP 0:3 for partition 3 finished leader promotion. Took 5 ms.
+2014-12-13 12:12:14,950   INFO  [LeaderCache] TM: SP 0:0 for partition 0 finished leader promotion. Took 24 ms.
+2014-12-13 12:12:14,950   INFO  [LeaderCache] TM: SP 0:2 for partition 2 finished leader promotion. Took 12 ms.
+2014-12-13 12:12:14,951   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:5 as leader for partition 5
+2014-12-13 12:12:14,954   INFO  [LeaderCache] TM: SP 0:4 for partition 4 found (including self) 1 surviving replicas to repair.  Survivors: 0:4
+2014-12-13 12:12:14,954   INFO  [LeaderCache] TM: SP 0:4 for partition 4 finished leader promotion. Took 3 ms.
+2014-12-13 12:12:14,972   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 12:12:14,972   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 12:12:14,973   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 12:12:14,973   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 12:12:14,976   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:6 as leader for partition 6
+2014-12-13 12:12:14,978   INFO  [LeaderCache] TM: SP 0:5 for partition 5 found (including self) 1 surviving replicas to repair.  Survivors: 0:5
+2014-12-13 12:12:14,979   INFO  [LeaderCache] TM: SP 0:5 for partition 5 finished leader promotion. Took 4 ms.
+2014-12-13 12:12:14,987   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 12:12:14,997   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:7 as leader for partition 7
+2014-12-13 12:12:15,010   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 12:12:15,011   INFO  [LeaderCache] TM: SP 0:6 for partition 6 found (including self) 1 surviving replicas to repair.  Survivors: 0:6
+2014-12-13 12:12:15,011   INFO  [LeaderCache] TM: SP 0:6 for partition 6 finished leader promotion. Took 17 ms.
+2014-12-13 12:12:15,024   INFO  [LeaderCache] TM: SP 0:7 for partition 7 found (including self) 1 surviving replicas to repair.  Survivors: 0:7
+2014-12-13 12:12:15,025   INFO  [LeaderCache] TM: SP 0:7 for partition 7 finished leader promotion. Took 10 ms.
+2014-12-13 12:12:15,031   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 12:12:15,047   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 12:12:15,053   INFO  [LeaderCache] TM: MP 0:8 for partition 16383 found 8 surviving leaders to repair.  Survivors: 0:0, 0:1, 0:2, 0:3, 0:4, 0:5, 0:6, 0:7
+2014-12-13 12:12:15,055   INFO  [LeaderCache] TM: MP 0:8 for partition 16383 finished leader promotion. Took 13 ms.
+2014-12-13 12:12:15,063   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 12:12:15,103   INFO  [main] HOST: Database start action is Create.
+2014-12-13 12:12:15,135   INFO  [main] HOST: PID of this Volt process is 6105
+2014-12-13 12:12:15,135   INFO  [main] HOST: Listening for native wire protocol clients on port 21212.
+2014-12-13 12:12:15,136   INFO  [main] HOST: Listening for admin wire protocol clients on port 21211.
+2014-12-13 12:12:15,136   INFO  [main] HOST: Local machine HTTP monitoring is listening on port 8080.
+2014-12-13 12:12:15,136   INFO  [main] HOST: Json API over HTTP enabled at path /api/1.0/, listening on port 8080.
+2014-12-13 12:12:15,136   INFO  [main] HOST: Maximum usable Java heap set to 1981 mb.
+2014-12-13 12:12:15,136   INFO  [main] HOST: Minimum required Java heap for catalog and server config is 394 MB.
+2014-12-13 12:12:15,136   INFO  [main] HOST: Cluster has 1 hosts with leader hostname: "localhost:3021". 8 sites per host. K = 0.
+2014-12-13 12:12:15,136   INFO  [main] HOST: The entire cluster has 1 copy of each of the 8 logical partitions.
+2014-12-13 12:12:15,136   INFO  [main] HOST: Detection of network partitions in the cluster is enabled.
+2014-12-13 12:12:15,136   INFO  [main] HOST: Client authentication is not enabled. Anonymous clients accepted.
+2014-12-13 12:12:15,136   INFO  [main] HOST: No schedule set for automated snapshots.
+2014-12-13 12:12:15,136   INFO  [main] HOST: Using "voltdbroot" for voltdbroot directory.
+2014-12-13 12:12:15,137   INFO  [main] HOST: CPU INFO:         4 Cores, 1 Sockets, 8 Hardware Threads
+2014-12-13 12:12:15,137   INFO  [main] HOST: CPU DESC:         Intel Core i7 3.4 GHz 256 KB L2/core 8 MB L3
+2014-12-13 12:12:15,137   INFO  [main] HOST: HOST MEMORY (MB): 8192
+2014-12-13 12:12:15,137   INFO  [main] HOST: OS PROFILE:       Mac OS X 10.9.5 x86_64 ja_JP
+2014-12-13 12:12:15,137   INFO  [main] HOST: JAVA VERSION:     1.7.0_45
+2014-12-13 12:12:15,137   INFO  [main] HOST: JAVA RUNTIME:     Java(TM) SE Runtime Environment (1.7.0_45-b18)
+2014-12-13 12:12:15,137   INFO  [main] HOST: JAVA VM:          Java HotSpot(TM) 64-Bit Server VM (24.45-b08, mixed mode)
+2014-12-13 12:12:15,137   INFO  [main] HOST: About to list cluster interfaces for all nodes with format [ip1 ip2 ... ipN] client-port:admin-port:http-port
+2014-12-13 12:12:15,137   INFO  [main] HOST:   Host id: 0 with interfaces: 192.168.0.2 21212,21211,8080 [SELF]
+2014-12-13 12:12:15,137   WARN  [main] CONSOLE: This is not a highly available cluster. K-Safety is set to 0.
+2014-12-13 12:12:15,138   WARN  [main] CONSOLE: Durability is turned off. Command logging is off.
+2014-12-13 12:12:15,153   INFO  [SnapshotDaemon] LOGGING: This node was selected as the leader for snapshot truncation
+2014-12-13 12:12:15,153   INFO  [Thread-15] HOST: Logging config info
+2014-12-13 12:12:15,154   INFO  [SnapshotDaemon] LOGGING: Checking for existence of snapshot truncation request
+2014-12-13 12:12:15,170   INFO  [Thread-16] CONSOLE: Server completed initialization.
+2014-12-13 13:42:54,809   WARN  [Thread-0] CONSOLE: The VoltDB server will shut down due to a control-C or other JVM exit.
+2014-12-13 16:33:40,319   INFO  [main] CONSOLE: Initializing VoltDB...
+
+ _    __      ____  ____  ____ 
+| |  / /___  / / /_/ __ \/ __ )
+| | / / __ \/ / __/ / / / __  |
+| |/ / /_/ / / /_/ /_/ / /_/ / 
+|___/\____/_/\__/_____/_____/
+
+--------------------------------
+
+2014-12-13 16:33:40,322   INFO  [main] HOST: Generating default deployment file "/Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/voltdbroot/deployment.xml"
+2014-12-13 16:33:40,330   INFO  [main] CONSOLE: Build: 4.8 voltdb-4.7-193-gf65c029 Community Edition
+2014-12-13 16:33:40,330   INFO  [main] HOST: Command line arguments: org.voltdb.VoltDB create catalog jikken.jar host localhost:3021
+2014-12-13 16:33:40,353   INFO  [main] HOST: Command line JVM arguments: -Xmx2048m -Djava.awt.headless=true -Dsun.net.inetaddr.ttl=300 -Dsun.net.inetaddr.negative.ttl=3600 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseTLAB -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCondCardMark -Dsun.rmi.dgc.server.gcInterval=9223372036854775807 -Dsun.rmi.dgc.client.gcInterval=9223372036854775807 -XX:CMSWaitDuration=120000 -XX:CMSMaxAbortablePrecleanTime=120000 -XX:+ExplicitGCInvokesConcurrent -XX:+CMSScavengeBeforeRemark -XX:+CMSClassUnloadingEnabled -XX:PermSize=64m -Dlog4j.configuration=file:///Users/jaianism/voltdb/voltdb/log4j.xml -Djava.library.path=/Users/jaianism/voltdb/voltdb
+2014-12-13 16:33:40,353   INFO  [main] HOST: Command line JVM classpath: /Users/jaianism/voltdb/voltdb/voltdb-4.8.jar:/Users/jaianism/voltdb/lib/avro-1.7.7.jar:/Users/jaianism/voltdb/lib/commons-cli-1.2.jar:/Users/jaianism/voltdb/lib/commons-codec-1.6.jar:/Users/jaianism/voltdb/lib/commons-lang3-3.0.jar:/Users/jaianism/voltdb/lib/commons-logging-1.1.3.jar:/Users/jaianism/voltdb/lib/groovy-all-2.1.7-indy.jar:/Users/jaianism/voltdb/lib/httpasyncclient-4.0.1.jar:/Users/jaianism/voltdb/lib/httpclient-4.3.2.jar:/Users/jaianism/voltdb/lib/httpcore-4.3.2.jar:/Users/jaianism/voltdb/lib/httpcore-nio-4.3.2.jar:/Users/jaianism/voltdb/lib/jackson-core-asl-1.9.13.jar:/Users/jaianism/voltdb/lib/jackson-mapper-asl-1.9.13.jar:/Users/jaianism/voltdb/lib/jetty-continuation-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-http-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-io-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-server-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jetty-util-7.6.1.v20120215.jar:/Users/jaianism/voltdb/lib/jline-2.10.jar:/Users/jaianism/voltdb/lib/jna.jar:/Users/jaianism/voltdb/lib/jsch-0.1.51.jar:/Users/jaianism/voltdb/lib/kafka_2.8.0-0.8.1.jar:/Users/jaianism/voltdb/lib/log4j-1.2.16.jar:/Users/jaianism/voltdb/lib/metrics-core-2.2.0.jar:/Users/jaianism/voltdb/lib/protobuf-java-2.4.1.jar:/Users/jaianism/voltdb/lib/scala-library.jar:/Users/jaianism/voltdb/lib/servlet-api-2.5.jar:/Users/jaianism/voltdb/lib/slf4j-api-1.6.2.jar:/Users/jaianism/voltdb/lib/slf4j-nop-1.6.2.jar:/Users/jaianism/voltdb/lib/snappy-java-1.1.0.1.jar:/Users/jaianism/voltdb/lib/super-csv-2.1.0.jar:/Users/jaianism/voltdb/lib/tomcat-jdbc.jar:/Users/jaianism/voltdb/lib/tomcat-juli.jar:/Users/jaianism/voltdb/lib/zmq-2.1.11.jar
+2014-12-13 16:33:40,362   INFO  [main] NETWORK: Default network thread count: 2
+2014-12-13 16:33:40,383   INFO  [main] HOST: Beginning inter-node communication on port 3021.
+2014-12-13 16:33:40,383   INFO  [main] HOST: Attempting to bind to leader ip localhost/127.0.0.1:3021
+2014-12-13 16:33:40,387   INFO  [main] CONSOLE: Connecting to VoltDB cluster as the leader...
+2014-12-13 16:33:40,432   INFO  [main] ZK-SERVER: binding to port /127.0.0.1:2181
+2014-12-13 16:33:40,441   INFO  [main] ZK-SERVER: Created server with tickTime 3000 minSessionTimeout 6000 maxSessionTimeout 60000
+2014-12-13 16:33:40,486   INFO  [main] ZK-SERVER: Initiating client connection, connectString=127.0.0.1:2181 sessionTimeout=2000 watcher=org.voltcore.zk.ZKUtil$1@660173e7
+2014-12-13 16:33:40,491   INFO  [main-SendThread()] ZK-CLIENT: Opening socket connection to server /127.0.0.1:2181
+2014-12-13 16:33:40,493   INFO  [main-SendThread(localhost:2181)] ZK-CLIENT: Socket connection established to localhost/127.0.0.1:2181, initiating session
+2014-12-13 16:33:40,493   INFO  [NIOServerCxn.Factory:/127.0.0.1:2181] ZK-SERVER: Accepted socket connection from /127.0.0.1:64740
+2014-12-13 16:33:40,495   INFO  [NIOServerCxn.Factory:/127.0.0.1:2181] ZK-SERVER: Client attempting to establish new session at /127.0.0.1:64740
+2014-12-13 16:33:40,507   INFO  [ZooKeeperServer] ZK-SERVER: Established session 0x1988ecea48000000 with negotiated timeout 6000 for client /127.0.0.1:64740
+2014-12-13 16:33:40,507   INFO  [main-SendThread(localhost:2181)] ZK-CLIENT: Session establishment complete on server localhost/127.0.0.1:2181, sessionid = 0x1988ecea48000000, negotiated timeout = 6000
+2014-12-13 16:33:40,549   INFO  [Socket Joiner] HOST: Attempting to bind to internal ip 0.0.0.0/0.0.0.0:3021
+2014-12-13 16:33:40,581   INFO  [main] HOST: Host id of this node is: 0
+2014-12-13 16:33:40,581   INFO  [main] CONSOLE: Host id of this node is: 0
+2014-12-13 16:33:40,614   INFO  [main] HOST: URL of deployment: /Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/voltdbroot/deployment.xml
+2014-12-13 16:33:40,863   INFO  [main] HOST: Dead host timeout set to 90000 milliseconds
+2014-12-13 16:33:41,109   INFO  [main] HOST: Searching for license file located /Users/jaianism/realtime_battle/RealtimeBattleAlphaServer/db/voltdb/license.xml
+2014-12-13 16:33:41,138   INFO  [Leader elector-/db/leaders/globalservice] HOST: Host 0 promoted to be the global service provider
+2014-12-13 16:33:42,562   INFO  [main] EXPORT: System is not using any export functionality.
+2014-12-13 16:33:42,570   INFO  [main] CONSOLE: Initializing the database. This may take a moment...
+2014-12-13 16:33:42,610   INFO  [Iv2ExecutionSite: 0:0] HOST: Loading native VoltDB code (voltdb-4.8). A confirmation message will follow if the loading is successful.
+2014-12-13 16:33:42,612   INFO  [Iv2ExecutionSite: 0:0] HOST: Successfully loaded native VoltDB library voltdb-4.8.
+2014-12-13 16:33:42,613   WARN  [Iv2ExecutionSite: 0:0] DBBPOOL: Strict java memory checking is enabled, don't do release builds or performance runs with this enabled. Invoke "ant clean" and "ant -Djmemcheck=NO_MEMCHECK" to disable.
+2014-12-13 16:33:42,843   INFO  [main] TM: Setting maximum size of MPI read pool to: 20
+2014-12-13 16:33:42,897   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:0 as leader for partition 0
+2014-12-13 16:33:42,906   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:1 as leader for partition 1
+2014-12-13 16:33:42,912   INFO  [LeaderCache] TM: SP 0:0 for partition 0 found (including self) 1 surviving replicas to repair.  Survivors: 0:0
+2014-12-13 16:33:42,913   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:2 as leader for partition 2
+2014-12-13 16:33:42,913   INFO  [LeaderCache] TM: SP 0:1 for partition 1 found (including self) 1 surviving replicas to repair.  Survivors: 0:1
+2014-12-13 16:33:42,923   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:3 as leader for partition 3
+2014-12-13 16:33:42,924   INFO  [LeaderCache] TM: SP 0:1 for partition 1 finished leader promotion. Took 12 ms.
+2014-12-13 16:33:42,924   INFO  [LeaderCache] TM: SP 0:0 for partition 0 finished leader promotion. Took 17 ms.
+2014-12-13 16:33:42,926   INFO  [LeaderCache] TM: SP 0:2 for partition 2 found (including self) 1 surviving replicas to repair.  Survivors: 0:2
+2014-12-13 16:33:42,927   INFO  [LeaderCache] TM: SP 0:2 for partition 2 finished leader promotion. Took 2 ms.
+2014-12-13 16:33:42,936   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:4 as leader for partition 4
+2014-12-13 16:33:42,937   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 16:33:42,937   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 16:33:42,940   INFO  [LeaderCache] TM: SP 0:3 for partition 3 found (including self) 1 surviving replicas to repair.  Survivors: 0:3
+2014-12-13 16:33:42,941   INFO  [LeaderCache] TM: SP 0:3 for partition 3 finished leader promotion. Took 5 ms.
+2014-12-13 16:33:42,951   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 16:33:42,958   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:5 as leader for partition 5
+2014-12-13 16:33:42,962   INFO  [LeaderCache] TM: SP 0:4 for partition 4 found (including self) 1 surviving replicas to repair.  Survivors: 0:4
+2014-12-13 16:33:42,962   INFO  [LeaderCache] TM: SP 0:4 for partition 4 finished leader promotion. Took 5 ms.
+2014-12-13 16:33:42,966   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 16:33:42,979   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:6 as leader for partition 6
+2014-12-13 16:33:42,983   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 16:33:42,988   INFO  [LeaderCache] TM: SP 0:5 for partition 5 found (including self) 1 surviving replicas to repair.  Survivors: 0:5
+2014-12-13 16:33:42,988   INFO  [LeaderCache] TM: SP 0:5 for partition 5 finished leader promotion. Took 9 ms.
+2014-12-13 16:33:43,003   INFO  [LeaderAppointer-Babysitters] TM: Appointing HSId 0:7 as leader for partition 7
+2014-12-13 16:33:43,006   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 16:33:43,011   INFO  [LeaderCache] TM: SP 0:6 for partition 6 found (including self) 1 surviving replicas to repair.  Survivors: 0:6
+2014-12-13 16:33:43,011   INFO  [LeaderCache] TM: SP 0:6 for partition 6 finished leader promotion. Took 12 ms.
+2014-12-13 16:33:43,026   INFO  [LeaderCache] TM: SP 0:7 for partition 7 found (including self) 1 surviving replicas to repair.  Survivors: 0:7
+2014-12-13 16:33:43,026   INFO  [LeaderCache] TM: SP 0:7 for partition 7 finished leader promotion. Took 10 ms.
+2014-12-13 16:33:43,033   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 16:33:43,040   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 16:33:43,052   INFO  [LeaderCache] TM: MP 0:8 for partition 16383 found 8 surviving leaders to repair.  Survivors: 0:0, 0:1, 0:2, 0:3, 0:4, 0:5, 0:6, 0:7
+2014-12-13 16:33:43,054   INFO  [LeaderCache] TM: MP 0:8 for partition 16383 finished leader promotion. Took 10 ms.
+2014-12-13 16:33:43,062   INFO  [LeaderCache] HOST: Mailbox is not registered for site id -4
+2014-12-13 16:33:43,096   INFO  [main] HOST: Database start action is Create.
+2014-12-13 16:33:43,151   INFO  [main] HOST: PID of this Volt process is 7950
+2014-12-13 16:33:43,151   INFO  [main] HOST: Listening for native wire protocol clients on port 21212.
+2014-12-13 16:33:43,151   INFO  [main] HOST: Listening for admin wire protocol clients on port 21211.
+2014-12-13 16:33:43,151   INFO  [main] HOST: Local machine HTTP monitoring is listening on port 8080.
+2014-12-13 16:33:43,151   INFO  [main] HOST: Json API over HTTP enabled at path /api/1.0/, listening on port 8080.
+2014-12-13 16:33:43,151   INFO  [main] HOST: Maximum usable Java heap set to 1981 mb.
+2014-12-13 16:33:43,151   INFO  [main] HOST: Minimum required Java heap for catalog and server config is 394 MB.
+2014-12-13 16:33:43,151   INFO  [main] HOST: Cluster has 1 hosts with leader hostname: "localhost:3021". 8 sites per host. K = 0.
+2014-12-13 16:33:43,151   INFO  [main] HOST: The entire cluster has 1 copy of each of the 8 logical partitions.
+2014-12-13 16:33:43,151   INFO  [main] HOST: Detection of network partitions in the cluster is enabled.
+2014-12-13 16:33:43,151   INFO  [main] HOST: Client authentication is not enabled. Anonymous clients accepted.
+2014-12-13 16:33:43,151   INFO  [main] HOST: No schedule set for automated snapshots.
+2014-12-13 16:33:43,151   INFO  [main] HOST: Using "voltdbroot" for voltdbroot directory.
+2014-12-13 16:33:43,152   INFO  [main] HOST: CPU INFO:         4 Cores, 1 Sockets, 8 Hardware Threads
+2014-12-13 16:33:43,152   INFO  [main] HOST: CPU DESC:         Intel Core i7 3.4 GHz 256 KB L2/core 8 MB L3
+2014-12-13 16:33:43,152   INFO  [main] HOST: HOST MEMORY (MB): 8192
+2014-12-13 16:33:43,152   INFO  [main] HOST: OS PROFILE:       Mac OS X 10.9.5 x86_64 ja_JP
+2014-12-13 16:33:43,152   INFO  [main] HOST: JAVA VERSION:     1.7.0_45
+2014-12-13 16:33:43,152   INFO  [main] HOST: JAVA RUNTIME:     Java(TM) SE Runtime Environment (1.7.0_45-b18)
+2014-12-13 16:33:43,152   INFO  [main] HOST: JAVA VM:          Java HotSpot(TM) 64-Bit Server VM (24.45-b08, mixed mode)
+2014-12-13 16:33:43,152   INFO  [main] HOST: About to list cluster interfaces for all nodes with format [ip1 ip2 ... ipN] client-port:admin-port:http-port
+2014-12-13 16:33:43,152   INFO  [main] HOST:   Host id: 0 with interfaces: 192.168.0.2 21212,21211,8080 [SELF]
+2014-12-13 16:33:43,158   WARN  [main] CONSOLE: This is not a highly available cluster. K-Safety is set to 0.
+2014-12-13 16:33:43,158   WARN  [main] CONSOLE: Durability is turned off. Command logging is off.
+2014-12-13 16:33:43,174   INFO  [SnapshotDaemon] LOGGING: This node was selected as the leader for snapshot truncation
+2014-12-13 16:33:43,175   INFO  [Thread-15] HOST: Logging config info
+2014-12-13 16:33:43,176   INFO  [SnapshotDaemon] LOGGING: Checking for existence of snapshot truncation request
+2014-12-13 16:33:43,192   INFO  [Thread-16] CONSOLE: Server completed initialization.
+2014-12-13 17:05:43,980   WARN  [Thread-0] CONSOLE: The VoltDB server will shut down due to a control-C or other JVM exit.

@@ -1,0 +1,10 @@
+SQL: update identifier set current_value = current_value + 1where table_name = ?;
+PLAN:
+RETURN RESULTS TO STORED PROCEDURE
+ LIMIT 1
+  RECEIVE FROM ALL PARTITIONS
+   SEND PARTITION RESULTS TO COORDINATOR
+    UPDATE
+     INDEX SCAN of "IDENTIFIER" using its primary key index
+      uniquely match (TABLE_NAME = ?0), filter by (TABLE_NAME = ?0)
+

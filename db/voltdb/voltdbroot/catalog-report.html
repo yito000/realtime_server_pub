@@ -1,0 +1,469 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>VoltDB Management Center</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="http://assets.voltdb.com/css/resources/schema/bootstrap.min.css" rel="stylesheet">
+<link href="http://assets.voltdb.com/css/resources/schema/bootstrap-responsive.css" rel="stylesheet">
+<link href="http://assets.voltdb.com/css/resources/schema/theme.bootstrap.css" rel="stylesheet">
+<link href="http://assets.voltdb.com/css/resources/layout.css" rel="stylesheet" />
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="http://assets.voltdb.com/b/js/html5shiv.js"></script>
+    <![endif]-->
+<!-- Fav and touch icons -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+<link rel="shortcut icon" href="../assets/ico/favicon.png">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#schemaLinkSqlQuery").on("click", function () {
+                //For opening the SQL Query Tab
+                $.cookie("current-tab", 3, { path: '/', domain: window.location.hostname });
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="wrapper">
+    <div class="catalogContainer" id="catalogContainer">
+        <div class="catalogMenu" id="MenuCatalog">
+            <div class="nav-collapse collapse">
+                <ul class="catalogNav" id="catalogNavlist">
+                    <li id='o-nav'> <a href="#o">Overview</a></li>
+                    <li id='s-nav'> <a href="#s">Schema</a></li>
+                    <li id='p-nav'> <a href="#p">Procedures &amp; SQL</a></li>
+                    <!--        <li id='r-nav'> <a href="#r">System Report</a></li> -->
+                    <li id='z-nav'> <a href="#z">Size Worksheet</a></li>
+                    <li id='d-nav'> <a href="#d">DDL Source</a></li>
+                    <!--        <li id='m-nav'> <a href='/memory/'>Memory Report</a></li> -->
+                </ul>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+        <!-- /container -->
+        <div class="container" id="containerCatalog">
+            <div id='o' class='reportpage'>
+                <div class="dataBlock">
+                    <div class="dataBlockContent systemOver" style="padding:0;">
+                        <!--##CLUSTER##-->
+                    </div>
+                </div>
+                <div class="dataBlock">
+                    <div class="dataBlockHeading" style="border-bottom:none;">
+                        <h3>Catalog Overview Statistics</h3>
+                    </div>
+                    <div class="dataBlockContent" style="padding:0;"> <table class='table table-condensed'>
+<tr><td>Compiled by VoltDB Version</td><td>5.0</td></tr>
+<tr><td>Compiled on</td><td>月, 5 1 2015 09:54:37 GMT+00:00</td></tr>
+<tr><td>Table Count</td><td>2 (1 partitioned / 1 replicated)</td></tr>
+<tr><td>Materialized View Count</td><td>0</td></tr>
+<tr><td>Index Count</td><td>2</td></tr>
+<tr><td>Procedure Count</td><td>5 (0 partitioned / 5 replicated) (2 read-only / 3 read-write)</td></tr>
+<tr><td>SQL Statement Count</td><td>10</td></tr>
+</table>
+
+ </div>
+                </div>
+            </div>
+            <div id='s' class='reportpage' style='display: none;'>
+                <div class="dataBlock">
+                    <div class="dataBlockHeading"> <a name='s'></a>
+                        <h1>Schema</h1>
+                    </div>
+                    <div class="dataBlockContent">
+                        <div class="tblScroll">
+                        <div class="checkbox">
+                         <label>
+                          <input type="checkbox" class="cb"> Expand All
+                         </label>
+                        </div>
+                        <table class="table tableL1 tablesorter" id='schematable'>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Partitioning</th>
+                                    <th>Columns</th>
+                                    <th>Indexes</th>
+                                    <th>PKey</th>
+                                    <th>TupleLimit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr class='primaryrow'><td style='white-space: nowrap;'><i id='s-identifier--icon' class='icon-chevron-right'></i> <a href='#' id='s-identifier' class='togglex'>IDENTIFIER</a></td><td><span class='label label l-Table'>Table</span></td><td style='whitespace: nowrap;'><span class='label label-warning l-Replicated'>Replicated</span></td><td>2</td><td>1</td><td><span class='label label-info l-Has-PKey'>Has-PKey</span></td><td><span class='label label l-No-limit'>No-limit</span></td></tr>
+<tr class='tablesorter-childRow'><td class='invert' colspan='7' id='s-identifier--dropdown'>
+<p><pre>CREATE TABLE IDENTIFIER (
+   TABLE_NAME varchar(100) NOT NULL,
+   CURRENT_VALUE integer DEFAULT '1' NOT NULL,
+   PRIMARY KEY (TABLE_NAME)
+);
+</pre></p>
+<p>Read/Write by procedures: <a href='#p-UserAdd'>UserAdd</a></p>    <table class='table tableL2 table-condensed'>
+    <thead><tr><th>Index Name</th><th>Type</th><th>Columns</th><th>Attributes</th></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='s-identifier-voltdb_autogen_idx_pk_identifier_table_name--icon' class='icon-chevron-right'></i> <a href='#' id='s-identifier-voltdb_autogen_idx_pk_identifier_table_name' class='togglex'>VOLTDB_AUTOGEN_IDX_PK_IDENTIFIER_TABLE_NAME</a></td><td>BALANCED_TREE</td><td>TABLE_NAME</td><td><span class='label label-success l-Unique'>Unique</span></td></tr>
+<tr class='dropdown2'><td colspan='5' id='s-identifier-voltdb_autogen_idx_pk_identifier_table_name--dropdown'>
+<p>Used by procedures: <a href='#p-UserAdd'>UserAdd</a></p></td></tr>
+    </thead>
+    </table>
+</td></tr>
+<tr class='primaryrow'><td style='white-space: nowrap;'><i id='s-users--icon' class='icon-chevron-right'></i> <a href='#' id='s-users' class='togglex'>USERS</a></td><td><span class='label label l-Table'>Table</span></td><td style='whitespace: nowrap;'><span class='label label-success l-Partitioned'>Partitioned</span><small> on ID</small></td><td>2</td><td>1</td><td><span class='label label-info l-Has-PKey'>Has-PKey</span></td><td><span class='label label l-No-limit'>No-limit</span></td></tr>
+<tr class='tablesorter-childRow'><td class='invert' colspan='7' id='s-users--dropdown'>
+<p><pre>CREATE TABLE USERS (
+   ID integer NOT NULL,
+   UIID varchar(64) NOT NULL,
+   PRIMARY KEY (ID)
+);
+</pre></p>
+<p>Read-only by procedures: <a href='#p-UserList'>UserList</a>, <a href='#p-UserSelect'>UserSelect</a></p><p>Read/Write by procedures: <a href='#p-UserAdd'>UserAdd</a>, <a href='#p-UserDeleteAll'>UserDeleteAll</a>, <a href='#p-UserUpdate'>UserUpdate</a></p>    <table class='table tableL2 table-condensed'>
+    <thead><tr><th>Index Name</th><th>Type</th><th>Columns</th><th>Attributes</th></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='s-users-voltdb_autogen_idx_pk_users_id--icon' class='icon-chevron-right'></i> <a href='#' id='s-users-voltdb_autogen_idx_pk_users_id' class='togglex'>VOLTDB_AUTOGEN_IDX_PK_USERS_ID</a></td><td>BALANCED_TREE</td><td>ID</td><td><span class='label label-success l-Unique'>Unique</span></td></tr>
+<tr class='dropdown2'><td colspan='5' id='s-users-voltdb_autogen_idx_pk_users_id--dropdown'>
+<p>Used by procedures: <a href='#p-UserList'>UserList</a>, <a href='#p-UserSelect'>UserSelect</a>, <a href='#p-UserUpdate'>UserUpdate</a></p></td></tr>
+    </thead>
+    </table>
+</td></tr>
+
+                            </tbody>
+
+                        </table>
+                        </div>
+                        <br/>
+                        <br/>
+                        <span class="prop"><a href = '#d' id="ddlSource">View the DDL Source</a></span> </div>
+                </div>
+            </div>
+            <div id='d' class='reportpage' style='display: none;'>
+                <div class="dataBlock">
+                    <div class="dataBlockHeading"> <a name='d'></a>
+                  <h1>DDL Source <a class="btn" id="downloadDDL" download="ddl.sql" href="/ddl/" style="padding:5px;">Download</a> </h1>
+                    </div>
+                    <div class="dataBlockContent">
+                        <pre>
+CREATE TABLE IDENTIFIER (
+   TABLE_NAME varchar(100) NOT NULL,
+   CURRENT_VALUE integer DEFAULT '1' NOT NULL,
+   PRIMARY KEY (TABLE_NAME)
+);
+
+CREATE TABLE USERS (
+   ID integer NOT NULL,
+   UIID varchar(64) NOT NULL,
+   PRIMARY KEY (ID)
+);
+PARTITION TABLE USERS ON COLUMN ID;
+
+
+CREATE PROCEDURE 
+   FROM CLASS UserAdd;
+
+CREATE PROCEDURE 
+   FROM CLASS UserDeleteAll;
+
+CREATE PROCEDURE 
+   FROM CLASS UserList;
+
+CREATE PROCEDURE 
+   FROM CLASS UserSelect;
+
+CREATE PROCEDURE 
+   FROM CLASS UserUpdate;
+
+
+</pre>
+                    </div>
+                </div>
+            </div>
+            <div id='p' class='reportpage' style='display: none;'>
+                <div class="dataBlock">
+                    <div class="dataBlockHeading"> <a name='p'></a>
+                        <h1>Procedures &amp; SQL</h1>
+                    </div>
+                    <div class="dataBlockContent">
+                        <div class="tblScroll">
+                        <div class="checkbox">
+                        <label>
+                         <input type="checkbox" class="cb"> Expand All
+                        </label>
+                       </div>
+                        <table class="table tableL1 tablesorter" id='proctable'>
+                            <thead>
+                                <tr>
+                                    <th>Procedure Name</th>
+                                    <th>Parameters</th>
+                                    <th>Partitioning</th>
+                                    <th>R/W</th>
+                                    <th>Access</th>
+                                    <th>Attributes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr class='primaryrow'><td style='white-space: nowrap'><i id='p-useradd--icon' class='icon-chevron-right'></i> <a href='#p-useradd' id='p-useradd' class='togglex'>UserAdd</a></td><td>STRING</td><td><span class='label label-warning l-Multi'>Multi</span></td><td><span class='label label-warning l-Write'>Write</span></td><td><i>None</i></td><td><span class='label label-info l-Java'>Java</span></td></tr>
+<tr class='tablesorter-childRow'><td class='invert' colspan='6' id='p-useradd--dropdown'>
+<p>Read/Write access to tables: <a href='#s-IDENTIFIER'>IDENTIFIER</a>, <a href='#s-USERS'>USERS</a></p><p>Uses indexes: <a href='#s-IDENTIFIER-VOLTDB_AUTOGEN_IDX_PK_IDENTIFIER_TABLE_NAME'>VOLTDB_AUTOGEN_IDX_PK_IDENTIFIER_TABLE_NAME</a></p>    <table class='table tableL2 table-condensed'>
+    <thead><tr><th><span style='white-space: nowrap;'>Statement Name</span></th><th>Statement SQL</th><th>Params</th><th>R/W</th><th>Attributes</th></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='p-useradd-id_insert_sql--icon' class='icon-chevron-right'></i> <a href='#' id='p-useradd-id_insert_sql' class='togglex'>id_insert_sql</a></td><td><tt>insert into identifier (table_name) values (?);</td></tt><td>STRING</td><td><span class='label label-warning l-Write'>Write</span></td><td></td></tr>
+<tr class='dropdown2'><td colspan='5' id='p-useradd-id_insert_sql--dropdown'>
+<div class='well well-small'><h4>Explain Plan:</h4>
+<tt>RETURN&nbsp;RESULTS&nbsp;TO&nbsp;STORED&nbsp;PROCEDURE<br/>&nbsp;LIMIT&nbsp;1<br/>&nbsp;&nbsp;RECEIVE&nbsp;FROM&nbsp;ALL&nbsp;PARTITIONS<br/>&nbsp;&nbsp;&nbsp;SEND&nbsp;PARTITION&nbsp;RESULTS&nbsp;TO&nbsp;COORDINATOR<br/>&nbsp;&nbsp;&nbsp;&nbsp;INSERT&nbsp;into&nbsp;&quot;IDENTIFIER&quot;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MATERIALIZE&nbsp;TUPLE&nbsp;from&nbsp;parameters&nbsp;and/or&nbsp;literals<br/></tt></div>
+</td></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='p-useradd-id_select_sql--icon' class='icon-chevron-right'></i> <a href='#' id='p-useradd-id_select_sql' class='togglex'>id_select_sql</a></td><td><tt>select current_value from identifier where table_name = 'users';</td></tt><td><i>None</i></td><td><span class='label label-success l-Read'>Read</span></td><td></td></tr>
+<tr class='dropdown2'><td colspan='5' id='p-useradd-id_select_sql--dropdown'>
+<div class='well well-small'><h4>Explain Plan:</h4>
+<tt>RETURN&nbsp;RESULTS&nbsp;TO&nbsp;STORED&nbsp;PROCEDURE<br/>&nbsp;INDEX&nbsp;SCAN&nbsp;of&nbsp;&quot;IDENTIFIER&quot;&nbsp;using&nbsp;its&nbsp;primary&nbsp;key&nbsp;index<br/>&nbsp;&nbsp;uniquely&nbsp;match&nbsp;(TABLE_NAME&nbsp;=&nbsp;'users')<br/></tt></div>
+</td></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='p-useradd-id_update_sql--icon' class='icon-chevron-right'></i> <a href='#' id='p-useradd-id_update_sql' class='togglex'>id_update_sql</a></td><td><tt>update identifier set current_value = current_value + 1where table_name = ?;</td></tt><td>STRING</td><td><span class='label label-warning l-Write'>Write</span></td><td></td></tr>
+<tr class='dropdown2'><td colspan='5' id='p-useradd-id_update_sql--dropdown'>
+<div class='well well-small'><h4>Explain Plan:</h4>
+<tt>RETURN&nbsp;RESULTS&nbsp;TO&nbsp;STORED&nbsp;PROCEDURE<br/>&nbsp;LIMIT&nbsp;1<br/>&nbsp;&nbsp;RECEIVE&nbsp;FROM&nbsp;ALL&nbsp;PARTITIONS<br/>&nbsp;&nbsp;&nbsp;SEND&nbsp;PARTITION&nbsp;RESULTS&nbsp;TO&nbsp;COORDINATOR<br/>&nbsp;&nbsp;&nbsp;&nbsp;UPDATE<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;SCAN&nbsp;of&nbsp;&quot;IDENTIFIER&quot;&nbsp;using&nbsp;its&nbsp;primary&nbsp;key&nbsp;index<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uniquely&nbsp;match&nbsp;(TABLE_NAME&nbsp;=&nbsp;?0),&nbsp;filter&nbsp;by&nbsp;(TABLE_NAME&nbsp;=&nbsp;?0)<br/></tt></div>
+</td></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='p-useradd-insert_sql--icon' class='icon-chevron-right'></i> <a href='#' id='p-useradd-insert_sql' class='togglex'>insert_sql</a></td><td><tt>insert into users (id, uiid) values (?, ?);</td></tt><td>INTEGER, STRING</td><td><span class='label label-warning l-Write'>Write</span></td><td></td></tr>
+<tr class='dropdown2'><td colspan='5' id='p-useradd-insert_sql--dropdown'>
+<div class='well well-small'><h4>Explain Plan:</h4>
+<tt>RETURN&nbsp;RESULTS&nbsp;TO&nbsp;STORED&nbsp;PROCEDURE<br/>&nbsp;Serial&nbsp;AGGREGATION&nbsp;ops:&nbsp;SUM(VOLT_TEMP_TABLE.modified_tuples)<br/>&nbsp;&nbsp;RECEIVE&nbsp;FROM&nbsp;ALL&nbsp;PARTITIONS<br/>&nbsp;&nbsp;&nbsp;SEND&nbsp;PARTITION&nbsp;RESULTS&nbsp;TO&nbsp;COORDINATOR<br/>&nbsp;&nbsp;&nbsp;&nbsp;INSERT&nbsp;into&nbsp;&quot;USERS&quot;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MATERIALIZE&nbsp;TUPLE&nbsp;from&nbsp;parameters&nbsp;and/or&nbsp;literals<br/></tt></div>
+</td></tr>
+    </thead>
+    </table>
+</td></tr>
+<tr class='primaryrow'><td style='white-space: nowrap'><i id='p-userdeleteall--icon' class='icon-chevron-right'></i> <a href='#p-userdeleteall' id='p-userdeleteall' class='togglex'>UserDeleteAll</a></td><td><i>None</i></td><td><span class='label label-warning l-Multi'>Multi</span></td><td><span class='label label-warning l-Write'>Write</span></td><td><i>None</i></td><td><span class='label label-info l-Java'>Java</span></td></tr>
+<tr class='tablesorter-childRow'><td class='invert' colspan='6' id='p-userdeleteall--dropdown'>
+<p>Read/Write access to tables: <a href='#s-USERS'>USERS</a></p>    <table class='table tableL2 table-condensed'>
+    <thead><tr><th><span style='white-space: nowrap;'>Statement Name</span></th><th>Statement SQL</th><th>Params</th><th>R/W</th><th>Attributes</th></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='p-userdeleteall-sql--icon' class='icon-chevron-right'></i> <a href='#' id='p-userdeleteall-sql' class='togglex'>sql</a></td><td><tt>delete from users;</td></tt><td><i>None</i></td><td><span class='label label-warning l-Write'>Write</span></td><td></td></tr>
+<tr class='dropdown2'><td colspan='5' id='p-userdeleteall-sql--dropdown'>
+<div class='well well-small'><h4>Explain Plan:</h4>
+<tt>RETURN&nbsp;RESULTS&nbsp;TO&nbsp;STORED&nbsp;PROCEDURE<br/>&nbsp;Serial&nbsp;AGGREGATION&nbsp;ops:&nbsp;SUM(VOLT_TEMP_TABLE.modified_tuples)<br/>&nbsp;&nbsp;RECEIVE&nbsp;FROM&nbsp;ALL&nbsp;PARTITIONS<br/>&nbsp;&nbsp;&nbsp;SEND&nbsp;PARTITION&nbsp;RESULTS&nbsp;TO&nbsp;COORDINATOR<br/>&nbsp;&nbsp;&nbsp;&nbsp;TRUNCATE&nbsp;TABLE&nbsp;USERS<br/></tt></div>
+</td></tr>
+    </thead>
+    </table>
+</td></tr>
+<tr class='primaryrow'><td style='white-space: nowrap'><i id='p-userlist--icon' class='icon-chevron-right'></i> <a href='#p-userlist' id='p-userlist' class='togglex'>UserList</a></td><td><i>None</i></td><td><span class='label label-warning l-Multi'>Multi</span></td><td><span class='label label-success l-Read'>Read</span></td><td><i>None</i></td><td><span class='label label-info l-Java'>Java</span><span class='label label-important l-Scans'>Scans</span></td></tr>
+<tr class='tablesorter-childRow'><td class='invert' colspan='6' id='p-userlist--dropdown'>
+<p>Read-only access to tables: <a href='#s-USERS'>USERS</a></p><p>Uses indexes: <a href='#s-USERS-VOLTDB_AUTOGEN_IDX_PK_USERS_ID'>VOLTDB_AUTOGEN_IDX_PK_USERS_ID</a></p>    <table class='table tableL2 table-condensed'>
+    <thead><tr><th><span style='white-space: nowrap;'>Statement Name</span></th><th>Statement SQL</th><th>Params</th><th>R/W</th><th>Attributes</th></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='p-userlist-sql--icon' class='icon-chevron-right'></i> <a href='#' id='p-userlist-sql' class='togglex'>sql</a></td><td><tt>select id, uiid from users order by id;</td></tt><td><i>None</i></td><td><span class='label label-success l-Read'>Read</span></td><td><span class='label label-important l-Scans'>Scans</span></td></tr>
+<tr class='dropdown2'><td colspan='5' id='p-userlist-sql--dropdown'>
+<div class='well well-small'><h4>Explain Plan:</h4>
+<tt>RETURN&nbsp;RESULTS&nbsp;TO&nbsp;STORED&nbsp;PROCEDURE<br/>&nbsp;ORDER&nbsp;BY&nbsp;(SORT)<br/>&nbsp;&nbsp;RECEIVE&nbsp;FROM&nbsp;ALL&nbsp;PARTITIONS<br/>&nbsp;&nbsp;&nbsp;SEND&nbsp;PARTITION&nbsp;RESULTS&nbsp;TO&nbsp;COORDINATOR<br/>&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;SCAN&nbsp;of&nbsp;&quot;USERS&quot;&nbsp;using&nbsp;its&nbsp;primary&nbsp;key&nbsp;index&nbsp;(for&nbsp;sort&nbsp;order&nbsp;only)<br/></tt></div>
+</td></tr>
+    </thead>
+    </table>
+</td></tr>
+<tr class='primaryrow'><td style='white-space: nowrap'><i id='p-userselect--icon' class='icon-chevron-right'></i> <a href='#p-userselect' id='p-userselect' class='togglex'>UserSelect</a></td><td>INTEGER</td><td><span class='label label-warning l-Multi'>Multi</span></td><td><span class='label label-success l-Read'>Read</span></td><td><i>None</i></td><td><span class='label label-info l-Java'>Java</span></td></tr>
+<tr class='tablesorter-childRow'><td class='invert' colspan='6' id='p-userselect--dropdown'>
+<p>Read-only access to tables: <a href='#s-USERS'>USERS</a></p><p>Uses indexes: <a href='#s-USERS-VOLTDB_AUTOGEN_IDX_PK_USERS_ID'>VOLTDB_AUTOGEN_IDX_PK_USERS_ID</a></p>    <table class='table tableL2 table-condensed'>
+    <thead><tr><th><span style='white-space: nowrap;'>Statement Name</span></th><th>Statement SQL</th><th>Params</th><th>R/W</th><th>Attributes</th></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='p-userselect-sql--icon' class='icon-chevron-right'></i> <a href='#' id='p-userselect-sql' class='togglex'>sql</a></td><td><tt>select id, uiid from users where id = ? order by id;</td></tt><td>INTEGER</td><td><span class='label label-success l-Read'>Read</span></td><td></td></tr>
+<tr class='dropdown2'><td colspan='5' id='p-userselect-sql--dropdown'>
+<div class='well well-small'><h4>Explain Plan:</h4>
+<tt>RETURN&nbsp;RESULTS&nbsp;TO&nbsp;STORED&nbsp;PROCEDURE<br/>&nbsp;ORDER&nbsp;BY&nbsp;(SORT)<br/>&nbsp;&nbsp;RECEIVE&nbsp;FROM&nbsp;ALL&nbsp;PARTITIONS<br/>&nbsp;&nbsp;&nbsp;SEND&nbsp;PARTITION&nbsp;RESULTS&nbsp;TO&nbsp;COORDINATOR<br/>&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;SCAN&nbsp;of&nbsp;&quot;USERS&quot;&nbsp;using&nbsp;its&nbsp;primary&nbsp;key&nbsp;index<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uniquely&nbsp;match&nbsp;(ID&nbsp;=&nbsp;?0)<br/></tt></div>
+</td></tr>
+    </thead>
+    </table>
+</td></tr>
+<tr class='primaryrow'><td style='white-space: nowrap'><i id='p-userupdate--icon' class='icon-chevron-right'></i> <a href='#p-userupdate' id='p-userupdate' class='togglex'>UserUpdate</a></td><td>INTEGER, STRING</td><td><span class='label label-warning l-Multi'>Multi</span></td><td><span class='label label-warning l-Write'>Write</span></td><td><i>None</i></td><td><span class='label label-info l-Java'>Java</span></td></tr>
+<tr class='tablesorter-childRow'><td class='invert' colspan='6' id='p-userupdate--dropdown'>
+<p>Read/Write access to tables: <a href='#s-USERS'>USERS</a></p><p>Uses indexes: <a href='#s-USERS-VOLTDB_AUTOGEN_IDX_PK_USERS_ID'>VOLTDB_AUTOGEN_IDX_PK_USERS_ID</a></p>    <table class='table tableL2 table-condensed'>
+    <thead><tr><th><span style='white-space: nowrap;'>Statement Name</span></th><th>Statement SQL</th><th>Params</th><th>R/W</th><th>Attributes</th></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='p-userupdate-insert_sql--icon' class='icon-chevron-right'></i> <a href='#' id='p-userupdate-insert_sql' class='togglex'>insert_sql</a></td><td><tt>insert into users (id, uiid) values (?, ?);</td></tt><td>INTEGER, STRING</td><td><span class='label label-warning l-Write'>Write</span></td><td></td></tr>
+<tr class='dropdown2'><td colspan='5' id='p-userupdate-insert_sql--dropdown'>
+<div class='well well-small'><h4>Explain Plan:</h4>
+<tt>RETURN&nbsp;RESULTS&nbsp;TO&nbsp;STORED&nbsp;PROCEDURE<br/>&nbsp;Serial&nbsp;AGGREGATION&nbsp;ops:&nbsp;SUM(VOLT_TEMP_TABLE.modified_tuples)<br/>&nbsp;&nbsp;RECEIVE&nbsp;FROM&nbsp;ALL&nbsp;PARTITIONS<br/>&nbsp;&nbsp;&nbsp;SEND&nbsp;PARTITION&nbsp;RESULTS&nbsp;TO&nbsp;COORDINATOR<br/>&nbsp;&nbsp;&nbsp;&nbsp;INSERT&nbsp;into&nbsp;&quot;USERS&quot;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MATERIALIZE&nbsp;TUPLE&nbsp;from&nbsp;parameters&nbsp;and/or&nbsp;literals<br/></tt></div>
+</td></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='p-userupdate-select_sql--icon' class='icon-chevron-right'></i> <a href='#' id='p-userupdate-select_sql' class='togglex'>select_sql</a></td><td><tt>select id, uiid from users where id = ? order by id;</td></tt><td>INTEGER</td><td><span class='label label-success l-Read'>Read</span></td><td></td></tr>
+<tr class='dropdown2'><td colspan='5' id='p-userupdate-select_sql--dropdown'>
+<div class='well well-small'><h4>Explain Plan:</h4>
+<tt>RETURN&nbsp;RESULTS&nbsp;TO&nbsp;STORED&nbsp;PROCEDURE<br/>&nbsp;ORDER&nbsp;BY&nbsp;(SORT)<br/>&nbsp;&nbsp;RECEIVE&nbsp;FROM&nbsp;ALL&nbsp;PARTITIONS<br/>&nbsp;&nbsp;&nbsp;SEND&nbsp;PARTITION&nbsp;RESULTS&nbsp;TO&nbsp;COORDINATOR<br/>&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;SCAN&nbsp;of&nbsp;&quot;USERS&quot;&nbsp;using&nbsp;its&nbsp;primary&nbsp;key&nbsp;index<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uniquely&nbsp;match&nbsp;(ID&nbsp;=&nbsp;?0)<br/></tt></div>
+</td></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='p-userupdate-update_sql--icon' class='icon-chevron-right'></i> <a href='#' id='p-userupdate-update_sql' class='togglex'>update_sql</a></td><td><tt>update users set uiid = ? where id = ?;</td></tt><td>STRING, INTEGER</td><td><span class='label label-warning l-Write'>Write</span></td><td></td></tr>
+<tr class='dropdown2'><td colspan='5' id='p-userupdate-update_sql--dropdown'>
+<div class='well well-small'><h4>Explain Plan:</h4>
+<tt>RETURN&nbsp;RESULTS&nbsp;TO&nbsp;STORED&nbsp;PROCEDURE<br/>&nbsp;Serial&nbsp;AGGREGATION&nbsp;ops:&nbsp;SUM(VOLT_TEMP_TABLE.modified_tuples)<br/>&nbsp;&nbsp;RECEIVE&nbsp;FROM&nbsp;ALL&nbsp;PARTITIONS<br/>&nbsp;&nbsp;&nbsp;SEND&nbsp;PARTITION&nbsp;RESULTS&nbsp;TO&nbsp;COORDINATOR<br/>&nbsp;&nbsp;&nbsp;&nbsp;UPDATE<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;SCAN&nbsp;of&nbsp;&quot;USERS&quot;&nbsp;using&nbsp;its&nbsp;primary&nbsp;key&nbsp;index<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uniquely&nbsp;match&nbsp;(ID&nbsp;=&nbsp;?1),&nbsp;filter&nbsp;by&nbsp;(ID&nbsp;=&nbsp;?1)<br/></tt></div>
+</td></tr>
+    </thead>
+    </table>
+</td></tr>
+
+                            </tbody>
+
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id='r' class='reportpage' style='display: none;'>
+                <div class="dataBlock">
+                    <div class="dataBlockHeading">
+                        <h1>System Report</h1>
+                    </div>
+                    <div class="dataBlockContent">
+                        <!--##PLATFORM2##-->
+                    </div>
+                </div>
+                <div class="dataBlock">
+                    <div class="dataBlockHeading">
+                        <h4>VoltDB Compiler Platform:</h4>
+                    </div>
+                    <div class="dataBlockContent">
+                        <p><tt>CPU INFO:         4 Cores, 1 Sockets, 8 Hardware Threads<br/>
+CPU DESC:         Intel Core i7 2.3 GHz 256 KB L2/core 6 MB L3<br/>
+HOST MEMORY (MB): 8192<br/>
+OS PROFILE:       Mac OS X 10.9.5 x86_64 ja_JP<br/>
+JAVA VERSION:     1.7.0_45<br/>
+JAVA RUNTIME:     Java(TM) SE Runtime Environment (1.7.0_45-b18)<br/>
+JAVA VM:          Java HotSpot(TM) 64-Bit Server VM (24.45-b08, mixed mode)<br/>
+</tt></p>
+                    </div>
+                </div>
+            </div>
+            <div id='z' class='reportpage' style='display: none;'>
+                <div class="dataBlock">
+                    <div class="dataBlockHeading"> <a name='z'></a>
+                        <h1>Estimate Memory Used by User Data</h1>
+                    </div>
+                    <div class="dataBlockContent">
+                        <table class="z-table" id="zTbl">
+                            <tr>
+                                <td width='40%'> This sizing worksheet is designed to help VoltDB application developers
+                                    estimate the amount of memory the user data will require in an application.
+                                    These estimates include user data and most of the per-row data structure
+                                    overhead for that data. Memory use that is not proportional to the amount
+                                    of data (e.g., the Java heap and any temporary buffers
+                                    and caches) is not included. </td>
+                                <td width='*'><small>
+                                                  <ul>
+                                                      <li>Sizes without units are in bytes.</li>
+                                                      <li>For more useful results replace row counts with better estimates.</li>
+                                                      <li>All calculated fields update after leaving any input field.</li>
+                                                      <li>Warning: Page refresh resets all input fields.</li>
+                                                      <li> VARCHAR columns are measured in UTF-8 characters by default. VARCHAR
+                                                          columns of up to 16 characters are stored in-line at 4 bytes per character.
+                                                          Columns of 16 characters or more are stored in pooled memory via pointers. </li>
+                                                  </ul>
+                                              </small></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="dataBlockContent">
+                        <div class="tblScroll">
+                        <table class="table tableL3 tablesorter" id='sizetable'>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Count</th>
+                                    <th class='min-max-header'>Row Min</th>
+                                    <th class='min-max-header'>Row Max</th>
+                                    <th class='min-max-header'>Index Min</th>
+                                    <th class='min-max-header'>Index Max</th>
+                                    <th class='min-max-header'>Table Min</th>
+                                    <th class='min-max-header'>Table Max</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <!--##SIZES##-->
+<tr class='primaryrow'><td class='table-view-name' id='s-size-1'>identifier</td>
+<td><span class='label label l-Table'>Table</span></td>
+<td><div class='ecount'><input type='text' class='form-control count-input' id='s-size-1-count' onblur='sizes_update_all();' value='1000' class='form-control' placeholder='.ecount'></input>
+</div></td>
+<td id='s-size-1-rmin' class='right-cell'>100</td>
+<td id='s-size-1-rmax' class='right-cell'>548</td>
+<td id='s-size-1-imin' class='right-cell'>48</td>
+<td id='s-size-1-imax' class='right-cell'>48</td>
+<td id='s-size-1-tmin' class='right-cell calculated-cell'>148000</td>
+<td id='s-size-1-tmax' class='right-cell calculated-cell'>596000</td>
+</tr>
+<tr class='tablesorter-childRow'><td class='invert' colspan='6' id='s-size-1--dropdown'>
+<p><pre>CREATE TABLE IDENTIFIER (
+   TABLE_NAME varchar(100) NOT NULL,
+   CURRENT_VALUE integer DEFAULT '1' NOT NULL,
+   PRIMARY KEY (TABLE_NAME)
+);
+</pre></p>
+    <table class='table tableL2 table-condensed'>
+    <thead><tr><th>Index Name</th><th>Type</th><th>Columns</th><th>Attributes</th></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='s-identifier-voltdb_autogen_idx_pk_identifier_table_name--icon' class='icon-chevron-right'></i> <a href='#' id='s-identifier-voltdb_autogen_idx_pk_identifier_table_name' class='togglex'>VOLTDB_AUTOGEN_IDX_PK_IDENTIFIER_TABLE_NAME</a></td><td>BALANCED_TREE</td><td>TABLE_NAME</td><td><span class='label label-success l-Unique'>Unique</span></td></tr>
+<tr class='dropdown2'><td colspan='5' id='s-identifier-voltdb_autogen_idx_pk_identifier_table_name--dropdown'>
+<p>Used by procedures: <a href='#p-UserAdd'>UserAdd</a></p></td></tr>
+    </thead>
+    </table>
+</td></tr>
+<tr class='primaryrow'><td class='table-view-name' id='s-size-2'>users</td>
+<td><span class='label label l-Table'>Table</span></td>
+<td><div class='ecount'><input type='text' class='form-control count-input' id='s-size-2-count' onblur='sizes_update_all();' value='1000' class='form-control' placeholder='.ecount'></input>
+</div></td>
+<td id='s-size-2-rmin' class='right-cell'>100</td>
+<td id='s-size-2-rmax' class='right-cell'>420</td>
+<td id='s-size-2-imin' class='right-cell'>44</td>
+<td id='s-size-2-imax' class='right-cell'>44</td>
+<td id='s-size-2-tmin' class='right-cell calculated-cell'>144000</td>
+<td id='s-size-2-tmax' class='right-cell calculated-cell'>464000</td>
+</tr>
+<tr class='tablesorter-childRow'><td class='invert' colspan='6' id='s-size-2--dropdown'>
+<p><pre>CREATE TABLE USERS (
+   ID integer NOT NULL,
+   UIID varchar(64) NOT NULL,
+   PRIMARY KEY (ID)
+);
+</pre></p>
+    <table class='table tableL2 table-condensed'>
+    <thead><tr><th>Index Name</th><th>Type</th><th>Columns</th><th>Attributes</th></tr>
+        <tr class='primaryrow2'><td style='white-space: nowrap'><i id='s-users-voltdb_autogen_idx_pk_users_id--icon' class='icon-chevron-right'></i> <a href='#' id='s-users-voltdb_autogen_idx_pk_users_id' class='togglex'>VOLTDB_AUTOGEN_IDX_PK_USERS_ID</a></td><td>BALANCED_TREE</td><td>ID</td><td><span class='label label-success l-Unique'>Unique</span></td></tr>
+<tr class='dropdown2'><td colspan='5' id='s-users-voltdb_autogen_idx_pk_users_id--dropdown'>
+<p>Used by procedures: <a href='#p-UserList'>UserList</a>, <a href='#p-UserSelect'>UserSelect</a>, <a href='#p-UserUpdate'>UserUpdate</a></p></td></tr>
+    </thead>
+    </table>
+</td></tr>
+
+                            </tbody>
+
+                        </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="dataBlock">
+                    <div class="dataBlockHeading">
+                        <h3>Size Analysis Summary</h3>
+                    </div>
+                    <div class="dataBlockContent">
+                        <div class="tblScroll">
+                        <table class='table size-summary-table'>
+<tr><td id='s-size-summary-table-count' class='right-cell'>2</td><td>tables whose row data  is expected to use between&nbsp;</td><td id='s-size-summary-table-min' class='right-cell calculated-cell'>200000</td><td>&nbsp;and&nbsp;</td><td id='s-size-summary-table-max' class='right-cell calculated-cell'>968000</td><td>&nbsp; of memory.&nbsp;</td></tr>
+<tr><td id='s-size-summary-view-count' class='right-cell'>0</td><td>materialized views whose row data  is expected to use about&nbsp;</td><td id='s-size-summary-view-min' class='right-cell calculated-cell'>0</td><td colspan='3'>&nbsp; of memory.&nbsp;</td></tr>
+<tr><td id='s-size-summary-index-count' class='right-cell'>2</td><td>indexes whose key data and overhead  is expected to use about&nbsp;</td><td id='s-size-summary-index-min' class='right-cell calculated-cell'>92</td><td colspan='3'>&nbsp; of memory.&nbsp;</td></tr>
+<tr><td colspan='6'>&nbsp;</td></tr>
+<tr><td colspan='2'><b>Total user data is expected to use between</b>&nbsp;</td><td id='s-size-summary-total-min' class='right-cell calculated-cell'>200092</td><td>&nbsp;<b>and</b>&nbsp;</td><td id='s-size-summary-total-max' class='right-cell calculated-cell'>968092</td><td>&nbsp<b>of memory.</b></td></tr>
+</table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="documentation"> <a href="http://voltdb.com/docs" class="icon-document" id="iconDoc">VoltDB Documentation</a> <span>Generated by VoltDB 5.0 on 5 1 2015 09:54:37 GMT+00:00</span>
+            <div class="clear"></div>
+        </div>
+    </div>
+    </div>
+<!-- Le javascript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="http://assets.voltdb.com/js/bootstrap.js"></script>
+<script src="http://assets.voltdb.com/js/jquery.tablesorter.js"></script>
+<script src="http://assets.voltdb.com/js/jquery.tablesorter.widgets.js"></script>
+<script src="http://assets.voltdb.com/js/template.js"></script>
+
+</body>
+</html>

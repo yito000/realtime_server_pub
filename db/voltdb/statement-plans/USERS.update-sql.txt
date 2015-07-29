@@ -1,0 +1,6 @@
+SQL: UPDATE USERS SET ID = ?, UIID = ? WHERE (ID = ?);
+PLAN:
+UPDATE
+ INDEX SCAN of "USERS" using its primary key index
+  uniquely match (ID = ?2)
+

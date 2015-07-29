@@ -1,0 +1,6 @@
+option optimize_for = LITE_RUNTIME;
+
+message UiidPData {
+    required string value = 1;
+}
+

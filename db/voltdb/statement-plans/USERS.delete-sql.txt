@@ -1,0 +1,6 @@
+SQL: DELETE FROM USERS WHERE (ID = ?);
+PLAN:
+DELETE USERS
+ INDEX SCAN of "USERS" using its primary key index
+  uniquely match (ID = ?0)
+

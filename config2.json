@@ -1,0 +1,22 @@
+{
+  "is_master_node":0,
+  "is_ipv6":0,
+  "port":0,
+  "is_worker_node":1,
+  "is_ipv6_node":1,
+  "node_port":12000,
+  "timeout":30000,
+  "retry":3,
+  "worker_thread_size":4,
+  "io_thread_size":3,
+  "scheduler_interval":20,
+  "connect_voltdb":1,
+  "voltdb_host":"0.0.0.0",
+  "voltdb_port":21212,
+  "connect_redis":1,
+  "redis_host":"0.0.0.0",
+  "redis_port":6379,
+  "variables":{
+    "flag":0
+  }
+}

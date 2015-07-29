@@ -1,0 +1,9 @@
+SQL: insert into users (id, uiid) values (?, ?);
+PLAN:
+RETURN RESULTS TO STORED PROCEDURE
+ Serial AGGREGATION ops: SUM(VOLT_TEMP_TABLE.modified_tuples)
+  RECEIVE FROM ALL PARTITIONS
+   SEND PARTITION RESULTS TO COORDINATOR
+    INSERT into "USERS"
+     MATERIALIZE TUPLE from parameters and/or literals
+

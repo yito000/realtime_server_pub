@@ -1,0 +1,5 @@
+SQL: UPSERT INTO USERS VALUES (?, ?);
+PLAN:
+UPSERT into "USERS"
+ MATERIALIZE TUPLE from parameters and/or literals
+

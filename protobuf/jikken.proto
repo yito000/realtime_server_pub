@@ -1,0 +1,7 @@
+option java_package = "protobuf";
+
+message AAA {
+    required string str = 1;
+    required int32 x = 2;
+}
+

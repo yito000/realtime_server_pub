@@ -1,0 +1,103 @@
+cmake_minimum_required(VERSION 2.8)
+add_definitions("-Os -std=c++11 -stdlib=libc++")
+
+include_directories(
+  libs/include 
+  libs/include/voltdb 
+  libs/include/mysql 
+  src 
+  src/common 
+  src/lib 
+  src/app 
+)
+
+link_directories(
+  ../libs/lib
+)
+
+add_executable(
+  realtime_server 
+  src/app/global.cc 
+  src/app/event/send_uiid.cc 
+  src/app/event/receive_uiid.cc 
+  src/app/protobuf/event/pb_ev_uiid.cc 
+  src/app/protobuf/event/pb_ev_res_uiid.cc 
+  src/app/protobuf/event/pb_master.cc 
+  src/app/protobuf/message/uiid.pb.cc 
+  src/app/record/user.cc 
+  src/app/record/user_record_voltdb.cc 
+  src/app/redis/user_record_redis.cc 
+  src/main.cc
+  src/app.cc 
+  src/setting_loader.cc 
+  src/server.cc 
+  src/cluster_builder.cc 
+  src/node_server.cc 
+  src/app_session_delegate.cc 
+  src/node_session_delegate.cc 
+  src/main_loop.cc 
+  src/common/common_object.cc 
+  src/common/actor/ws_actor.cc 
+  src/common/actor/actor_manager.cc 
+  src/common/cluster/cluster_actor.cc 
+  src/common/cluster/cluster_node_delegate.cc 
+  src/common/cluster/cluster.cc 
+  src/common/cluster/router/round_robin_router.cc 
+  src/common/cluster/router/simple_random_router.cc 
+  src/common/db/redis/redis_service.cc 
+  src/common/db/voltdb/voltdb_connection.cc 
+  src/common/db/voltdb/voltdb_processor.cc 
+  src/common/db/voltdb/voltdb_io_service.cc 
+  src/common/db/voltdb/volt_command_invoker.cc 
+  src/common/error/error_handle_router.cc 
+  src/common/error/internal/error_handle_route_map.cc 
+  src/common/file/file_util.cc 
+  src/common/network/packet_data_helper.cc 
+  src/common/protobuf/pb_command_dispatcher.cc 
+  src/common/protobuf/protobuf_router.cc 
+  src/common/protobuf/internal/protobuf_route_map.cc 
+  src/common/scheduler/app_scheduler.cc 
+  src/common/scheduler/delayed_task_processor.cc 
+  src/common/system_actor/server_node.cc 
+  src/common/thread/bidirectional_communicator.cc 
+  src/common/user_actor/user_client.cc 
+  src/lib/archive/gzip.cc 
+  src/lib/base64/base64.cc 
+  src/lib/crypt/crypt.cc 
+  src/lib/exception/base_exception.cc 
+  src/lib/log/logger.cc 
+  src/lib/log/detail/log_detail.cc 
+  src/lib/network/io/socket.cc 
+  src/lib/network/io/ssl_socket.cc 
+  src/lib/network/websocket/client/handshake_helper.cc 
+  src/lib/network/websocket/client/websocket.cc 
+  src/lib/network/websocket/client/websocket_async.cc 
+  src/lib/network/websocket/client/frame_data.cc 
+  src/lib/network/websocket/server/websocket_session.cc 
+  src/lib/network/websocket/server/frame_data.cc 
+  src/lib/network/websocket/server/handshake.cc 
+  src/lib/network/websocket/secret/secret_key.cc 
+  src/lib/random/random.cc 
+  src/lib/thread/task_dispatcher.cc 
+  src/lib/thread/multiple_task_dispatcher.cc 
+  src/lib/uri/uri.cc 
+  src/lib/variable/key_value_cache_storage.cc 
+)
+
+target_link_libraries(
+  realtime_server 
+  ssl 
+  crypto 
+  protobuf-lite
+  mysqlclient 
+  voltdbcpp 
+  event 
+  event_pthreads 
+  boost_filesystem-mt 
+  boost_iostreams-mt 
+  boost_system-mt 
+  boost_regex-mt 
+  boost_thread-mt 
+  pthread
+)
+

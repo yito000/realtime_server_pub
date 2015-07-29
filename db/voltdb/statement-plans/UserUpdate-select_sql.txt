@@ -1,0 +1,9 @@
+SQL: select id, uiid from users where id = ? order by id;
+PLAN:
+RETURN RESULTS TO STORED PROCEDURE
+ ORDER BY (SORT)
+  RECEIVE FROM ALL PARTITIONS
+   SEND PARTITION RESULTS TO COORDINATOR
+    INDEX SCAN of "USERS" using its primary key index
+     uniquely match (ID = ?0)
+
