@@ -200,7 +200,7 @@ void App::initMainLoop(Setting::const_ptr setting)
     main_loop->addActorManager(down_actor_manager);
 
     auto task = new DelayedTask;
-    task->interval = 20;
+    task->interval = 5;
     task->func = std::bind(&MainLoop::update, main_loop);
 
     app_scheduler->addTask("_main_loop", task);
@@ -208,7 +208,7 @@ void App::initMainLoop(Setting::const_ptr setting)
 
 void App::initIOThread(Setting::const_ptr setting)
 {
-    const int SCHEDULER_INTERVAL = 20;
+    const int SCHEDULER_INTERVAL = 5;
     const int IO_SCHEDULER_INTERVAL = 60;
 
     for (int i = 0; i < setting->io_thread_size; i++) {
@@ -245,7 +245,7 @@ void App::initNodeServer(Setting::const_ptr setting)
         addr_type = NodeServer::ADDR_V6;
     }
 
-    const int SCHEDULER_INTERVAL = 10;
+    const int SCHEDULER_INTERVAL = 3;
     const int SERVER_SCHEDULER_INTERVAL = 30;
 
     auto node_server = new NodeServer(
@@ -356,8 +356,8 @@ void App::initRedisClient(Setting::const_ptr setting)
 
 void App::setupCluster(Setting::const_ptr setting)
 {
-    const int SCHEDULER_INTERVAL = 20;
-    const int CLUSTER_SCHEDULER_INTERVAL = 30000;
+    const int SCHEDULER_INTERVAL = 5;
+    const int CLUSTER_SCHEDULER_INTERVAL = 20000;
 
     cluster = ClusterBuilder::build(setting, task_comm);
 

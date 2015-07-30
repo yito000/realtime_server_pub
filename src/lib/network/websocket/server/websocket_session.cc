@@ -12,14 +12,17 @@ namespace server {
 using boost::asio::ip::tcp;
 
 WebsocketSession::WebsocketSession(boost::asio::io_service& _ios,
-    int _timeout_millis, int _retry) : ios(_ios), ios_st(ios), socket(ios), 
-    read_timer(ios), write_timer(ios)
+    int _timeout_millis) : 
+    ios(_ios), 
+    ios_st(ios), 
+    socket(ios), 
+    read_timer(ios), 
+    write_timer(ios)
 {
     start_flag = false;
     handshake_ok = false;
 
     timeout_millis = _timeout_millis;
-    retry = _retry;
 
     session_delegate = NULL;
 }
@@ -305,7 +308,6 @@ void WebsocketSession::writeAsync(PacketData::ptr packet_data,
                     send_callback(ec);
                 }
             } else {
-                // todo retry (boost::asio::error::timed_out)
                 if (session_delegate) {
                     session_delegate->onError(this, ec);
                 }
@@ -349,7 +351,6 @@ void WebsocketSession::receivePacket()
                     session_delegate->onReceiveFinish(this);
                 }
             } else {
-                // todo retry (boost::asio::error::timed_out)
                 if (session_delegate) {
                     session_delegate->onError(this, ec);
                 }

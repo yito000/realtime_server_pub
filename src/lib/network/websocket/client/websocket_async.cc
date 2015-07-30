@@ -27,18 +27,20 @@ namespace client {
 using boost::asio::ip::tcp;
 
 WebsocketAsync::WebsocketAsync(boost::asio::io_service& _ios,
-    const std::string& _host, unsigned short _port,
-    int _timeout_millis, int _retry) : host(_host), port(_port),
-    ios(_ios), ios_st(ios), socket(ios), 
-    read_timer(ios), write_timer(ios)
+    const std::string& _host, unsigned short _port, int _timeout_millis) : 
+    host(_host), 
+    port(_port),
+    ios(_ios), 
+    ios_st(ios), 
+    socket(ios), 
+    read_timer(ios), 
+    write_timer(ios)
 {
     first_process = true;
     connected = false;
     handshake_ok = false;
 
     timeout_millis = _timeout_millis;
-    retry = _retry;
-
     ws_delegate = NULL;
 
     //
@@ -218,7 +220,6 @@ void WebsocketAsync::handShake(HandShakeRequest::ptr handshake_req)
         [this, handshake_req, req](boost::system::error_code ec, 
             std::size_t s) {
 
-            // todo retry
             if (!ec) {
                 ByteBuffer* tmp_buf = new ByteBuffer;
 
@@ -301,7 +302,6 @@ void WebsocketAsync::writeAsync(PacketData::ptr packet_data,
                     send_callback(ec);
                 }
             } else {
-                // todo retry (boost::asio::error::timed_out)
                 if (ws_delegate) {
                     ws_delegate->onError(this, ec);
                 }
@@ -340,7 +340,6 @@ void WebsocketAsync::receivePacket()
                     ws_delegate->onReceiveFinish(this);
                 }
             } else {
-                // todo retry (boost::asio::error::timed_out)
                 if (ws_delegate) {
                     ws_delegate->onError(this, ec);
                 }

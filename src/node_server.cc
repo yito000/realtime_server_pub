@@ -28,7 +28,7 @@ NodeServer::~NodeServer()
 
 void NodeServer::accept()
 {
-    auto ss = new server::WebsocketSession(ios, timeout_millis, retry);
+    auto ss = new server::WebsocketSession(ios, timeout_millis);
     ss->setDelegate(session_delegate);
     ss->setValidProtocol("cluster");
 

@@ -37,7 +37,7 @@ class WebsocketSession : public WebsocketContext
 {
 public:
     WebsocketSession(boost::asio::io_service& _ios, 
-        int _timeout_millis, int _retry);
+        int _timeout_millis);
     virtual ~WebsocketSession();
 
     boost::asio::ip::tcp::socket& getSocket();
@@ -109,7 +109,6 @@ private:
     bool start_flag;
     bool handshake_ok;
     int timeout_millis;
-    int retry;
     
     ByteBuffer tmp_buffer;
 };

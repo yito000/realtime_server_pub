@@ -29,7 +29,7 @@ public:
 
     WebsocketAsync(boost::asio::io_service& _ios, 
         const std::string& _host, unsigned short _port,
-        int _timeout_millis, int _retry);
+        int _timeout_millis);
     ~WebsocketAsync();
 
     void connect(HandShakeRequest::ptr handshake_req);
@@ -82,7 +82,6 @@ private:
     std::string host;
     unsigned short port;
     int timeout_millis;
-    int retry;
 
     boost::asio::io_service& ios;
     boost::asio::io_service::strand ios_st;

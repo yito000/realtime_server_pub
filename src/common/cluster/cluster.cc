@@ -10,7 +10,6 @@
 namespace {
     // todo setting
     const int TIMEOUT_MILLIS = 60 * 1000;
-    const int RETRY_COUNT = 3;
 
     //
     const char* WS_CLUSTER_PATH = "/";
@@ -26,7 +25,6 @@ void Cluster::addNode(long node_id,
         unsigned short _port = port;
 
         task_comm->postMaster([this, _node_id, _host, _port]() {
-            // todo
             client::HandShakeRequest::ptr hs_req = 
                 new client::HandShakeRequest;
             hs_req->path = WS_CLUSTER_PATH;
@@ -41,7 +39,7 @@ void Cluster::addNode(long node_id,
             auto del = new ClusterNodeDelegate(_node_id, task_comm);
             auto ws = new client::WebsocketAsync(
                 task_comm->getMasterIOService(), _host, _port, 
-                TIMEOUT_MILLIS, RETRY_COUNT);
+                TIMEOUT_MILLIS);
 
             ws->setDelegate(del);
             ws->connect(hs_req);
@@ -148,8 +146,9 @@ void Cluster::run()
         for (auto node_info: node_list) {
             am->getActorFromKey(node_info->node_id, 
                 [this](WsActor::const_ptr actor) {
-                    //
+                    // success callback
                 }, [this, node_info]() {
+                    // error callback
                     Logger::debug("add node");
 
                     this->addNode(node_info->node_id,
@@ -168,7 +167,7 @@ void Cluster::setWatchMode(bool flag)
 {
     Logger::debug("set watch mode");
 
-    // todo atomic operator
+    // TODO: atomic operator
     watch_mode = flag;
 }
 
