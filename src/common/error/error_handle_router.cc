@@ -18,4 +18,3 @@ ErrorHandleRouter::Callback ErrorHandleRouter::getCallback(int error_num)
     ErrorHandleRouter::Callback ret;
     return ret;
 }
-

@@ -137,4 +137,3 @@ void VoltdbConnection::drain()
 {
     while (!cli.drain()) {}
 }
-

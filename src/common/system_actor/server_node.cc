@@ -37,8 +37,13 @@ void ServerNode::onReceive(PacketData::ptr r_pd) const
     if (r_pd->packet_type == PACKET_TYPE_BINARY) {
         PbCommandDispatcher::bulkDispatch(this, r_pd->data);
     } else {
-        Logger::debug("warning packet type=%d, data size=%ld\n",
+        Logger::debug("1: warning packet type=%d, data size=%ld\n",
             r_pd->packet_type, r_pd->data.size());
+        
+        for (int i = 0; i < r_pd->data.size(); i++) {
+            printf("%p ", r_pd->data[i]);
+        }
+        printf("\n");
     }
 }
 
@@ -70,4 +75,3 @@ long ServerNode::getKey() const
 {
     return reinterpret_cast<long>(session);
 }
-

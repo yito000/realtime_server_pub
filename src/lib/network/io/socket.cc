@@ -291,4 +291,3 @@ void Socket::asyncSomeCallback(const boost::system::error_code& error_code, std:
     ret = error_code;
     ret_bytes = bytes_transferred;
 }
-

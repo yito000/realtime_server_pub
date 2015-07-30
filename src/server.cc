@@ -48,4 +48,3 @@ void Server::start()
 {
     ios.run();
 }
-

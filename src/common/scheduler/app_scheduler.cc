@@ -69,4 +69,3 @@ void AppScheduler::endScheduler()
     std::string name = std::to_string(reinterpret_cast<long>(this));
     addTask(name, task);
 }
-

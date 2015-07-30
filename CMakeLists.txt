@@ -1,18 +1,19 @@
 cmake_minimum_required(VERSION 2.8)
 add_definitions("-Os -std=c++11 -stdlib=libc++")
+#add_definitions("-Os -std=c++11 -stdlib=libc++ -DLIB_DEBUG")
 
 include_directories(
-  libs/include 
-  libs/include/voltdb 
-  libs/include/mysql 
-  src 
-  src/common 
-  src/lib 
-  src/app 
+  ${CMAKE_CURRENT_LIST_DIR}/libs/include 
+  ${CMAKE_CURRENT_LIST_DIR}/libs/include/voltdb 
+  ${CMAKE_CURRENT_LIST_DIR}/libs/include/mysql 
+  ${CMAKE_CURRENT_LIST_DIR}/src 
+  ${CMAKE_CURRENT_LIST_DIR}/src/common 
+  ${CMAKE_CURRENT_LIST_DIR}/src/lib 
+  ${CMAKE_CURRENT_LIST_DIR}/src/app 
 )
 
 link_directories(
-  ../libs/lib
+  ${CMAKE_CURRENT_LIST_DIR}/libs/lib
 )
 
 add_executable(

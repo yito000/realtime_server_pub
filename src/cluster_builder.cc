@@ -19,4 +19,3 @@ Cluster::ptr ClusterBuilder::build(Setting::const_ptr setting,
 
     return cluster;
 }
-

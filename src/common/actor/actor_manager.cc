@@ -106,4 +106,3 @@ void ActorManager::getSize(SizeCallback callback)
         spin_lock.unlock();
     });
 }
-

@@ -81,7 +81,7 @@ private:
     void writeAsync(PacketData::ptr packet_data,
         SendCallback send_callback);
 
-    void receivePacket(ByteBuffer* buf);
+    void receivePacket();
     int createWebsocketData(ByteBuffer* buf, 
         std::list<PacketData::ptr>& pd_list);
 
@@ -110,9 +110,10 @@ private:
     bool handshake_ok;
     int timeout_millis;
     int retry;
+    
+    ByteBuffer tmp_buffer;
 };
 
 };
 
 #endif
-

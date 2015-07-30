@@ -13,4 +13,3 @@ void VoltdbProcessor::run()
 
     voltdb_conn->drain();
 }
-

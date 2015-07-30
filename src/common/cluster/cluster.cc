@@ -200,4 +200,3 @@ void Cluster::addNewNodeInfo(long node_id,
         node_list.push_back(node_info);
     }
 }
-

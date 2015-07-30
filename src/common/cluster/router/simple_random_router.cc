@@ -28,4 +28,3 @@ long SimpleRandomRouter::getNode(PacketData::ptr pd)
 
     return -1;
 }
-

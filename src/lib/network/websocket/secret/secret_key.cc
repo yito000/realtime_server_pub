@@ -45,4 +45,3 @@ std::string SecretKey::calcResponse(const std::string& sec_key)
 
     return enc_str;
 }
-

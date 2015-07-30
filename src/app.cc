@@ -391,4 +391,3 @@ void App::setupCluster(Setting::const_ptr setting)
     //
     task_comm->postWorker(std::bind(&AppScheduler::run, sche));
 }
-

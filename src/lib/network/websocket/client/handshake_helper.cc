@@ -191,4 +191,3 @@ bool setHeaderValue(const std::string& key,
 }
 
 };
-

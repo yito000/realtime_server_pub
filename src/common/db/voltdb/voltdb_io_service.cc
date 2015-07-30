@@ -17,4 +17,3 @@ VoltdbConnection::ptr VoltdbIOService::getVoltdbConnection()
 {
     return voltdb_conn;
 }
-

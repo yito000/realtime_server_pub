@@ -67,4 +67,3 @@ void AppSessionDelegate::onError(server::WebsocketSession* session,
         actor->onError(ec);
     });
 }
-

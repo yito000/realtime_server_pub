@@ -77,4 +77,3 @@ long ClusterActor::getKey() const
 {
     return node_id;
 }
-

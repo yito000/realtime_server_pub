@@ -29,4 +29,3 @@ long RoundRobinRouter::getNode(PacketData::ptr pd)
 
     return node_info->node_id;
 }
-

@@ -279,9 +279,7 @@ HandShakeResponse::ptr WebsocketSession::validateHandShakeRequest(
 
 void WebsocketSession::readAsync()
 {
-    ByteBuffer* tmp_buf = new ByteBuffer;
-
-    receivePacket(tmp_buf);
+    receivePacket();
 }
 
 void WebsocketSession::writeAsync(PacketData::ptr packet_data,
@@ -324,19 +322,19 @@ void WebsocketSession::writeAsync(PacketData::ptr packet_data,
         });
 }
 
-void WebsocketSession::receivePacket(ByteBuffer* buf)
+void WebsocketSession::receivePacket()
 {
     socket.async_read_some(boost::asio::buffer(data, MAX_LENGTH),
-        [this, buf](boost::system::error_code ec, std::size_t s) {
+        [this](boost::system::error_code ec, std::size_t s) {
             if (!ec) {
                 Logger::debug("packet size = %ld", s);
 
                 for (int i = 0; i < s; i++) {
-                    buf->push_back(data[i]);
+                    tmp_buffer.push_back(data[i]);
                 }
 
                 std::list<PacketData::ptr> pd_list;
-                int ret = createWebsocketData(buf, pd_list);
+                int ret = createWebsocketData(&tmp_buffer, pd_list);
 
                 Logger::debug("status = %d, packet count = %ld", 
                     ret, pd_list.size());
@@ -347,19 +345,8 @@ void WebsocketSession::receivePacket(ByteBuffer* buf)
                     }
                 }
 
-                // todo error
-
                 if (session_delegate) {
                     session_delegate->onReceiveFinish(this);
-                }
-
-                if (ret == 0) {
-                    delete buf;
-                } else if (ret == 1) {
-                    receivePacket(buf);
-                } else {
-                    Logger::debug("create websocket data error");
-                    delete buf;
                 }
             } else {
                 // todo retry (boost::asio::error::timed_out)
@@ -367,7 +354,6 @@ void WebsocketSession::receivePacket(ByteBuffer* buf)
                     session_delegate->onError(this, ec);
                 }
 
-                delete buf;
                 close();
             }
 
@@ -414,23 +400,23 @@ int WebsocketSession::createWebsocketData(ByteBuffer* buf,
                     break;
                 }
             } else {
-                // delete value
-                auto start_it = buf->begin();
-                auto it = buf->begin();
-                for (int i = 0; i < start_index; i++) {
-                    ++it;
-                }
-
-                if (start_index > 0) {
-                    buf->erase(start_it, it);
-                }
-
-                return 1;
+                break;
             }
         } catch (std::exception& e) {
             Logger::debug("error start index: %d", start_index);
             return 2;
         }
+    }
+    
+    // delete value
+    auto start_it = buf->begin();
+    auto it = buf->begin();
+    for (int i = 0; i < start_index; i++) {
+        ++it;
+    }
+
+    if (start_index > 0) {
+        buf->erase(start_it, it);
     }
 
     return 0;
@@ -470,4 +456,3 @@ void WebsocketSession::checkDeadline(boost::asio::deadline_timer* timer)
 }
 
 };
-

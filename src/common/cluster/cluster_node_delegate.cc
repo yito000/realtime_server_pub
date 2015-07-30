@@ -69,4 +69,3 @@ void ClusterNodeDelegate::onError(
         actor->onError(ec);
     });
 }
-

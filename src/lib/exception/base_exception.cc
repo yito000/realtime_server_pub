@@ -42,4 +42,3 @@ void BaseException::printAll()
     Logger::log("line:     %d", getLine());
     Logger::log("message:  %s", what());
 }
-

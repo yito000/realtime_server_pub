@@ -199,4 +199,3 @@ void CommonObject::initialize()
 {
     //
 }
-

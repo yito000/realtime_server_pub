@@ -52,4 +52,3 @@ void MainLoop::updateActor(ActorManager::ptr actor_manager)
         }
     });
 }
-

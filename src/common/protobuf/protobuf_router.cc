@@ -18,4 +18,3 @@ ProtobufRouter::Callback ProtobufRouter::getRoute(int op_code)
     ProtobufRouter::Callback ret;
     return ret;
 }
-

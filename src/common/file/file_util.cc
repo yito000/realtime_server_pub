@@ -8,4 +8,3 @@ std::string FileUtil::getCurrentPath()
 
     return p.native() + "/";
 }
-

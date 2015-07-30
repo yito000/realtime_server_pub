@@ -96,4 +96,3 @@ void VoltCommandInvoker::retryQuery(const std::string command_name,
         sche->addTask(name, task);
     }
 }
-
