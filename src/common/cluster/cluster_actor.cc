@@ -44,7 +44,7 @@ void ClusterActor::onReceive(PacketData::ptr r_pd) const
     if (r_pd->packet_type == PACKET_TYPE_BINARY) {
         PbCommandDispatcher::bulkDispatch(this, r_pd->data);
     } else {
-        Logger::debug("warning packet type=%d, data size=%ld\n",
+        Logger::log("cluster actor: warning packet type=%d, data size=%ld\n",
             r_pd->packet_type, r_pd->data.size());
     }
 }

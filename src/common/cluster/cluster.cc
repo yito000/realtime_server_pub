@@ -20,11 +20,9 @@ void Cluster::addNode(long node_id,
     const std::string& host, unsigned short port)
 {
     try {
-        long _node_id = node_id;
-        std::string _host = host;
-        unsigned short _port = port;
+        std::string a_host = host;
 
-        task_comm->postMaster([this, _node_id, _host, _port]() {
+        task_comm->postMaster([this, node_id, a_host, port]() {
             client::HandShakeRequest::ptr hs_req = 
                 new client::HandShakeRequest;
             hs_req->path = WS_CLUSTER_PATH;
@@ -34,17 +32,17 @@ void Cluster::addNode(long node_id,
             hs_req->protocols.insert(CLUSTER_PROTOCOL_NAME);
 
             //
-            Logger::debug("connect: %s:%d", _host.c_str(), _port);
+            Logger::debug("connect: %s:%d", a_host.c_str(), port);
 
-            auto del = new ClusterNodeDelegate(_node_id, task_comm);
+            auto del = new ClusterNodeDelegate(node_id, task_comm, this);
             auto ws = new client::WebsocketAsync(
-                task_comm->getMasterIOService(), _host, _port, 
+                task_comm->getMasterIOService(), a_host, port, 
                 TIMEOUT_MILLIS);
 
             ws->setDelegate(del);
             ws->connect(hs_req);
 
-            addNewNodeInfo(_node_id, _host, _port);
+            addNewNodeInfo(node_id, a_host, port);
         });
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;
@@ -53,32 +51,25 @@ void Cluster::addNode(long node_id,
 
 void Cluster::removeNode(long node_id)
 {
-    auto am = CommonObject::getInstance()->getDownActorManager();
-
-    am->removeActor(node_id);
-}
-
-void Cluster::cloneNodeList(NodeListCallback callback)
-{
-    if (!callback) {
-        return;
-    }
-
-    std::list<ClusterNodeInfo::ptr> clone_list;
-
-    for (auto node_info: node_list) {
-        auto tmp_node = new ClusterNodeInfo(*node_info);
-
-        clone_list.push_back(tmp_node);
-    }
-
-    callback(clone_list);
+    removeActiveNode(node_id);
+    
+    task_comm->postMaster([this, node_id]() {
+        auto it = node_list.begin();
+        for (; it != node_list.end(); ++it) {
+            if ((*it)->node_id == node_id) {
+                node_list.erase(it);
+                break;
+            }
+        }
+    });
 }
 
 void Cluster::setNodeRouter(NodeRouter::ptr router)
 {
-    node_router = router;
-    node_router->setNodeList(&node_list);
+    task_comm->postMaster([this, router]() {
+        node_router = router;
+        node_router->setNodeList(&active_node_list);
+    });
 }
 
 void Cluster::broadcast(PacketData::ptr pd, NodeSendCallback callback)
@@ -139,19 +130,24 @@ void Cluster::sendRouter(PacketData::ptr pd, NodeSendCallback callback)
 void Cluster::run()
 {
     if (watch_mode && node_list.size() > 0) {
-        Logger::debug("watch cluster node");
-
         auto am = CommonObject::getInstance()->getDownActorManager();
 
         for (auto node_info: node_list) {
             am->getActorFromKey(node_info->node_id, 
-                [this](WsActor::const_ptr actor) {
-                    // success callback
+                [this, node_info](WsActor::const_ptr actor) {
+                    if (!actor->isOpen()) {
+                        Logger::debug("reconnect cluster");
+                        
+                        removeActiveNode(node_info->node_id);
+                        addNode(node_info->node_id,
+                            node_info->host, node_info->port);
+                    }
                 }, [this, node_info]() {
                     // error callback
-                    Logger::debug("add node");
-
-                    this->addNode(node_info->node_id,
+                    Logger::debug("connect cluster");
+                    
+                    removeActiveNode(node_info->node_id);
+                    addNode(node_info->node_id,
                         node_info->host, node_info->port);
                 });
         }
@@ -181,21 +177,65 @@ Cluster::Cluster(BidirectionalCommunicator::ptr t_comm) :
 void Cluster::addNewNodeInfo(long node_id, 
     const std::string& host, unsigned short port)
 {
-    bool found = false;
+    std::string a_host = host;
+    
+    task_comm->postMaster([this, a_host, node_id, port]() {
+        bool found = false;
 
-    for (auto node_info: node_list) {
-        if (node_info->node_id == node_id) {
-            found = true;
-            break;
+        for (auto node_info: node_list) {
+            if (node_info->node_id == node_id) {
+                found = true;
+                break;
+            }
         }
-    }
 
-    if (!found) {
-        ClusterNodeInfo::ptr node_info = new ClusterNodeInfo;
-        node_info->node_id = node_id;
-        node_info->host = host;
-        node_info->port = port;
+        if (!found) {
+            ClusterNodeInfo::ptr node_info = new ClusterNodeInfo;
+            node_info->node_id = node_id;
+            node_info->host = a_host;
+            node_info->port = port;
+            
+            node_list.push_back(node_info);
+        }
+    });
+}
 
-        node_list.push_back(node_info);
-    }
+void Cluster::addActiveNode(long node_id,
+    client::WebsocketAsync* websocket)
+{
+    task_comm->postMaster([this, node_id, websocket]() {
+        bool found = false;
+
+        for (auto n: active_node_list) {
+            if (n->node_id == node_id) {
+                n->websocket = websocket;
+                
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            auto node_info = new ActiveClusterNodeInfo;
+            node_info->node_id = node_id;
+            node_info->websocket = websocket;
+            
+            active_node_list.push_back(node_info);
+        }
+    
+        node_router->setNodeList(&active_node_list);
+    });
+}
+
+void Cluster::removeActiveNode(long node_id)
+{
+    task_comm->postMaster([this, node_id]() {
+        auto it = active_node_list.begin();
+        for (; it != active_node_list.end(); ++it) {
+            if ((*it)->node_id == node_id) {
+                active_node_list.erase(it);
+                break;
+            }
+        }
+    });
 }

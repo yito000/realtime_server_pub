@@ -14,4 +14,3 @@ void PbEvResponseUiid::response(const WsActor* user_client,
 
     Logger::debug("response ok: %s, data size=%d", uiid.c_str(), size);
 }
-

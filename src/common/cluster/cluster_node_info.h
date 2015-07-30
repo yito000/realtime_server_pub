@@ -18,5 +18,23 @@ struct ClusterNodeInfo : public SmartPtr<ClusterNodeInfo>
     }
 };
 
+namespace client {
+    class WebsocketAsync;
+};
+
+struct ActiveClusterNodeInfo : public SmartPtr<ActiveClusterNodeInfo>
+{
+    typedef boost::intrusive_ptr<ActiveClusterNodeInfo> ptr;
+
+    long node_id;
+    client::WebsocketAsync* websocket;
+
+    ActiveClusterNodeInfo()
+    {
+        node_id = -1;
+        websocket = nullptr;
+    }
+};
+
 #endif
 

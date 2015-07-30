@@ -28,14 +28,14 @@ HandShakeRequest::ptr HandShake::parseReqHeader(ByteBuffer* buf)
 
     std::string tmp_str;
     std::getline(ss, tmp_str);
-    std::cout << tmp_str << std::endl;
+//    std::cout << tmp_str << std::endl;
 
     if (!getFirstLine(tmp_str, req)) {
         return NULL;
     }
 
     while (std::getline(ss, tmp_str)) {
-        std::cout << tmp_str << std::endl;
+//        std::cout << tmp_str << std::endl;
 
         if (!readHeaderLine(tmp_str, req)) {
             return NULL;

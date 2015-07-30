@@ -4,7 +4,7 @@
 #include "smart_ptr.hpp"
 #include <list>
 
-#include "cluster_node_info.h"
+#include "cluster/cluster_node_info.h"
 #include "router/node_router.h"
 
 #include "network/websocket/packet.h"
@@ -19,6 +19,7 @@ typedef std::function<void(std::list<ClusterNodeInfo::ptr>&)> NodeListCallback;
 class Cluster : public SmartPtr<Cluster>
 {
     friend class ClusterBuilder;
+    friend class ClusterNodeDelegate;
 
 public:
     typedef boost::intrusive_ptr<Cluster> ptr;
@@ -26,7 +27,6 @@ public:
     void addNode(long node_id, 
         const std::string& host, unsigned short port);
     void removeNode(long node_id);
-    void cloneNodeList(NodeListCallback callback);
 
     void setNodeRouter(NodeRouter::ptr router);
 
@@ -45,10 +45,14 @@ private:
 
     void addNewNodeInfo(long node_id,
         const std::string& host, unsigned short port);
-
+    void addActiveNode(long node_id,
+        client::WebsocketAsync* websocket);
+    void removeActiveNode(long node_id);
+    
     BidirectionalCommunicator::ptr task_comm;
     NodeRouter::ptr node_router;
     std::list<ClusterNodeInfo::ptr> node_list;
+    std::list<ActiveClusterNodeInfo::ptr> active_node_list;
 
     bool watch_mode;
 };

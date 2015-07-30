@@ -1,6 +1,9 @@
 #include "simple_random_router.h"
 
 #include "common_object.h"
+#include "network/websocket/client/websocket_async.h"
+
+#include "log/logger.h"
 
 long SimpleRandomRouter::getNode(PacketData::ptr pd)
 {
@@ -19,7 +22,7 @@ long SimpleRandomRouter::getNode(PacketData::ptr pd)
     int seq = 0;
 
     for (auto node_info: node_list) {
-        if (seq == req_seq) {
+        if (node_info->websocket->isOpen() && seq == req_seq) {
             return node_info->node_id;
         }
 

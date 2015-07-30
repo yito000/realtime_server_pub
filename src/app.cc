@@ -357,7 +357,7 @@ void App::initRedisClient(Setting::const_ptr setting)
 void App::setupCluster(Setting::const_ptr setting)
 {
     const int SCHEDULER_INTERVAL = 5;
-    const int CLUSTER_SCHEDULER_INTERVAL = 20000;
+    const int CLUSTER_SCHEDULER_INTERVAL = 5000;
 
     cluster = ClusterBuilder::build(setting, task_comm);
 
@@ -379,7 +379,7 @@ void App::setupCluster(Setting::const_ptr setting)
     //
     {
         auto task = new DelayedTask;
-        task->interval = CLUSTER_SCHEDULER_INTERVAL * 6;
+        task->interval = 100;
         task->max_loop = 1;
         task->func = [this]() {
             cluster->setWatchMode(true);

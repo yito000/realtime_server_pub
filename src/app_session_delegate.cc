@@ -5,6 +5,7 @@
 #include "network/websocket/server/websocket_session.h"
 
 #include "user_actor/user_client.h"
+#include "log/logger.h"
 
 AppSessionDelegate::AppSessionDelegate(BidirectionalCommunicator::ptr t_comm) : 
     task_comm(t_comm)
@@ -65,5 +66,7 @@ void AppSessionDelegate::onError(server::WebsocketSession* session,
 
     am->getActorFromKey(key, [ec](WsActor::const_ptr actor) {
         actor->onError(ec);
+    }, [session]() {
+        session->destroyAsync();
     });
 }

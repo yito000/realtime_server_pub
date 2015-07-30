@@ -4,4 +4,3 @@ User::User()
 {
     user_id = -1;
 }
-

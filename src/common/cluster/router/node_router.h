@@ -17,13 +17,13 @@ public:
 
     virtual long getNode(PacketData::ptr pd) = 0;
 
-    void setNodeList(std::list<ClusterNodeInfo::ptr>* ref_list)
+    void setNodeList(std::list<ActiveClusterNodeInfo::ptr>* ref_list)
     {
         ref_node_list = ref_list;
     }
 
 protected:
-    std::list<ClusterNodeInfo::ptr>* ref_node_list;
+    std::list<ActiveClusterNodeInfo::ptr>* ref_node_list;
 };
 
 #endif

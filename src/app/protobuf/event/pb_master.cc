@@ -43,4 +43,3 @@ void PbMaster::sendWorker(const WsActor* user_client,
     CommonObject::getInstance()->postWorker(
         std::bind(SendUiid::exec, user_client, "ok_dayo"));
 }
-

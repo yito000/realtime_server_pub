@@ -35,4 +35,3 @@ UserRecordVoltdb::UserRecordVoltdb()
 {
     //
 }
-

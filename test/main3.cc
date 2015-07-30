@@ -196,7 +196,7 @@ int main(int argc, char** argv)
 
         std::vector<client::WebsocketAsync::ptr> v;
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 300; i++) {
             auto del = new WebsocketDelegateImpl;
             auto ws = new client::WebsocketAsync(ios, 
                 "0.0.0.0", 9000, 600 * 1000, 3);

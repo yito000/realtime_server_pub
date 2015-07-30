@@ -37,7 +37,7 @@ HandShakeResponse::ptr createResponseObject(ByteBuffer* packet)
     HandShakeResponse::ptr res = new HandShakeResponse;
 
     std::getline(ss, tmp_str);
-    std::cout << tmp_str << std::endl;
+//    std::cout << tmp_str << std::endl;
 
     if (!getResponseCode(tmp_str, res)) {
         return NULL;
@@ -48,7 +48,7 @@ HandShakeResponse::ptr createResponseObject(ByteBuffer* packet)
     }
 
     while (std::getline(ss, tmp_str)) {
-        std::cout << tmp_str << std::endl;
+//        std::cout << tmp_str << std::endl;
 
         if (!readHeaderLine(tmp_str, res)) {
             return NULL;
