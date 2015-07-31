@@ -1,9 +1,10 @@
-#include "frame_data.h"
+#include "client_frame_data.h"
 
-namespace server {
+namespace client {
 
 void FrameData::serialize(bool end, PacketType packet_type,
-    const std::vector<char>& body, std::vector<char>& out_data)
+    const std::string& mask, const std::vector<char>& body, 
+    std::vector<char>& out_data)
 {
     char* pa = NULL;
     int len_type = 3;
@@ -11,17 +12,17 @@ void FrameData::serialize(bool end, PacketType packet_type,
 
     if (body.size() > 125) {
         if (body.size() > 65535) {
-            pa = new char[10];
+            pa = new char[14];
             len_type = 1;
-            header_size = 10;
+            header_size = 14;
         } else {
-            pa = new char[4];
+            pa = new char[8];
             len_type = 2;
-            header_size = 4;
+            header_size = 8;
         }
     } else {
-        pa = new char[2];
-        header_size = 2;
+        pa = new char[6];
+        header_size = 6;
     }
 
     //
@@ -83,13 +84,27 @@ void FrameData::serialize(bool end, PacketType packet_type,
         pa[1] = body.size();
     }
 
+    // enable mask
+    pa[1] |= (0x01 << 7);
+
+    pa[cur_index + 1] = mask[0];
+    pa[cur_index + 2] = mask[1];
+    pa[cur_index + 3] = mask[2];
+    pa[cur_index + 4] = mask[3];
+
+    int mask_len = mask.size();
+    if (mask_len != 4) {
+        delete[] pa;
+        return;
+    }
+
     //
     for (int i = 0; i < header_size; i++) {
         out_data.push_back(pa[i]);
     }
 
     for (int i = 0; i < body.size(); i++) {
-        out_data.push_back(body[i]);
+        out_data.push_back(body[i] ^ mask[i % 4]);
     }
 
     delete[] pa;
@@ -108,25 +123,6 @@ bool FrameData::deserialize(std::vector<char>& data,
     socket_frame.fin = c1 & (1 << 7);
     socket_frame.opcode = c1 & 0x0f;
     socket_frame.mask = c2 & (1 << 7);
-
-    if (!socket_frame.mask) {
-        // todo
-        throw std::exception();
-    }
-
-    switch (socket_frame.opcode) {
-        case PACKET_TYPE_BINARY:
-        case PACKET_TYPE_TEXT:
-        case PACKET_TYPE_CLOSE:
-        case PACKET_TYPE_PING:
-        case PACKET_TYPE_PONG:
-            break;
-
-        default:
-            // todo
-            throw std::exception();
-            break;
-    }
 
     int raw_data_byte_index = 0;
 
@@ -198,17 +194,18 @@ bool FrameData::deserialize(std::vector<char>& data,
     }
 
     int start_body_index = raw_data_byte_index + 1;
+    int end_body_index = start_body_index + body_size;
 
     if (socket_frame.mask) {
         int cnt = 0;
-        for (int i = start_body_index; i < data.size(); i++) {
+        for (int i = start_body_index; i < end_body_index; i++) {
             char mask_key = socket_frame.mask_key[cnt % 4];
             socket_frame.body.push_back(data[i] ^ mask_key);
 
             cnt++;
         }
     } else {
-        for (int i = start_body_index; i < data.size(); i++) {
+        for (int i = start_body_index; i < end_body_index; i++) {
             socket_frame.body.push_back(data[i]);
         }
     }

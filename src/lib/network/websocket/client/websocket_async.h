@@ -10,7 +10,7 @@
 #include <functional>
 #include <boost/asio.hpp>
 
-#include "frame_data.h"
+#include "client_frame_data.h"
 
 #include "../packet.h"
 #include "../socket_buffer.h"

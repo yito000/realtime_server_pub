@@ -8,7 +8,7 @@
 #include <list>
 
 #include "handshake.h"
-#include "frame_data.h"
+#include "server_frame_data.h"
 
 #include "../packet.h"
 #include "../socket_buffer.h"

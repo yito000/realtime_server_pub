@@ -18,7 +18,7 @@ link_directories(
 
 add_executable(
   realtime_server 
-  src/app/event/receive_uiid.cc
+    src/app/event/receive_uiid.cc
   src/app/event/send_uiid.cc
   src/app/global.cc
   src/app/protobuf/event/pb_ev_res_uiid.cc
@@ -66,13 +66,13 @@ add_executable(
   src/lib/log/logger.cc
   src/lib/network/io/socket.cc
   src/lib/network/io/ssl_socket.cc
-  src/lib/network/websocket/client/frame_data.cc
+  src/lib/network/websocket/client/client_frame_data.cc
   src/lib/network/websocket/client/handshake_helper.cc
   src/lib/network/websocket/client/websocket.cc
   src/lib/network/websocket/client/websocket_async.cc
   src/lib/network/websocket/secret/secret_key.cc
-  src/lib/network/websocket/server/frame_data.cc
   src/lib/network/websocket/server/handshake.cc
+  src/lib/network/websocket/server/server_frame_data.cc
   src/lib/network/websocket/server/websocket_session.cc
   src/lib/random/random.cc
   src/lib/thread/multiple_task_dispatcher.cc
@@ -146,7 +146,7 @@ add_executable(
   src/lib/network/io/socket.h
   src/lib/network/io/socket_buffer.h
   src/lib/network/io/ssl_socket.h
-  src/lib/network/websocket/client/frame_data.h
+  src/lib/network/websocket/client/client_frame_data.h
   src/lib/network/websocket/client/handshake.h
   src/lib/network/websocket/client/handshake_helper.h
   src/lib/network/websocket/client/websocket.h
@@ -154,8 +154,8 @@ add_executable(
   src/lib/network/websocket/client/websocket_delegate.h
   src/lib/network/websocket/packet.h
   src/lib/network/websocket/secret/secret_key.h
-  src/lib/network/websocket/server/frame_data.h
   src/lib/network/websocket/server/handshake.h
+  src/lib/network/websocket/server/server_frame_data.h
   src/lib/network/websocket/server/session_delegate.h
   src/lib/network/websocket/server/websocket_session.h
   src/lib/network/websocket/socket_buffer.h
