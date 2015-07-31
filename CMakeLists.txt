@@ -201,6 +201,7 @@ add_executable(
   src/lib/math/vec4.h
   src/lib/network/io/socket.h
   src/lib/network/io/socket_buffer.h
+  src/lib/network/io/socket_inf.h
   src/lib/network/io/ssl_socket.h
   src/lib/random/random.h
   src/lib/thread/multiple_task_dispatcher.h
