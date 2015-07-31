@@ -86,6 +86,8 @@ add_executable(
   src/lib/math/vec2.cc
   src/lib/math/vec3.cc
   src/lib/math/vec4.cc
+  src/lib/network/io/async_socket.cc
+  src/lib/network/io/async_ssl_socket.cc
   src/lib/network/io/socket.cc
   src/lib/network/io/ssl_socket.cc
   src/lib/random/random.cc
@@ -197,6 +199,9 @@ add_executable(
   src/lib/math/vec2.h
   src/lib/math/vec3.h
   src/lib/math/vec4.h
+  src/lib/network/io/async_socket.h
+  src/lib/network/io/async_socket_inf.h
+  src/lib/network/io/async_ssl_socket.h
   src/lib/network/io/socket.h
   src/lib/network/io/socket_buffer.h
   src/lib/network/io/socket_inf.h
