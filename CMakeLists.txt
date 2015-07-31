@@ -57,7 +57,6 @@ add_executable(
   src/common/network/http/https_client.cc
   src/common/network/websocket/client/client_frame_data.cc
   src/common/network/websocket/client/handshake_helper.cc
-  src/common/network/websocket/client/websocket.cc
   src/common/network/websocket/client/websocket_async.cc
   src/common/network/websocket/secret/secret_key.cc
   src/common/network/websocket/server/handshake.cc
@@ -161,7 +160,6 @@ add_executable(
   src/common/network/websocket/client/client_frame_data.h
   src/common/network/websocket/client/handshake.h
   src/common/network/websocket/client/handshake_helper.h
-  src/common/network/websocket/client/websocket.h
   src/common/network/websocket/client/websocket_async.h
   src/common/network/websocket/client/websocket_delegate.h
   src/common/network/websocket/packet.h
