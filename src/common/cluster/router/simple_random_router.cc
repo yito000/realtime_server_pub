@@ -1,6 +1,6 @@
 #include "simple_random_router.h"
 
-#include "common_object.h"
+#include "common/global_rand.h"
 #include "network/websocket/client/websocket_async.h"
 
 #include "log/logger.h"
@@ -16,7 +16,7 @@ long SimpleRandomRouter::getNode(PacketData::ptr pd)
 
     int max_val = node_size * 1000000;
     int rand_int = 
-        CommonObject::getInstance()->getRandomInt(0, max_val);
+        GlobalRand::getInstance()->getInt(0, max_val);
 
     int req_seq = rand_int % node_size;
     int seq = 0;

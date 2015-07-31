@@ -3,7 +3,6 @@
 CommonObject* CommonObject::getInstance()
 {
     static CommonObject inst;
-    inst.initialize();
 
     return &inst;
 }
@@ -88,87 +87,6 @@ void CommonObject::setErrorHandleRouter(ErrorHandleRouter::ptr eh_router)
     err_handle_router = eh_router;
 }
 
-KeyValueCacheStorage::ptr CommonObject::getKeyValueCacheStorage()
-{
-    return key_value_cache;
-}
-
-void CommonObject::setKeyValueCacheStorage(KeyValueCacheStorage::ptr kv_cache)
-{
-    key_value_cache = kv_cache;
-}
-
-Random* CommonObject::getRandomGenerator()
-{
-    return rand;
-}
-
-void CommonObject::setRandomGenerator(Random* r)
-{
-    rand = r;
-}
-
-void CommonObject::getVariable(const std::string& key, 
-    VarGetCallback callback)
-{
-    task_comm->postMaster([this, key, callback]() {
-        auto v = key_value_cache->get(key);
-
-        if (v) {
-            callback(v.get());
-        } else {
-            callback("");
-        }
-    });
-}
-
-void CommonObject::setVariable(const std::string& key, 
-    const std::string& value)
-{
-    std::string str = value;
-
-    task_comm->postMaster([this, key, str]() {
-        key_value_cache->set(key, str);
-    });
-}
-
-void CommonObject::getVarObject(const std::string& key, 
-    VarObjGetCallback callback)
-{
-    task_comm->postMaster([this, key, callback]() {
-        auto data = key_value_cache->getObject(key);
-
-        if (data) {
-            callback(data.get());
-        } else {
-            callback(nullptr);
-        }
-    });
-}
-
-void CommonObject::setVarObject(const std::string& key, 
-    void* data)
-{
-    task_comm->postMaster([this, key, data]() {
-        key_value_cache->setObject(key, data);
-    });
-}
-
-int CommonObject::getRandomInt(int min, int max)
-{
-    return rand->getInt(min, max);
-}
-
-void CommonObject::getRandomAllAscii(int length, std::string& ret)
-{
-    rand->getAllAscii(length, ret);
-}
-
-void CommonObject::getRandomAscii(int length, std::string& ret)
-{
-    rand->getAscii(length, ret);
-}
-
 VoltdbIOService::ptr CommonObject::getVoltdbIOService()
 {
     return volt_io_service;
@@ -191,11 +109,6 @@ void CommonObject::setRedisService(RedisService::ptr r_service)
 
 // private member function
 CommonObject::CommonObject()
-{
-    rand = nullptr;
-}
-
-void CommonObject::initialize()
 {
     //
 }

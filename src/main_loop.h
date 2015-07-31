@@ -27,6 +27,7 @@ private:
     BidirectionalCommunicator::ptr task_comm;
 
     std::map<void*, ActorManager::ptr> actor_manager_list;
+    bool first_update_flag;
 };
 
 #endif

@@ -7,7 +7,7 @@
 #include "record/user_record_voltdb.h"
 #include "record/voltdb_record.h"
 
-#include "common_object.h"
+#include "app_director.h"
 #include "event/receive_uiid.h"
 
 #include "log/logger.h"
@@ -27,7 +27,7 @@ void PbEvUiid::addUser(const WsActor* user_client,
             auto response = rv.toString();
 
             if (response != "NG") {
-                CommonObject::getInstance()->postWorker(
+                AppDirector::getInstance()->postWorker(
                     std::bind(ReceiveUiid::exec, user_client, uiid));
             } else {
                 Logger::debug("user add ng.");
@@ -49,7 +49,7 @@ void PbEvUiid::addUser(const WsActor* user_client,
                 auto row = it.next();
                 std::string uiid = row.getString(0);
 
-                CommonObject::getInstance()->postWorker(
+                AppDirector::getInstance()->postWorker(
                     std::bind(ReceiveUiid::exec, user_client, uiid));
                 });
             } else {

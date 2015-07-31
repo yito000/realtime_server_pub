@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "app_director.h"
 #include "common_object.h"
 #include "log/logger.h"
 
@@ -11,7 +12,7 @@
 
 void Global::onStart(AppGlobalSetting& g_setting)
 {
-    auto kv_cache = CommonObject::getInstance()->getKeyValueCacheStorage();
+    auto kv_cache = AppDirector::getInstance()->getKeyValueCacheStorage();
 
     //
     if (g_setting.user_pb_route_map) {

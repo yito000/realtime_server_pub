@@ -1,5 +1,6 @@
 #include "pb_master.h"
 
+#include "app_director.h"
 #include "common_object.h"
 #include "common/network/packet_data_helper.h"
 
@@ -40,6 +41,6 @@ void PbMaster::sendWorker(const WsActor* user_client,
     });
 
     //
-    CommonObject::getInstance()->postWorker(
+    AppDirector::getInstance()->postWorker(
         std::bind(SendUiid::exec, user_client, "ok_dayo"));
 }

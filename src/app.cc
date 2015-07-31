@@ -7,9 +7,11 @@
 #include "cluster_builder.h"
 
 #include "common/common.h"
+#include "common/global_rand.h"
 #include "lib/lib.h"
 
 #include "common_object.h"
+#include "app_director.h"
 #include "app_session_delegate.h"
 #include "node_session_delegate.h"
 
@@ -131,22 +133,14 @@ Setting::ptr App::initSettings(ArgsInfo& args)
 
 void App::initRandomGenerator(Setting::const_ptr setting)
 {
-    using namespace std::chrono;
-
-    auto now = system_clock::now();
-    auto ms = duration_cast<milliseconds>(now.time_since_epoch());
-
-    int seed = ms.count();
-    auto rand = new Random(seed);
-
-    CommonObject::getInstance()->setRandomGenerator(rand);
+    GlobalRand::getInstance();
 }
 
 void App::initThreadPool(Setting::const_ptr setting)
 {
     task_comm = BidirectionalCommunicator::create(setting->thread_size);
-
-    CommonObject::getInstance()->setBidirectionalCommunicator(task_comm);
+    
+    AppDirector::getInstance()->setBidirectionalCommunicator(task_comm);
 }
 
 void App::initScheduler(Setting::const_ptr setting)
@@ -287,7 +281,7 @@ void App::initKeyValueCache(Setting::const_ptr setting)
         kv_cache->set(key, value);
     }
 
-    CommonObject::getInstance()->setKeyValueCacheStorage(kv_cache);
+    AppDirector::getInstance()->setKeyValueCacheStorage(kv_cache);
 }
 
 void App::initVoltdbThread(Setting::const_ptr setting)

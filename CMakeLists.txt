@@ -33,6 +33,7 @@ add_executable(
   src/cluster_builder.cc
   src/common/actor/actor_manager.cc
   src/common/actor/ws_actor.cc
+  src/common/app_director.cc
   src/common/cluster/cluster.cc
   src/common/cluster/cluster_actor.cc
   src/common/cluster/cluster_node_delegate.cc
@@ -46,7 +47,11 @@ add_executable(
   src/common/db/voltdb/voltdb_processor.cc
   src/common/error/error_handle_router.cc
   src/common/error/internal/error_handle_route_map.cc
-  src/common/file/file_util.cc
+  src/common/file/platform/file_stream_general.cc
+  src/common/file/platform/file_stream_qt.cc
+  src/common/file/platform/file_util_general.cc
+  src/common/file/platform/file_util_qt.cc
+  src/common/global_rand.cc
   src/common/network/packet_data_helper.cc
   src/common/protobuf/internal/protobuf_route_map.cc
   src/common/protobuf/pb_command_dispatcher.cc
@@ -113,6 +118,7 @@ add_executable(
   src/cluster_builder.h
   src/common/actor/actor_manager.h
   src/common/actor/ws_actor.h
+  src/common/app_director.h
   src/common/cluster/cluster.h
   src/common/cluster/cluster_actor.h
   src/common/cluster/cluster_node_delegate.h
@@ -122,6 +128,7 @@ add_executable(
   src/common/cluster/router/simple_random_router.h
   src/common/common.h
   src/common/common_object.h
+  src/common/data_buffer.h
   src/common/db/redis/lib/config.h
   src/common/db/redis/lib/impl/redisclientimpl.h
   src/common/db/redis/lib/redisclient.h
@@ -137,7 +144,14 @@ add_executable(
   src/common/db/voltdb/voltdb_result.h
   src/common/error/error_handle_router.h
   src/common/error/internal/error_handle_route_map.h
+  src/common/file/file_path.h
+  src/common/file/file_stream.h
   src/common/file/file_util.h
+  src/common/file/platform/apple/app_path_ios.h
+  src/common/file/platform/apple/app_path_mac.h
+  src/common/file/platform/file_stream_general.h
+  src/common/file/platform/file_stream_qt.h
+  src/common/global_rand.h
   src/common/network/packet_data_helper.h
   src/common/protobuf/internal/protobuf_route_map.h
   src/common/protobuf/pb_command_dispatcher.h
@@ -147,6 +161,7 @@ add_executable(
   src/common/scheduler/delayed_task_processor.h
   src/common/system_actor/server_node.h
   src/common/thread/bidirectional_communicator.h
+  src/common/thread/task_actor.h
   src/common/user_actor/user_client.h
   src/lib/archive/gzip.h
   src/lib/base64/base64.h
@@ -207,6 +222,7 @@ add_executable(
   src/lib/exception/websocket_exception.hpp
   src/lib/network/protocol/http_helper.hpp
   src/lib/smart_ptr.hpp
+  src/common/thread/task_actor.tmpl
 )
 
 target_link_libraries(

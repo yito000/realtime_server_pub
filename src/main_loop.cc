@@ -1,8 +1,10 @@
 #include "main_loop.h"
+#include "common/app_director.h"
 
 #include "log/logger.h"
 
-MainLoop::MainLoop()
+MainLoop::MainLoop() :
+    first_update_flag(false)
 {
     //
 }
@@ -32,6 +34,13 @@ void MainLoop::removeActorManager(ActorManager::ptr a_manager)
 
 void MainLoop::update()
 {
+    if (!first_update_flag) {
+        auto app_dir = AppDirector::getInstance();
+        app_dir->setMainThreadId(boost::this_thread::get_id());
+        
+        first_update_flag = true;
+    }
+    
     task_comm->update();
 
     auto it = actor_manager_list.begin();
