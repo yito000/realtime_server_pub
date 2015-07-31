@@ -4,6 +4,16 @@
 
 #include "log/logger.h"
 
+AsyncSocket::AsyncSocket(boost::asio::io_service& _ios) :
+    ios(_ios),
+    socket(ios),
+    connect_timer(ios),
+    read_timer(ios), 
+    write_timer(ios)
+{
+    initTimer();
+}
+
 AsyncSocket::AsyncSocket(boost::asio::io_service& _ios,
     const std::string& _host, unsigned int _port) :
     ios(_ios),
@@ -44,7 +54,11 @@ void AsyncSocket::connect(boost::posix_time::time_duration timeout,
     boost::asio::ip::tcp::resolver::query query(host, protocol);
     auto endpoint_it = resolver.resolve(query);
     
-    connect_timer.expires_from_now(timeout);
+    if (timeout == boost::posix_time::pos_infin) {
+        connect_timer.expires_at(boost::posix_time::pos_infin);
+    } else {
+        connect_timer.expires_from_now(timeout);
+    }
     
     auto err = boost::asio::error::host_not_found;
     connectInternal(err, endpoint_it, callback);
@@ -65,7 +79,11 @@ bool AsyncSocket::isOpen()
 void AsyncSocket::read(boost::posix_time::time_duration timeout, 
     SocketReadCallback callback)
 {
-    read_timer.expires_from_now(timeout);
+    if (timeout == boost::posix_time::pos_infin) {
+        read_timer.expires_at(boost::posix_time::pos_infin);
+    } else {
+        read_timer.expires_from_now(timeout);
+    }
     
     SocketReadCallback func = [this, callback](
         boost::system::error_code ec, char* data, std::size_t s) {
@@ -84,7 +102,11 @@ void AsyncSocket::read(boost::posix_time::time_duration timeout,
 void AsyncSocket::write(const ByteBuffer& buffer, 
     boost::posix_time::time_duration timeout, SocketWriteCallback callback)
 {
-    write_timer.expires_from_now(timeout);
+    if (timeout == boost::posix_time::pos_infin) {
+        write_timer.expires_at(boost::posix_time::pos_infin);
+    } else {
+        write_timer.expires_from_now(timeout);
+    }
     
     socket.async_write_some(boost::asio::buffer(buffer),
         [this, callback](boost::system::error_code ec, std::size_t s) {
@@ -147,6 +169,8 @@ void AsyncSocket::connectInternal(boost::system::error_code err,
                     connectInternal(ec, endpoint_it, callback);
                 } else {
                     callback(ec);
+                    
+                    connect_timer.expires_at(boost::posix_time::pos_infin);
                 }
             });
     } else {

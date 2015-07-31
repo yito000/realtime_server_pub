@@ -6,6 +6,8 @@
 
 #include "system_actor/server_node.h"
 
+#include "log/logger.h"
+
 NodeSessionDelegate::NodeSessionDelegate(BidirectionalCommunicator::ptr t_comm) :
     task_comm(t_comm)
 {
@@ -67,6 +69,7 @@ void NodeSessionDelegate::onError(
     am->getActorFromKey(key, [ec](WsActor::const_ptr actor) {
         actor->onError(ec);
     }, [session]() {
+        // TODO: session crush
         session->destroyAsync();
     });
 }

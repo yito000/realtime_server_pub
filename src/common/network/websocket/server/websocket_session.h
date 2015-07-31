@@ -14,6 +14,7 @@
 #include "../socket_buffer.h"
 
 #include "session_delegate.h"
+#include "network/io/async_socket_inf.h"
 
 namespace server {
 
@@ -36,8 +37,9 @@ public:
 class WebsocketSession : public WebsocketContext
 {
 public:
-    WebsocketSession(boost::asio::io_service& _ios, 
+    static WebsocketSession* create(boost::asio::io_service& _ios, 
         int _timeout_millis);
+    
     virtual ~WebsocketSession();
 
     boost::asio::ip::tcp::socket& getSocket();
@@ -72,6 +74,10 @@ public:
     }
 
 private:
+    WebsocketSession(boost::asio::io_service& _ios, 
+        int _timeout_millis);
+    bool init(boost::asio::io_service& _ios);
+    
     void receiveHandShake(ByteBuffer* buf);
     void handShake(ByteBuffer* buf);
     void sendHandShakeOK(HandShakeResponse::ptr h_res);
@@ -91,18 +97,9 @@ private:
     bool deserializeFramingData(std::vector<char>& data,
         SocketFrame& socket_frame, int start_index);
 
-    void checkDeadline(boost::asio::deadline_timer* timer);
-
     boost::asio::io_service& ios;
-    boost::asio::io_service::strand ios_st;
-    boost::asio::ip::tcp::socket socket;
-
-    boost::asio::deadline_timer read_timer;
-    boost::asio::deadline_timer write_timer;
-
-    enum { MAX_LENGTH = 8192 };
-    char data[MAX_LENGTH];
-
+    AsyncSocketInf::ptr socket;
+    
     SessionDelegate* session_delegate;
     std::string valid_protocol;
 

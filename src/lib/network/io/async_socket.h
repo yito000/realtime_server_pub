@@ -8,10 +8,15 @@
 class AsyncSocket : public AsyncSocketInf
 {
 public:
+    // server mode
+    AsyncSocket(boost::asio::io_service& _ios);
+    
+    // client mode
     AsyncSocket(boost::asio::io_service& _ios, 
         const std::string& _host, unsigned int _port);
     AsyncSocket(boost::asio::io_service& _ios, 
         const std::string& _host, const std::string& _protocol);
+    
     ~AsyncSocket();
     
     virtual void connect(boost::posix_time::time_duration timeout, 
@@ -27,6 +32,11 @@ public:
     
     virtual std::string getHost() override;
     virtual std::string getProtocol() override;
+    
+    virtual boost::asio::ip::tcp::socket& getDetail() override
+    {
+        return socket;
+    }
     
     virtual void setConnectTimeoutCallback(SocketTimeoutCallback callback) override;
     virtual void setReadTimeoutCallback(SocketTimeoutCallback callback) override;

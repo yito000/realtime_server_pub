@@ -81,8 +81,8 @@ private:
         SocketFrame& socket_frame, int start_index);
 
     AsyncSocketInf::ptr socket;
-    
     boost::asio::io_service& ios;
+    
     int timeout_millis;
     WebsocketDelegate* ws_delegate;
 

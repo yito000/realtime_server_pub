@@ -2,6 +2,9 @@
 
 #include "../secret/secret_key.h"
 
+#include "network/io/async_socket.h"
+#include "network/io/async_ssl_socket.h"
+
 #include <boost/lexical_cast.hpp>
 #include <boost/thread.hpp>
 #include "common/network/websocket/websocket_exception.hpp"
@@ -11,20 +14,16 @@ namespace server {
 
 using boost::asio::ip::tcp;
 
-WebsocketSession::WebsocketSession(boost::asio::io_service& _ios,
-    int _timeout_millis) : 
-    ios(_ios), 
-    ios_st(ios), 
-    socket(ios), 
-    read_timer(ios), 
-    write_timer(ios)
+WebsocketSession* WebsocketSession::create(boost::asio::io_service& _ios, 
+    int _timeout_millis)
 {
-    start_flag = false;
-    handshake_ok = false;
-
-    timeout_millis = _timeout_millis;
-
-    session_delegate = NULL;
+    auto inst = new WebsocketSession(_ios, _timeout_millis);
+    if (!inst->init(_ios)) {
+        delete inst;
+        return nullptr;
+    }
+    
+    return inst;
 }
 
 WebsocketSession::~WebsocketSession()
@@ -34,7 +33,7 @@ WebsocketSession::~WebsocketSession()
 
 tcp::socket& WebsocketSession::getSocket()
 {
-    return socket;
+    return socket->getDetail();
 }
 
 void WebsocketSession::start()
@@ -42,14 +41,6 @@ void WebsocketSession::start()
     if (start_flag) {
         return;
     }
-
-    read_timer.async_wait(
-        ios_st.wrap(std::bind(&WebsocketSession::checkDeadline, 
-            this, &read_timer)));
-
-    write_timer.async_wait(
-        ios_st.wrap(std::bind(&WebsocketSession::checkDeadline, 
-            this, &write_timer)));
 
     start_flag = true;
 
@@ -61,36 +52,27 @@ void WebsocketSession::start()
 
 bool WebsocketSession::isOpen()
 {
-    return socket.is_open();
+    return socket->isOpen();
 }
 
 void WebsocketSession::read()
 {
-    ios.dispatch([this]() {
-        readAsync();
-    });
+    readAsync();
 }
 
 void WebsocketSession::write(PacketData::ptr packet_data,
     SendCallback send_callback)
 {
-    ios.dispatch([this, packet_data, send_callback]() {
-        writeAsync(packet_data, send_callback);
-    });
+    writeAsync(packet_data, send_callback);
 }
 
 void WebsocketSession::close()
 {
     ios.dispatch([this]() {
         try {
-            if (socket.is_open()) {
-                socket.close();
-            }
+            socket->close();
 
             Logger::debug("close websocket session");
-
-            read_timer.cancel();
-            write_timer.cancel();
         } catch (BaseException& e) {
             e.printAll();
         }
@@ -101,12 +83,7 @@ void WebsocketSession::destroyAsync()
 {
     ios.dispatch([this]() {
         try {
-            if (socket.is_open()) {
-                socket.close();
-            }
-
-            read_timer.cancel();
-            write_timer.cancel();
+            socket->close();
         } catch (BaseException& e) {
             e.printAll();
         }
@@ -116,13 +93,43 @@ void WebsocketSession::destroyAsync()
 }
 
 // private member function
+WebsocketSession::WebsocketSession(boost::asio::io_service& _ios,
+    int _timeout_millis) : 
+    ios(_ios)
+{
+    start_flag = false;
+    handshake_ok = false;
+
+    timeout_millis = _timeout_millis;
+
+    session_delegate = NULL;
+}
+
+bool WebsocketSession::init(boost::asio::io_service& _ios)
+{
+    socket = new AsyncSocket(_ios);
+    socket->setConnectTimeoutCallback([this](AsyncSocketInf&) {
+        // TODO: callback
+        return false;
+    });
+    socket->setReadTimeoutCallback([this](AsyncSocketInf&) {
+        // TODO: callback
+        return false;
+    });
+    socket->setWriteTimeoutCallback([this](AsyncSocketInf&) {
+        // TODO: callback
+        return false;
+    });
+    
+    return true;
+}
+
 void WebsocketSession::receiveHandShake(ByteBuffer* buf)
 {
     auto du = boost::posix_time::milliseconds(timeout_millis);
-    read_timer.expires_from_now(du);
-
-    socket.async_read_some(boost::asio::buffer(data, MAX_LENGTH),
-        [this, buf](boost::system::error_code ec, std::size_t s) {
+    
+    socket->read(du, 
+        [this, buf](boost::system::error_code ec, char* data, std::size_t s) {
             if (!ec) {
                 for (int i = 0; i < s; i++) {
                     buf->push_back(data[i]);
@@ -131,8 +138,6 @@ void WebsocketSession::receiveHandShake(ByteBuffer* buf)
                 try {
                     handShake(buf);
                 } catch (BaseException& e) {
-                    // todo 400 error
-
                     e.printAll();
 
                     delete buf;
@@ -142,8 +147,6 @@ void WebsocketSession::receiveHandShake(ByteBuffer* buf)
                 delete buf;
                 close();
             }
-
-            read_timer.expires_at(boost::posix_time::pos_infin);
         });
 }
 
@@ -184,11 +187,9 @@ void WebsocketSession::sendHandShakeOK(HandShakeResponse::ptr h_res)
 
     //
     auto du = boost::posix_time::milliseconds(timeout_millis);
-    write_timer.expires_from_now(du);
-
-    socket.async_write_some(boost::asio::buffer(*res),
+    
+    socket->write(*res, du, 
         [this, res](boost::system::error_code ec, std::size_t s) {
-            // todo timeout
             if (!ec) {
                 if (session_delegate) {
                     session_delegate->onStart(this);
@@ -198,7 +199,6 @@ void WebsocketSession::sendHandShakeOK(HandShakeResponse::ptr h_res)
             }
 
             delete res;
-            write_timer.expires_at(boost::posix_time::pos_infin);
         });
 }
 
@@ -289,13 +289,12 @@ void WebsocketSession::writeAsync(PacketData::ptr packet_data,
     SendCallback send_callback)
 {
     auto du = boost::posix_time::milliseconds(timeout_millis);
-    write_timer.expires_from_now(du);
-
+    
     ByteBuffer* ser_packet_data = new ByteBuffer;
     serializeFramingData(packet_data->fin, packet_data->packet_type,
         packet_data->data, *ser_packet_data);
-
-    socket.async_write_some(boost::asio::buffer(*ser_packet_data),
+    
+    socket->write(*ser_packet_data, du,
         [this, send_callback, ser_packet_data](
             boost::system::error_code ec, std::size_t s) {
 
@@ -320,14 +319,13 @@ void WebsocketSession::writeAsync(PacketData::ptr packet_data,
             }
 
             delete ser_packet_data;
-            write_timer.expires_at(boost::posix_time::pos_infin);
         });
 }
 
 void WebsocketSession::receivePacket()
 {
-    socket.async_read_some(boost::asio::buffer(data, MAX_LENGTH),
-        [this](boost::system::error_code ec, std::size_t s) {
+    socket->read(boost::posix_time::pos_infin, 
+        [this](boost::system::error_code ec, char* data, std::size_t s) {
             if (!ec) {
                 Logger::debug("packet size = %ld", s);
 
@@ -357,8 +355,6 @@ void WebsocketSession::receivePacket()
 
                 close();
             }
-
-            read_timer.expires_at(boost::posix_time::pos_infin);
         });
 }
 
@@ -438,22 +434,6 @@ bool WebsocketSession::deserializeFramingData(std::vector<char>& data,
     }
 
     return FrameData::deserialize(tmp_data, socket_frame);
-}
-
-void WebsocketSession::checkDeadline(boost::asio::deadline_timer* timer)
-{
-    if (timer->expires_at() <= 
-        boost::asio::deadline_timer::traits_type::now()) {
-        close();
-
-        timer->expires_at(boost::posix_time::pos_infin);
-    }
-
-    if (socket.is_open()) {
-        timer->async_wait(
-            ios_st.wrap(std::bind(&WebsocketSession::checkDeadline, 
-                this, timer)));
-    }
 }
 
 };

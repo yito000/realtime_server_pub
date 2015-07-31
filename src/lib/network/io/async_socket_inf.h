@@ -36,6 +36,8 @@ public:
     virtual std::string getHost() = 0;
     virtual std::string getProtocol() = 0;
     
+    virtual boost::asio::ip::tcp::socket& getDetail() = 0;
+    
     virtual void setConnectTimeoutCallback(SocketTimeoutCallback callback) = 0;
     virtual void setReadTimeoutCallback(SocketTimeoutCallback callback) = 0;
     virtual void setWriteTimeoutCallback(SocketTimeoutCallback callback) = 0;

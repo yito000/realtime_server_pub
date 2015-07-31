@@ -16,10 +16,15 @@ public:
         VERIFY_PEER_FAIL_IF_NO_PEER_CERT = boost::asio::ssl::context::verify_fail_if_no_peer_cert
     };
     
+    // server mode
+    AsyncSSLSocket(boost::asio::io_service& _ios);
+    
+    // client mode
     AsyncSSLSocket(boost::asio::io_service& _ios, 
-        const std::string& _host, unsigned int _port, bool _server_mode = false);
+        const std::string& _host, unsigned int _port);
     AsyncSSLSocket(boost::asio::io_service& _ios, 
-        const std::string& _host, const std::string& _protocol, bool _server_mode = false);
+        const std::string& _host, const std::string& _protocol);
+    
     ~AsyncSSLSocket();
     
     void setVerifyMode(VerifyMode verify_mode);
@@ -39,6 +44,11 @@ public:
     
     virtual std::string getHost() override;
     virtual std::string getProtocol() override;
+    
+    virtual boost::asio::ip::tcp::socket& getDetail() override
+    {
+        return (boost::asio::ip::tcp::socket&)socket->lowest_layer();
+    }
     
     virtual void setConnectTimeoutCallback(SocketTimeoutCallback callback) override;
     virtual void setReadTimeoutCallback(SocketTimeoutCallback callback) override;

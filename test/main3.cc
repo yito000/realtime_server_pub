@@ -76,7 +76,7 @@ public:
     {
         send_count = 0;
         receive_count = 0;
-        max_send = 500;
+        max_send = 10000;
     }
 
     virtual void onStart(client::WebsocketAsync* ws)
@@ -196,7 +196,7 @@ int main(int argc, char** argv)
 
         std::vector<client::WebsocketAsync::ptr> v;
 
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 500; i++) {
             auto del = new WebsocketDelegateImpl;
             auto ws = new client::WebsocketAsync(ios, 
                 "0.0.0.0", 9000, 600 * 1000, 3);

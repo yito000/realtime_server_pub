@@ -2,13 +2,32 @@
 
 #include <boost/bind.hpp>
 
-AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios,
-    const std::string& _host, unsigned int _port, bool _server_mode) :
+AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios) :
     ios(_ios),
     connect_timer(ios),
     read_timer(ios), 
     write_timer(ios),
-    server_mode(_server_mode)
+    server_mode(false)
+{
+    if (server_mode) {
+        ssl_context = new boost::asio::ssl::context(ios, boost::asio::ssl::context::tlsv12_server);
+    } else {
+        ssl_context = new boost::asio::ssl::context(ios, boost::asio::ssl::context::tlsv12_client);
+    }
+    
+    ssl_context->set_password_callback(boost::bind(&AsyncSSLSocket::passwordCallback, this));
+    socket = new boost::asio::ssl::stream<boost::asio::ip::tcp::socket>(ios, *ssl_context);
+    
+    initTimer();
+}
+
+AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios,
+    const std::string& _host, unsigned int _port) :
+    ios(_ios),
+    connect_timer(ios),
+    read_timer(ios), 
+    write_timer(ios),
+    server_mode(false)
 {
     host = _host;
     protocol = std::to_string(_port);
@@ -26,12 +45,12 @@ AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios,
 }
 
 AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios,
-    const std::string& _host, const std::string& _protocol, bool _server_mode) :
+    const std::string& _host, const std::string& _protocol) :
     ios(_ios),
     connect_timer(ios),
     read_timer(ios), 
     write_timer(ios),
-    server_mode(_server_mode)
+    server_mode(false)
 {
     host = _host;
     protocol = _protocol;
@@ -83,7 +102,11 @@ void AsyncSSLSocket::connect(boost::posix_time::time_duration timeout,
     boost::asio::ip::tcp::resolver::query query(host, protocol);
     auto endpoint_it = resolver.resolve(query);
     
-    connect_timer.expires_from_now(timeout);
+    if (timeout == boost::posix_time::pos_infin) {
+        connect_timer.expires_at(boost::posix_time::pos_infin);
+    } else {
+        connect_timer.expires_from_now(timeout);
+    }
     
     auto err = boost::asio::error::host_not_found;
     connectInternal(err, endpoint_it, timeout, callback);
@@ -104,7 +127,11 @@ bool AsyncSSLSocket::isOpen()
 void AsyncSSLSocket::read(boost::posix_time::time_duration timeout, 
     SocketReadCallback callback)
 {
-    read_timer.expires_from_now(timeout);
+    if (timeout == boost::posix_time::pos_infin) {
+        read_timer.expires_at(boost::posix_time::pos_infin);
+    } else {
+        read_timer.expires_from_now(timeout);
+    }
     
     SocketReadCallback func = [this, callback](
         boost::system::error_code ec, char* data, std::size_t s) {
@@ -123,7 +150,11 @@ void AsyncSSLSocket::read(boost::posix_time::time_duration timeout,
 void AsyncSSLSocket::write(const ByteBuffer& buffer, 
     boost::posix_time::time_duration timeout, SocketWriteCallback callback)
 {
-    write_timer.expires_from_now(timeout);
+    if (timeout == boost::posix_time::pos_infin) {
+        write_timer.expires_at(boost::posix_time::pos_infin);
+    } else {
+        write_timer.expires_from_now(timeout);
+    }
     
     socket->async_write_some(boost::asio::buffer(buffer),
         [this, callback](boost::system::error_code ec, std::size_t s) {
@@ -185,6 +216,8 @@ void AsyncSSLSocket::connectInternal(boost::system::error_code err,
             [this, endpoint_it, timeout, callback](boost::system::error_code ec) {
                 if (ec) {
                     connectInternal(ec, endpoint_it, timeout, callback);
+                    
+                    connect_timer.expires_at(boost::posix_time::pos_infin);
                 } else {
                     handshake(timeout, callback);
                 }
@@ -266,6 +299,8 @@ void AsyncSSLSocket::handshake(boost::posix_time::time_duration timeout,
                 
                 if (ec) {
                     close();
+                } else {
+                    connect_timer.expires_at(boost::posix_time::pos_infin);
                 }
             });
     } else {
@@ -275,6 +310,8 @@ void AsyncSSLSocket::handshake(boost::posix_time::time_duration timeout,
                 
                 if (ec) {
                     close();
+                } else {
+                    connect_timer.expires_at(boost::posix_time::pos_infin);
                 }
             });
     }

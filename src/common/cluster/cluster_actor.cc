@@ -28,7 +28,7 @@ void ClusterActor::update() const
 void ClusterActor::write(PacketData::ptr pd,
     client::SendCallback send_callback) const
 {
-    // todo helper class
+    // TODO: helper class
     char mask_key[4] = {0x1, 0x2, 0x3, 0x4};
 
     websocket->write(pd, mask_key, send_callback);
