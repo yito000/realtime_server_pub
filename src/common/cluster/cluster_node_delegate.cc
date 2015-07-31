@@ -71,7 +71,6 @@ void ClusterNodeDelegate::onError(
     am->getActorFromKey(key, [ec](WsActor::const_ptr actor) {
         actor->onError(ec);
     }, [ws]() {
-        // TODO: session crush
         ws->destroyAsync();
     });
 }
