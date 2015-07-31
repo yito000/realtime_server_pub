@@ -88,7 +88,8 @@ void App::parseArgs(int argc, char** argv, ArgsInfo& args)
 
 Setting::ptr App::initSettings(ArgsInfo& args)
 {
-    std::string filepath = FileUtil::getCurrentPath() + args.config_file;
+    auto file_util = FileUtil::getInstance();
+    std::string filepath = file_util->getCurrentPath() + args.config_file;
     Logger::debug("load config file: %s", filepath.c_str());
 
     auto setting = SettingLoader::load(filepath);
