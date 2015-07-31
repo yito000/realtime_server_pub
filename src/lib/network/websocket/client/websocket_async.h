@@ -68,7 +68,7 @@ private:
         const std::string mask_key, SendCallback send_callback);
 
     void receivePacket();
-    int createWebsocketData(ByteBuffer* buf, std::list<PacketData::ptr>& pd_list);
+    void createWebsocketData(ByteBuffer* buf, std::list<PacketData::ptr>& pd_list);
 
     //
     void serializeFramingData(bool end, PacketType packet_type,

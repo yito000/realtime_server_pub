@@ -3,6 +3,8 @@
 
 #include "smart_ptr.hpp"
 
+#include <string>
+
 struct ClusterNodeInfo : public SmartPtr<ClusterNodeInfo>
 {
     typedef boost::intrusive_ptr<ClusterNodeInfo> ptr;

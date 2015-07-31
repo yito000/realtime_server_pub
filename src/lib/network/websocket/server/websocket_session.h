@@ -82,7 +82,7 @@ private:
         SendCallback send_callback);
 
     void receivePacket();
-    int createWebsocketData(ByteBuffer* buf, 
+    void createWebsocketData(ByteBuffer* buf, 
         std::list<PacketData::ptr>& pd_list);
 
     //

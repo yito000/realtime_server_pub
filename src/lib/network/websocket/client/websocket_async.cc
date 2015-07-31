@@ -328,7 +328,7 @@ void WebsocketAsync::receivePacket()
                 }
 
                 std::list<PacketData::ptr> pd_list;
-                int ret = createWebsocketData(&tmp_buffer, pd_list);
+                createWebsocketData(&tmp_buffer, pd_list);
 
                 for (auto pd: pd_list) {
                     if (ws_delegate) {
@@ -351,7 +351,7 @@ void WebsocketAsync::receivePacket()
         });
 }
 
-int WebsocketAsync::createWebsocketData(ByteBuffer* buf, 
+void WebsocketAsync::createWebsocketData(ByteBuffer* buf, 
     std::list<PacketData::ptr>& pd_list)
 {
     ByteBuffer& data = *buf;
@@ -393,7 +393,7 @@ int WebsocketAsync::createWebsocketData(ByteBuffer* buf,
             }
         } catch (std::exception& e) {
             Logger::debug("error start index: %d", start_index);
-            return 2;
+            return;
         }
     }
     
@@ -408,7 +408,7 @@ int WebsocketAsync::createWebsocketData(ByteBuffer* buf,
         buf->erase(start_it, it);
     }
 
-    return 0;
+    return;
 }
 
 void WebsocketAsync::serializeFramingData(bool end, PacketType packet_type,

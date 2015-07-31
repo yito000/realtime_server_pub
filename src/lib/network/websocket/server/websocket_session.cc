@@ -336,10 +336,10 @@ void WebsocketSession::receivePacket()
                 }
 
                 std::list<PacketData::ptr> pd_list;
-                int ret = createWebsocketData(&tmp_buffer, pd_list);
+                createWebsocketData(&tmp_buffer, pd_list);
 
-                Logger::debug("status = %d, packet count = %ld", 
-                    ret, pd_list.size());
+                Logger::debug("packet count = %ld", 
+                    pd_list.size());
 
                 for (auto pd: pd_list) {
                     if (session_delegate) {
@@ -362,7 +362,7 @@ void WebsocketSession::receivePacket()
         });
 }
 
-int WebsocketSession::createWebsocketData(ByteBuffer* buf, 
+void WebsocketSession::createWebsocketData(ByteBuffer* buf, 
     std::list<PacketData::ptr>& pd_list)
 {
     ByteBuffer& data = *buf;
@@ -405,7 +405,7 @@ int WebsocketSession::createWebsocketData(ByteBuffer* buf,
             }
         } catch (std::exception& e) {
             Logger::debug("error start index: %d", start_index);
-            return 2;
+            return;
         }
     }
     
@@ -420,7 +420,7 @@ int WebsocketSession::createWebsocketData(ByteBuffer* buf,
         buf->erase(start_it, it);
     }
 
-    return 0;
+    return;
 }
 
 void WebsocketSession::serializeFramingData(bool end, PacketType packet_type,
