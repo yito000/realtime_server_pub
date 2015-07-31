@@ -6,8 +6,8 @@
 #include <vector>
 #include <set>
 
-#include "../../io/socket.h"
-#include "../packet.h"
+#include "lib/network/io/socket.h"
+#include "common/network/websocket/packet.h"
 #include "handshake.h"
 
 namespace client {

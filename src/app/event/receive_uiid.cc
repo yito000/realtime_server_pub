@@ -2,7 +2,7 @@
 
 #include "protobuf/message/uiid.pb.h"
 
-#include "common/network/packet_data_helper.h"
+#include "common/network/websocket/ws_packet_data_helper.h"
 #include "log/logger.h"
 
 void ReceiveUiid::exec(const WsActor* actor,
@@ -23,7 +23,7 @@ void ReceiveUiid::exec(const WsActor* actor,
     const int OP_CODE = 2;
 
     PacketData::ptr pd = 
-        PacketDataHelper::buildPacket(OP_CODE, buf, a_size);
+        WsPacketDataHelper::buildPacket(OP_CODE, buf, a_size);
 
     pd->fin = true;
     pd->cont_frame = false;

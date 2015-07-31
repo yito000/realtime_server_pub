@@ -1,6 +1,6 @@
-#include "packet_data_helper.h"
+#include "ws_packet_data_helper.h"
 
-PacketData::ptr PacketDataHelper::buildPacket(int op_code, 
+PacketData::ptr WsPacketDataHelper::buildPacket(int op_code, 
     const char* ser_data, int size)
 {
     auto packet = new PacketData;
@@ -35,7 +35,7 @@ PacketData::ptr PacketDataHelper::buildPacket(int op_code,
     return packet;
 }
 
-PacketData::ptr PacketDataHelper::buildPacket(int op_code, 
+PacketData::ptr WsPacketDataHelper::buildPacket(int op_code, 
     std::vector<char>& v)
 {
     auto packet = new PacketData;

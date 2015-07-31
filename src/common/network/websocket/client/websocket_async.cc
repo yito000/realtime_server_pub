@@ -8,7 +8,7 @@
 #include <boost/thread.hpp>
 
 #include "handshake_helper.h"
-#include "exception/websocket_exception.hpp"
+#include "common/network/websocket/websocket_exception.hpp"
 #include "log/logger.h"
 
 namespace {

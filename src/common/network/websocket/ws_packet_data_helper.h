@@ -1,10 +1,10 @@
-#ifndef PACKET_DATA_HELPER_H
-#define PACKET_DATA_HELPER_H
+#ifndef WS_PACKET_DATA_HELPER_H
+#define WS_PACKET_DATA_HELPER_H
 
 #include <vector>
 #include "network/websocket/packet.h"
 
-class PacketDataHelper
+class WsPacketDataHelper
 {
 public:
     static PacketData::ptr buildPacket(int op_code, const char* data, int size);

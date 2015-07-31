@@ -4,7 +4,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/thread.hpp>
-#include "exception/websocket_exception.hpp"
+#include "common/network/websocket/websocket_exception.hpp"
 #include "log/logger.h"
 
 namespace server {

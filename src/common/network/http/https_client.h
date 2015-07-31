@@ -1,17 +1,17 @@
-#ifndef HTTP_CLIENT_H
-#define HTTP_CLIENT_H
+#ifndef HTTPS_CLIENT_H
+#define HTTPS_CLIENT_H
 
 #include "smart_ptr.hpp"
 
 #include "http_request_params.h"
 #include "http_response_header.h"
 
-#include "../io/socket.h"
+#include "network/io/ssl_socket.h"
 
-class HttpClient : public SmartPtr<HttpClient>
+class HttpsClient : public SmartPtr<HttpsClient>
 {
 public:
-    typedef boost::intrusive_ptr<HttpClient> ptr;
+    typedef boost::intrusive_ptr<HttpsClient> ptr;
     
     HttpResponseHeader::ptr sendGetRequest(HttpRequestParams::ptr params);
     HttpResponseHeader::ptr sendPostRequestAsJson(const std::string& json_str, HttpRequestParams::ptr params);
@@ -19,7 +19,7 @@ public:
     void close();
     
 private:
-    Socket::ptr socket;
+    SSLSocket::ptr socket;
 };
 
 #endif
