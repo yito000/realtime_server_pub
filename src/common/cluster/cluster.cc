@@ -35,10 +35,10 @@ void Cluster::addNode(long node_id,
             Logger::debug("connect: %s:%d", a_host.c_str(), port);
 
             auto del = new ClusterNodeDelegate(node_id, task_comm, this);
-            auto ws = new client::WebsocketAsync(
+            auto ws = client::WebsocketAsync::create(
                 task_comm->getMasterIOService(), a_host, port, 
                 TIMEOUT_MILLIS);
-
+            
             ws->setDelegate(del);
             ws->connect(hs_req);
 

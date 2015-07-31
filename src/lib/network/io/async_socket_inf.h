@@ -3,6 +3,7 @@
 
 #include "smart_ptr.hpp"
 
+#include <string>
 #include <boost/asio.hpp>
 #include <functional>
 
@@ -31,6 +32,9 @@ public:
         SocketReadCallback callback) = 0;
     virtual void write(const ByteBuffer& buffer, boost::posix_time::time_duration timeout, 
         SocketWriteCallback callback) = 0;
+    
+    virtual std::string getHost() = 0;
+    virtual std::string getProtocol() = 0;
     
     virtual void setConnectTimeoutCallback(SocketTimeoutCallback callback) = 0;
     virtual void setReadTimeoutCallback(SocketTimeoutCallback callback) = 0;

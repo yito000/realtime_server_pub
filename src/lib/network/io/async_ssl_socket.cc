@@ -106,8 +106,18 @@ void AsyncSSLSocket::read(boost::posix_time::time_duration timeout,
 {
     read_timer.expires_from_now(timeout);
     
+    SocketReadCallback func = [this, callback](
+        boost::system::error_code ec, char* data, std::size_t s) {
+        
+        if (callback) {
+            callback(ec, data, s);
+        }
+        
+        read_timer.expires_at(boost::posix_time::pos_infin);
+    };
+    
     socket->async_read_some(boost::asio::buffer(data, MAX_LENGTH), 
-        boost::bind(callback, _1, data, _2));
+        boost::bind(func, _1, data, _2));
 }
 
 void AsyncSSLSocket::write(const ByteBuffer& buffer, 
@@ -116,7 +126,23 @@ void AsyncSSLSocket::write(const ByteBuffer& buffer,
     write_timer.expires_from_now(timeout);
     
     socket->async_write_some(boost::asio::buffer(buffer),
-        callback);
+        [this, callback](boost::system::error_code ec, std::size_t s) {
+            if (callback) {
+                callback(ec, s);
+            }
+            
+            write_timer.expires_at(boost::posix_time::pos_infin);
+        });
+}
+
+std::string AsyncSSLSocket::getHost()
+{
+    return host;
+}
+
+std::string AsyncSSLSocket::getProtocol()
+{
+    return protocol;
 }
 
 void AsyncSSLSocket::setConnectTimeoutCallback(SocketTimeoutCallback callback)
@@ -170,58 +196,61 @@ void AsyncSSLSocket::connectInternal(boost::system::error_code err,
 
 void AsyncSSLSocket::checkConnectDeadline()
 {
-    if (connect_timeout_func) {
-        if (connect_timeout_func(*this)) {
-            if (connect_timer.expires_at() <=
-                boost::asio::deadline_timer::traits_type::now()) {
-            
-                connect_timer.expires_at(boost::posix_time::pos_infin);
-                connect_timer.async_wait(
-                    std::bind(&AsyncSSLSocket::checkConnectDeadline, this));
-            }
+    if (connect_timer.expires_at() <=
+        boost::asio::deadline_timer::traits_type::now()) {
+        
+        if (connect_timeout_func && connect_timeout_func(*this)) {
+            //
         } else {
             close();
         }
-    } else {
-        close();
+        
+        connect_timer.expires_at(boost::posix_time::pos_infin);
+    }
+    
+    if (socket->lowest_layer().is_open()) {
+        connect_timer.async_wait(
+            std::bind(&AsyncSSLSocket::checkConnectDeadline, this));
     }
 }
 
 void AsyncSSLSocket::checkReadDeadline()
 {
-    if (read_timeout_func) {
-        if (read_timeout_func(*this)) {
-            if (read_timer.expires_at() <=
-                boost::asio::deadline_timer::traits_type::now()) {
-            
-                read_timer.expires_at(boost::posix_time::pos_infin);
-                read_timer.async_wait(
-                    std::bind(&AsyncSSLSocket::checkReadDeadline, this));
-            }
+    if (read_timer.expires_at() <=
+        boost::asio::deadline_timer::traits_type::now()) {
+        
+        if (read_timeout_func && write_timeout_func(*this)) {
+            //
         } else {
             close();
         }
-    } else {
-        close();
+        
+        read_timer.expires_at(boost::posix_time::pos_infin);
+    }
+    
+    if (socket->lowest_layer().is_open()) {
+        read_timer.async_wait(
+            std::bind(&AsyncSSLSocket::checkReadDeadline, this));
     }
 }
 
 void AsyncSSLSocket::checkWriteDeadline()
 {
-    if (write_timeout_func) {
-        if (write_timeout_func(*this)) {
-            if (write_timer.expires_at() <=
-                boost::asio::deadline_timer::traits_type::now()) {
-            
-                write_timer.expires_at(boost::posix_time::pos_infin);
-                write_timer.async_wait(
-                    std::bind(&AsyncSSLSocket::checkWriteDeadline, this));
-            }
+    if (write_timer.expires_at() <=
+        boost::asio::deadline_timer::traits_type::now()) {
+        
+        if (write_timeout_func && write_timeout_func(*this)) {
+            //
         } else {
             close();
         }
-    } else {
-        close();
+        
+        write_timer.expires_at(boost::posix_time::pos_infin);
+    }
+    
+    if (socket->lowest_layer().is_open()) {
+        write_timer.async_wait(
+            std::bind(&AsyncSSLSocket::checkWriteDeadline, this));
     }
 }
 

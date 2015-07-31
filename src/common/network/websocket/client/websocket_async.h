@@ -15,6 +15,7 @@
 #include "../packet.h"
 #include "../socket_buffer.h"
 
+#include "network/io/async_socket_inf.h"
 #include "handshake.h"
 #include "websocket_delegate.h"
 
@@ -26,10 +27,11 @@ class WebsocketAsync : public SmartPtr<WebsocketAsync>
 {
 public:
     typedef boost::intrusive_ptr<WebsocketAsync> ptr;
-
-    WebsocketAsync(boost::asio::io_service& _ios, 
+    
+    static WebsocketAsync* create(boost::asio::io_service& _ios, 
         const std::string& _host, unsigned short _port,
         int _timeout_millis);
+    
     ~WebsocketAsync();
 
     void connect(HandShakeRequest::ptr handshake_req);
@@ -53,9 +55,10 @@ public:
     }
 
 private:
-    void connectInternal(boost::system::error_code err,
-        boost::asio::ip::tcp::resolver::iterator endpoint_it,
-        HandShakeRequest::ptr handshake_req);
+    WebsocketAsync(boost::asio::io_service& _ios, int _timeout_millis);
+    bool init(boost::asio::io_service& _ios, 
+        const std::string& _host, unsigned short _port);
+    
     void handShake(HandShakeRequest::ptr handshake_req);
     void receiveHandShake(ByteBuffer* buf, 
         HandShakeRequest::ptr handshake_req);
@@ -77,22 +80,10 @@ private:
     bool deserializeFramingData(std::vector<char>& data,
         SocketFrame& socket_frame, int start_index);
 
-    void checkDeadline(boost::asio::deadline_timer* timer);
-
-    std::string host;
-    unsigned short port;
-    int timeout_millis;
-
+    AsyncSocketInf::ptr socket;
+    
     boost::asio::io_service& ios;
-    boost::asio::io_service::strand ios_st;
-    boost::asio::ip::tcp::socket socket;
-
-    boost::asio::deadline_timer read_timer;
-    boost::asio::deadline_timer write_timer;
-
-    enum { MAX_LENGTH = 8192 };
-    char data[MAX_LENGTH];
-
+    int timeout_millis;
     WebsocketDelegate* ws_delegate;
 
     // todo enum state flag

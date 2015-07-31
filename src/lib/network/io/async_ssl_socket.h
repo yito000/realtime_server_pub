@@ -37,6 +37,9 @@ public:
     virtual void write(const ByteBuffer& buffer, boost::posix_time::time_duration timeout, 
         SocketWriteCallback callback) override;
     
+    virtual std::string getHost() override;
+    virtual std::string getProtocol() override;
+    
     virtual void setConnectTimeoutCallback(SocketTimeoutCallback callback) override;
     virtual void setReadTimeoutCallback(SocketTimeoutCallback callback) override;
     virtual void setWriteTimeoutCallback(SocketTimeoutCallback callback) override;

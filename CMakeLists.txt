@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-add_definitions("-Os -std=c++11 -stdlib=libc++ -DNDEBUG")
+add_definitions("-Os -std=c++11 -stdlib=libc++ -DNDEBUG -g")
 #add_definitions("-Os -std=c++11 -stdlib=libc++")
 
 include_directories(
