@@ -1,6 +1,6 @@
-#if defined(QT_PROJECT)
+#if defined(TARGET_PLATFORM_QT)
 
-#include "log_detail.h"
+#include "../log_detail.h"
 
 #include <QDebug>
 

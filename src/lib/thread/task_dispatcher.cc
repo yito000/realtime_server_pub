@@ -20,8 +20,6 @@ void TaskDispatcher::initialize()
         return;
     }
 
-    //
-
     init = true;
 }
 

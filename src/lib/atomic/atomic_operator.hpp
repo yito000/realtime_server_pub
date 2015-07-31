@@ -42,25 +42,15 @@ public:
         __sync_lock_release(ptr);
     }
     
-    static inline void sync()
+    static inline void load()
+    {
+        __sync_synchronize();
+    }
+    
+    static inline void store()
     {
         __sync_synchronize();
     }
 };
-
-template <>
-class AtomicOperator<float>
-{
-public:
-    static inline bool compare_and_swap(float* ptr, float oldval, float newval)
-    {
-        return __sync_bool_compare_and_swap(
-            reinterpret_cast<std::uint32_t*>(ptr), 
-            *reinterpret_cast<std::uint32_t*>(&oldval), 
-            *reinterpret_cast<std::uint32_t*>(&newval));
-    }
-};
-
-typedef AtomicOperator<long> Atomic;
 
 #endif

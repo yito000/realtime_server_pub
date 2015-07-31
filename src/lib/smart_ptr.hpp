@@ -11,6 +11,11 @@ public:
     SmartPtr() : ref_count(0) {}
     SmartPtr(const SmartPtr& p) : ref_count(p.ref_count.load()) {}
     virtual ~SmartPtr() {}
+    
+    int getRefCount() const
+    {
+        return ref_count.load();
+    }
 
     friend void intrusive_ptr_add_ref(const T* t)
     {

@@ -1,7 +1,7 @@
 #include "logger.h"
 #include "detail/log_detail.h"
 
-const int LOGBUF_SIZE = 2048;
+const int LOGBUF_SIZE = 20480;
 
 void Logger::log(const char* str, ...)
 {
@@ -31,7 +31,7 @@ void Logger::log(const std::string str, ...)
 
 void Logger::debug(const char* str, ...)
 {
-#ifdef LIB_DEBUG
+#ifndef NDEBUG
     char buf[LOGBUF_SIZE];
 
     va_list args;
@@ -46,7 +46,7 @@ void Logger::debug(const char* str, ...)
 
 void Logger::debug(const std::string str, ...)
 {
-#ifdef LIB_DEBUG
+#ifndef NDEBUG
     char buf[LOGBUF_SIZE];
 
     va_list args;

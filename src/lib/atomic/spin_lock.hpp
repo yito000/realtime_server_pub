@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <boost/thread.hpp>
+#include <boost/chrono.hpp>
 
 #include "atomic_operator.hpp"
 
@@ -20,7 +21,7 @@ public:
         int cnt = 0;
         auto du = boost::chrono::milliseconds(1);
 
-        while (Atomic::lock_test_and_set(&atomic_lock, Locked) == Locked) {
+        while (AtomicOperator<long>::lock_test_and_set(&atomic_lock, Locked) == Locked) {
             if (cnt >= LOOP_COUNT) {
                 boost::this_thread::sleep_for(du);
             }
@@ -31,7 +32,7 @@ public:
 
     inline void unlock()
     {
-        Atomic::lock_release(&atomic_lock);
+        AtomicOperator<long>::lock_release(&atomic_lock);
     }
 };
 

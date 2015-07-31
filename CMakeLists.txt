@@ -18,7 +18,7 @@ link_directories(
 
 add_executable(
   realtime_server 
-    src/app/event/receive_uiid.cc
+  src/app/event/receive_uiid.cc
   src/app/event/send_uiid.cc
   src/app/global.cc
   src/app/protobuf/event/pb_ev_res_uiid.cc
@@ -60,12 +60,22 @@ add_executable(
   src/lib/base64/base64.cc
   src/lib/crypt/crypt.cc
   src/lib/exception/base_exception.cc
-  src/lib/log/detail/log_detail.cc
-  src/lib/log/detail/log_detail_android.cc
-  src/lib/log/detail/log_detail_qt.cc
+  src/lib/log/detail/platform/log_detail.cc
+  src/lib/log/detail/platform/log_detail_android.cc
+  src/lib/log/detail/platform/log_detail_qt.cc
   src/lib/log/logger.cc
+  src/lib/math/mat3.cc
+  src/lib/math/mat4.cc
+  src/lib/math/math_util.cc
+  src/lib/math/quaternion.cc
+  src/lib/math/vec2.cc
+  src/lib/math/vec3.cc
+  src/lib/math/vec4.cc
   src/lib/network/io/socket.cc
   src/lib/network/io/ssl_socket.cc
+  src/lib/network/protocol/http_client.cc
+  src/lib/network/protocol/http_header_parser.cc
+  src/lib/network/protocol/https_client.cc
   src/lib/network/websocket/client/client_frame_data.cc
   src/lib/network/websocket/client/handshake_helper.cc
   src/lib/network/websocket/client/websocket.cc
@@ -77,6 +87,8 @@ add_executable(
   src/lib/random/random.cc
   src/lib/thread/multiple_task_dispatcher.cc
   src/lib/thread/task_dispatcher.cc
+  src/lib/time/app_time.cc
+  src/lib/time/time_formatter.cc
   src/lib/uri/uri.cc
   src/lib/variable/key_value_cache_storage.cc
   src/main.cc
@@ -143,9 +155,25 @@ add_executable(
   src/lib/lib.h
   src/lib/log/detail/log_detail.h
   src/lib/log/logger.h
+  src/lib/math/mat3.h
+  src/lib/math/mat4.h
+  src/lib/math/mat4_inl.h
+  src/lib/math/math_util.h
+  src/lib/math/quaternion.h
+  src/lib/math/sse/matrix_sse.h
+  src/lib/math/sse/matrix_sse_inl.h
+  src/lib/math/vec2.h
+  src/lib/math/vec3.h
+  src/lib/math/vec4.h
   src/lib/network/io/socket.h
   src/lib/network/io/socket_buffer.h
   src/lib/network/io/ssl_socket.h
+  src/lib/network/protocol/http_client.h
+  src/lib/network/protocol/http_header_parser.h
+  src/lib/network/protocol/http_request_params.h
+  src/lib/network/protocol/http_response_header.h
+  src/lib/network/protocol/http_status_code.h
+  src/lib/network/protocol/https_client.h
   src/lib/network/websocket/client/client_frame_data.h
   src/lib/network/websocket/client/handshake.h
   src/lib/network/websocket/client/handshake_helper.h
@@ -162,6 +190,8 @@ add_executable(
   src/lib/random/random.h
   src/lib/thread/multiple_task_dispatcher.h
   src/lib/thread/task_dispatcher.h
+  src/lib/time/app_time.h
+  src/lib/time/time_formatter.h
   src/lib/uri/uri.h
   src/lib/variable/key_value_cache_storage.h
   src/main_loop.h
@@ -170,9 +200,12 @@ add_executable(
   src/server.h
   src/setting.h
   src/setting_loader.h
+  src/lib/allocator/custom_allocator.hpp
+  src/lib/allocator/stl_custom_allocator.hpp
   src/lib/atomic/atomic_operator.hpp
   src/lib/atomic/spin_lock.hpp
   src/lib/exception/websocket_exception.hpp
+  src/lib/network/protocol/http_helper.hpp
   src/lib/smart_ptr.hpp
 )
 
@@ -185,6 +218,7 @@ target_link_libraries(
   voltdbcpp 
   event 
   event_pthreads 
+  boost_date_time-mt 
   boost_filesystem-mt 
   boost_iostreams-mt 
   boost_system-mt 
