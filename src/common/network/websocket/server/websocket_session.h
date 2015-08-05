@@ -1,6 +1,8 @@
 #ifndef WEBSOCKET_SESSION_H
 #define WEBSOCKET_SESSION_H
 
+#include "allocator/custom_allocator.hpp"
+
 #include <functional>
 #include <boost/asio.hpp>
 
@@ -32,9 +34,11 @@ public:
     virtual void read() = 0;
     virtual void write(PacketData::ptr packet_data,
         SendCallback send_callback) = 0;
+    
+    virtual long getKey() const = 0;
 };
 
-class WebsocketSession : public WebsocketContext
+class WebsocketSession : public WebsocketContext, public CustomAllocator<>
 {
 public:
     static WebsocketSession* create(boost::asio::io_service& _ios, 
@@ -45,13 +49,13 @@ public:
     boost::asio::ip::tcp::socket& getSocket();
     void start();
 
-    bool isOpen();
-    void read();
-    void write(PacketData::ptr packet_data,
-        SendCallback send_callback);
-    void close();
+    virtual bool isOpen() override;
+    virtual void read() override;
+    virtual void write(PacketData::ptr packet_data,
+        SendCallback send_callback) override;
+    virtual void close() override;
 
-    void destroyAsync();
+    virtual void destroyAsync() override;
 
     SessionDelegate* getDelegate()
     {
@@ -72,6 +76,8 @@ public:
     {
         valid_protocol = p;
     }
+    
+    virtual long getKey() const override;
 
 private:
     WebsocketSession(boost::asio::io_service& _ios, 
@@ -108,6 +114,7 @@ private:
     int timeout_millis;
     
     ByteBuffer tmp_buffer;
+    std::string uuid;
 };
 
 };

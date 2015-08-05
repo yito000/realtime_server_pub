@@ -14,6 +14,10 @@
 #include "common/network/websocket/websocket_exception.hpp"
 #include "log/logger.h"
 
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
 namespace {
     const int DEFAULT_TIMEOUT = 60 * 1000;
 
@@ -23,6 +27,9 @@ namespace {
         std::regex_constants::icase);
     std::regex sec_protocol("Sec-WebSocket-Protocol", 
         std::regex_constants::icase);
+    
+    // TODO
+    auto uuid_gen = boost::uuids::random_generator();
 };
 
 namespace client {
@@ -61,7 +68,8 @@ void WebsocketAsync::connect(HandShakeRequest::ptr handshake_req)
             
             handShake(handshake_req);
         } else {
-            socket->close();
+            Logger::log("WebsocketAsync: connect error");
+            destroyAsync();
         }
     });
 }
@@ -114,9 +122,16 @@ void WebsocketAsync::destroyAsync()
         } catch (BaseException& e) {
             e.printAll();
         }
-
+        
+        Logger::log("websocket async: destroy");
         delete this;
     });
+}
+
+long WebsocketAsync::getKey() const
+{
+    return std::hash<long>()(reinterpret_cast<long>(this)) ^
+        std::hash<std::string>()(uuid);
 }
 
 // private member function
@@ -130,6 +145,8 @@ WebsocketAsync::WebsocketAsync(boost::asio::io_service& _ios,
 
     timeout_millis = _timeout_millis;
     ws_delegate = NULL;
+    
+    uuid = boost::lexical_cast<std::string>(boost::uuids::uuid(uuid_gen()));
 }
 
 bool WebsocketAsync::init(boost::asio::io_service& _ios, 
@@ -209,7 +226,8 @@ void WebsocketAsync::handShake(HandShakeRequest::ptr handshake_req)
 
                 receiveHandShake(tmp_buf, handshake_req);
             } else {
-                close();
+                Logger::log("WebsocketAsync: handshake error");
+                destroyAsync();
             }
 
             delete req;
@@ -239,11 +257,13 @@ void WebsocketAsync::receiveHandShake(ByteBuffer* buf,
 
                     ws_delegate->onStart(this);
                 } else {
-                    close();
+                    destroyAsync();
                 }
             } else {
+                Logger::log("WebsocketAsync: receive handshake error");
+                
                 delete buf;
-                close();
+                destroyAsync();
             }
         });
 }
@@ -273,16 +293,13 @@ void WebsocketAsync::writeAsync(PacketData::ptr packet_data,
             boost::system::error_code ec, std::size_t s) {
             
             if (!ec) {
-                if (ws_delegate) {
-                    ws_delegate->onSendFinish(this);
-                }
-
                 if (send_callback) {
                     send_callback(ec);
                 }
             } else {
                 if (ws_delegate) {
-                    ws_delegate->onError(this, ec);
+                    ws_delegate->onError(this, 
+                        client::WebsocketDelegate::Operation::WRITE, ec);
                 }
 
                 if (send_callback) {
@@ -290,6 +307,10 @@ void WebsocketAsync::writeAsync(PacketData::ptr packet_data,
                 }
 
                 close();
+            }
+            
+            if (ws_delegate) {
+                ws_delegate->onSendFinish(this, ec);
             }
 
             delete ser_packet_data;
@@ -313,16 +334,17 @@ void WebsocketAsync::receivePacket()
                         ws_delegate->onReceive(this, pd);
                     }
                 }
-
-                if (ws_delegate) {
-                    ws_delegate->onReceiveFinish(this);
-                }
             } else {
                 if (ws_delegate) {
-                    ws_delegate->onError(this, ec);
+                    ws_delegate->onError(this, 
+                        client::WebsocketDelegate::Operation::READ, ec);
                 }
 
                 close();
+            }
+            
+            if (ws_delegate) {
+                ws_delegate->onReceiveFinish(this, ec);
             }
         });
 }

@@ -5,10 +5,14 @@
 #include "log/logger.h"
 
 //
-#include "protobuf/event/pb_ev_uiid.h"
+//#include "protobuf/event/pb_ev_uiid.h"
+//#include "protobuf/event/pb_ev_res_uiid.h"
+//#include "protobuf/event/pb_master.h"
 
-#include "protobuf/event/pb_ev_res_uiid.h"
-#include "protobuf/event/pb_master.h"
+//
+#include "flatbuffers/event/fb_event_uiid.h"
+#include "flatbuffers/event/fb_event_res_uiid.h"
+#include "flatbuffers/event/fb_master.h"
 
 void Global::onStart(AppGlobalSetting& g_setting)
 {
@@ -22,12 +26,12 @@ void Global::onStart(AppGlobalSetting& g_setting)
         if (flag_opt && flag_opt.get() == "1") {
             Logger::debug("set master mode");
 
-            route_map->addRoute(1, PbMaster::sendWorker);
-            route_map->addRoute(2, PbEvResponseUiid::response);
+            route_map->addRoute(1, FbMaster::sendWorker);
+            route_map->addRoute(2, FbEvResponseUiid::response);
         } else {
             Logger::debug("set worker mode");
 
-            route_map->addRoute(1, PbEvUiid::addUser);
+            route_map->addRoute(1, FbEvUiid::addUser);
         }
     }
 

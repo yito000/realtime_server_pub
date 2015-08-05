@@ -2,6 +2,7 @@
 #define WEBSOCKET_ASYNC_H
 
 #include "smart_ptr.hpp"
+#include "allocator/custom_allocator.hpp"
 
 #include <string>
 #include <vector>
@@ -23,7 +24,7 @@ namespace client {
 
 typedef std::function<void(boost::system::error_code ec)> SendCallback;
 
-class WebsocketAsync : public SmartPtr<WebsocketAsync>
+class WebsocketAsync : public SmartPtr<WebsocketAsync>, public CustomAllocator<>
 {
 public:
     typedef boost::intrusive_ptr<WebsocketAsync> ptr;
@@ -53,6 +54,8 @@ public:
     {
         ws_delegate = wd;
     }
+    
+    long getKey() const;
 
 private:
     WebsocketAsync(boost::asio::io_service& _ios, int _timeout_millis);
@@ -92,6 +95,7 @@ private:
     bool handshake_ok;
     
     ByteBuffer tmp_buffer;
+    std::string uuid;
 };
 
 };

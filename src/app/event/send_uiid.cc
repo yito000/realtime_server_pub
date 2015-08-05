@@ -1,9 +1,9 @@
 #include "send_uiid.h"
 
+#include "common/common_object.h"
 #include "log/logger.h"
 
-void SendUiid::exec(const WsActor* user_client,
-    const std::string uiid)
+void SendUiid::exec(long actor_key, const std::string uiid)
 {
     Logger::debug("uiid is %s", uiid.c_str());
 
@@ -15,12 +15,15 @@ void SendUiid::exec(const WsActor* user_client,
     pd->packet_type = PACKET_TYPE_TEXT;
 
     pd->data.insert(pd->data.end(), uiid.begin(), uiid.end());
-
-    user_client->write(pd, [](error_code ec) {
-        if (!ec) {
-            Logger::debug("send ok!");
-        } else {
-            Logger::debug("send ng...");
-        }
+    
+    auto am = CommonObject::getInstance()->getDownActorManager();
+    am->getActorFromKey(actor_key, [pd, uiid](WsActor::const_ptr actor) {
+        actor->write(pd, [](error_code ec) {
+            if (!ec) {
+                Logger::debug("send ok!");
+            } else {
+                Logger::debug("send ng...");
+            }
+        });
     });
 }

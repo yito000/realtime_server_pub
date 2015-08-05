@@ -1,21 +1,22 @@
 #include "receive_uiid.h"
 
-#include "protobuf/message/uiid.pb.h"
+#include "flatbuffers/table/uiid_generated.h"
+#include "common/common_object.h"
 
 #include "common/network/websocket/ws_packet_data_helper.h"
 #include "log/logger.h"
 
-void ReceiveUiid::exec(const WsActor* actor,
+void ReceiveUiid::exec(long actor_key,
     const std::string uiid)
 {
-    UiidPData u_data;
-    u_data.set_value(uiid);
-
-    int a_size = u_data.ByteSize();
-    char* buf = new char[a_size];
-
-    memset(buf, 0, a_size);
-    u_data.SerializeToArray(buf, a_size);
+    flatbuffers::FlatBufferBuilder fbb;
+    auto fb_uiid = fbb.CreateString(uiid);
+    
+    auto data = CreateUiidData(fbb, fb_uiid);
+    fbb.Finish(data);
+    
+    auto a_size = fbb.GetSize();
+    const char* buf = (const char*)fbb.GetBufferPointer();
 
     //
     using namespace boost::system;
@@ -29,13 +30,14 @@ void ReceiveUiid::exec(const WsActor* actor,
     pd->cont_frame = false;
     pd->packet_type = PACKET_TYPE_BINARY;
 
-    delete[] buf;
-
-    actor->write(pd, [](error_code ec) {
-        if (!ec) {
-            Logger::debug("receive ok!");
-        } else {
-            Logger::debug("receive ng...");
-        }
+    auto am = CommonObject::getInstance()->getUpActorManager();
+    am->getActorFromKey(actor_key, [pd, uiid](WsActor::const_ptr actor) {
+        actor->write(pd, [](error_code ec) {
+            if (!ec) {
+                Logger::debug("receive ok!");
+            } else {
+                Logger::debug("receive ng...");
+            }
+        });
     });
 }

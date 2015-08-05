@@ -16,10 +16,12 @@ public:
     virtual void onStart(client::WebsocketAsync* ws);
     virtual void onReceive(client::WebsocketAsync* ws,
         PacketData::ptr pd);
-    virtual void onReceiveFinish(client::WebsocketAsync* ws);
-    virtual void onSendFinish(client::WebsocketAsync* ws);
-    virtual void onError(client::WebsocketAsync* ws,
+    virtual void onReceiveFinish(client::WebsocketAsync* ws,
         boost::system::error_code ec);
+    virtual void onSendFinish(client::WebsocketAsync* ws,
+        boost::system::error_code ec);
+    virtual void onError(client::WebsocketAsync* ws,
+        Operation operation, boost::system::error_code ec);
 
 private:
     int node_id;

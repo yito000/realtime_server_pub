@@ -1,12 +1,25 @@
 cmake_minimum_required(VERSION 2.8)
-add_definitions("-Os -std=c++11 -stdlib=libc++ -DNDEBUG -g")
-#add_definitions("-Os -std=c++11 -stdlib=libc++")
+add_definitions("-O0 -std=c++11 -stdlib=libc++ -g -DNDEBUG")
+#add_definitions("-O3 -std=c++11 -stdlib=libc++ -DNDEBUG")
+
+if (APPLE)
+    add_definitions("-DTARGET_OS_MACOSX")
+elseif (LINUX)
+    add_definitions("-DTARGET_OS_LINUX")
+endif ()
+
+add_definitions("-DUSE_JEMALLOC")
 
 include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/libs/include 
   ${CMAKE_CURRENT_LIST_DIR}/libs/include/voltdb 
   ${CMAKE_CURRENT_LIST_DIR}/libs/include/mysql 
+  ${CMAKE_CURRENT_LIST_DIR}/libs/include/jemalloc 
   ${CMAKE_CURRENT_LIST_DIR}/src 
+  ${CMAKE_CURRENT_LIST_DIR}/src/external_src/flatbuffers 
+  ${CMAKE_CURRENT_LIST_DIR}/src/external_src/redis 
+  ${CMAKE_CURRENT_LIST_DIR}/src/external_src/redis/impl 
+  ${CMAKE_CURRENT_LIST_DIR}/redis_impl 
   ${CMAKE_CURRENT_LIST_DIR}/src/common 
   ${CMAKE_CURRENT_LIST_DIR}/src/lib 
   ${CMAKE_CURRENT_LIST_DIR}/src/app 
@@ -20,6 +33,9 @@ add_executable(
   realtime_server 
   src/app/event/receive_uiid.cc
   src/app/event/send_uiid.cc
+  src/app/flatbuffers/event/fb_event_res_uiid.cc
+  src/app/flatbuffers/event/fb_event_uiid.cc
+  src/app/flatbuffers/event/fb_master.cc
   src/app/global.cc
   src/app/protobuf/event/pb_ev_res_uiid.cc
   src/app/protobuf/event/pb_ev_uiid.cc
@@ -103,8 +119,15 @@ add_executable(
   src/node_session_delegate.cc
   src/server.cc
   src/setting_loader.cc
+  src/external_src/flatbuffers/idl_gen_text.cpp
+  src/external_src/flatbuffers/idl_parser.cpp
+  src/external_src/flatbuffers/reflection.cpp
   src/app/event/receive_uiid.h
   src/app/event/send_uiid.h
+  src/app/flatbuffers/event/fb_event_res_uiid.h
+  src/app/flatbuffers/event/fb_event_uiid.h
+  src/app/flatbuffers/event/fb_master.h
+  src/app/flatbuffers/table/uiid_generated.h
   src/app/global.h
   src/app/protobuf/event/pb_ev_res_uiid.h
   src/app/protobuf/event/pb_ev_uiid.h
@@ -130,12 +153,6 @@ add_executable(
   src/common/common.h
   src/common/common_object.h
   src/common/data_buffer.h
-  src/common/db/redis/lib/config.h
-  src/common/db/redis/lib/impl/redisclientimpl.h
-  src/common/db/redis/lib/redisclient.h
-  src/common/db/redis/lib/redisparser.h
-  src/common/db/redis/lib/redisvalue.h
-  src/common/db/redis/lib/version.h
   src/common/db/redis/redis_service.h
   src/common/db/voltdb/volt_command_invoker.h
   src/common/db/voltdb/voltdb.h
@@ -182,6 +199,17 @@ add_executable(
   src/common/thread/bidirectional_communicator.h
   src/common/thread/task_actor.h
   src/common/user_actor/user_client.h
+  src/external_src/flatbuffers/flatbuffers/flatbuffers.h
+  src/external_src/flatbuffers/flatbuffers/hash.h
+  src/external_src/flatbuffers/flatbuffers/idl.h
+  src/external_src/flatbuffers/flatbuffers/reflection.h
+  src/external_src/flatbuffers/flatbuffers/reflection_generated.h
+  src/external_src/flatbuffers/flatbuffers/util.h
+  src/external_src/redis/config.h
+  src/external_src/redis/redisclient.h
+  src/external_src/redis/redisparser.h
+  src/external_src/redis/redisvalue.h
+  src/external_src/redis/version.h
   src/lib/archive/gzip.h
   src/lib/base64/base64.h
   src/lib/crypt/crypt.h
@@ -236,6 +264,7 @@ target_link_libraries(
   protobuf-lite
   mysqlclient 
   voltdbcpp 
+  jemalloc 
   event 
   event_pthreads 
   boost_date_time-mt 

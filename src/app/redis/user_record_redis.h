@@ -4,7 +4,7 @@
 #include <string>
 #include <functional>
 
-#include "db/redis/lib/redisclient.h"
+#include "redisclient.h"
 
 class UserRecordRedis
 {

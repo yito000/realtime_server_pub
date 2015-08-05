@@ -9,8 +9,9 @@
 class WsActor;
 class ProtobufRouter;
 
-typedef std::function<void(const WsActor*, 
-    const char*, int)> RouteCallback;
+typedef boost::intrusive_ptr<WsActor> WsActorPtr;
+
+typedef std::function<void(long, const char*, int)> RouteCallback;
 
 class ProtobufRouteMap : public SmartPtr<ProtobufRouteMap>
 {

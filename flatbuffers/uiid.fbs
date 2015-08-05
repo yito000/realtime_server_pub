@@ -1,0 +1,5 @@
+table UiidData {
+    value: string (id: 0);
+}
+
+root_type UiidData;

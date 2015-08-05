@@ -75,6 +75,7 @@ private:
     bool server_mode;
 
     boost::asio::io_service& ios;
+    boost::asio::io_service::strand ios_st;
     boost::asio::ssl::stream<boost::asio::ip::tcp::socket>* socket;
     boost::asio::ssl::context* ssl_context;
     

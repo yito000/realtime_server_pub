@@ -4,7 +4,7 @@
 
 #include "log/logger.h"
 
-void PbEvResponseUiid::response(const WsActor* user_client,
+void PbEvResponseUiid::response(long actor_key,
     const char* data, int size)
 {
     UiidPData uiid_data;

@@ -6,7 +6,7 @@
 class PbMaster
 {
 public:
-    static void sendWorker(const WsActor* user_client,
+    static void sendWorker(long actor_key,
         const char* data, int size);
 };
 

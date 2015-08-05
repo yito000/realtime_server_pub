@@ -7,8 +7,7 @@
 class SendUiid
 {
 public:
-    static void exec(const WsActor* user_client, 
-        const std::string uiid);
+    static void exec(long actor_key, const std::string uiid);
 };
 
 #endif

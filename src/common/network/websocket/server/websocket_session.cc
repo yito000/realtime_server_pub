@@ -10,6 +10,15 @@
 #include "common/network/websocket/websocket_exception.hpp"
 #include "log/logger.h"
 
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
+namespace {
+    // TODO
+    auto uuid_gen = boost::uuids::random_generator();
+};
+
 namespace server {
 
 using boost::asio::ip::tcp;
@@ -92,6 +101,12 @@ void WebsocketSession::destroyAsync()
     });
 }
 
+long WebsocketSession::getKey() const
+{
+    return std::hash<long>()(reinterpret_cast<long>(this)) ^
+        std::hash<std::string>()(uuid);
+}
+
 // private member function
 WebsocketSession::WebsocketSession(boost::asio::io_service& _ios,
     int _timeout_millis) : 
@@ -103,6 +118,8 @@ WebsocketSession::WebsocketSession(boost::asio::io_service& _ios,
     timeout_millis = _timeout_millis;
 
     session_delegate = NULL;
+    
+    uuid = boost::lexical_cast<std::string>(boost::uuids::uuid(uuid_gen()));
 }
 
 bool WebsocketSession::init(boost::asio::io_service& _ios)
@@ -141,11 +158,11 @@ void WebsocketSession::receiveHandShake(ByteBuffer* buf)
                     e.printAll();
 
                     delete buf;
-                    close();
+                    destroyAsync();
                 }
             } else {
                 delete buf;
-                close();
+                destroyAsync();
             }
         });
 }
@@ -193,9 +210,11 @@ void WebsocketSession::sendHandShakeOK(HandShakeResponse::ptr h_res)
             if (!ec) {
                 if (session_delegate) {
                     session_delegate->onStart(this);
+                } else {
+                    destroyAsync();
                 }
             } else {
-                close();
+                destroyAsync();
             }
 
             delete res;
@@ -299,16 +318,13 @@ void WebsocketSession::writeAsync(PacketData::ptr packet_data,
             boost::system::error_code ec, std::size_t s) {
 
             if (!ec) {
-                if (session_delegate) {
-                    session_delegate->onSendFinish(this);
-                }
-
                 if (send_callback) {
                     send_callback(ec);
                 }
             } else {
                 if (session_delegate) {
-                    session_delegate->onError(this, ec);
+                    session_delegate->onError(this, 
+                        server::SessionDelegate::Operation::WRITE, ec);
                 }
 
                 if (send_callback) {
@@ -316,6 +332,10 @@ void WebsocketSession::writeAsync(PacketData::ptr packet_data,
                 }
 
                 close();
+            }
+            
+            if (session_delegate) {
+                session_delegate->onSendFinish(this, ec);
             }
 
             delete ser_packet_data;
@@ -344,16 +364,17 @@ void WebsocketSession::receivePacket()
                         session_delegate->onReceive(this, pd);
                     }
                 }
-
-                if (session_delegate) {
-                    session_delegate->onReceiveFinish(this);
-                }
             } else {
                 if (session_delegate) {
-                    session_delegate->onError(this, ec);
+                    session_delegate->onError(this, 
+                        server::SessionDelegate::Operation::READ, ec);
                 }
 
                 close();
+            }
+            
+            if (session_delegate) {
+                session_delegate->onReceiveFinish(this, ec);
             }
         });
 }

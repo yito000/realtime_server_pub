@@ -52,12 +52,21 @@ void MainLoop::update()
 // private member function
 void MainLoop::updateActor(ActorManager::ptr actor_manager)
 {
-    actor_manager->map([actor_manager](WsActor::const_ptr actor,
+    std::list<WsActor::const_ptr> actor_list;
+    
+    actor_manager->map([actor_manager, &actor_list](WsActor::const_ptr actor,
         const ActorManager::ActorList& list) {
 
         if (!actor->isOpen()) {
             Logger::debug("remove actor");
-            actor_manager->removeActor(actor);
+            
+            actor_list.push_back(actor);
         }
     });
+    
+    for (auto& a: actor_list) {
+        actor_manager->removeActor(a);
+    }
+    
+    actor_manager->update();
 }

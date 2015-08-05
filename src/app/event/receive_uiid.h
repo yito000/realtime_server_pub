@@ -7,7 +7,7 @@
 class ReceiveUiid
 {
 public:
-    static void exec(const WsActor* actor,
+    static void exec(long actor_key,
         const std::string uiid);
 };
 

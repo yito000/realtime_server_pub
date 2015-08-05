@@ -1,4 +1,5 @@
 #include "round_robin_router.h"
+#include "common/common_object.h"
 
 #include "network/websocket/client/websocket_async.h"
 

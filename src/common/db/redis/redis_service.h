@@ -1,7 +1,7 @@
 #ifndef REDIS_SERVICE_H
 #define REDIS_SERVICE_H
 
-#include "db/redis/lib/redisclient.h"
+#include "redisclient.h"
 
 #include "smart_ptr.hpp"
 

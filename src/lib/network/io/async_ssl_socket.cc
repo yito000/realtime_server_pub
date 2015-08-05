@@ -4,6 +4,7 @@
 
 AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios) :
     ios(_ios),
+    ios_st(ios),
     connect_timer(ios),
     read_timer(ios), 
     write_timer(ios),
@@ -24,6 +25,7 @@ AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios) :
 AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios,
     const std::string& _host, unsigned int _port) :
     ios(_ios),
+    ios_st(ios),
     connect_timer(ios),
     read_timer(ios), 
     write_timer(ios),
@@ -47,6 +49,7 @@ AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios,
 AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios,
     const std::string& _host, const std::string& _protocol) :
     ios(_ios),
+    ios_st(ios),
     connect_timer(ios),
     read_timer(ios), 
     write_timer(ios),
@@ -114,9 +117,15 @@ void AsyncSSLSocket::connect(boost::posix_time::time_duration timeout,
 
 void AsyncSSLSocket::close()
 {
-    if (socket->lowest_layer().is_open()) {
-        socket->lowest_layer().close();
-    }
+    ios.dispatch([this]() {
+        if (socket->lowest_layer().is_open()) {
+            connect_timer.cancel();
+            read_timer.cancel();
+            write_timer.cancel();
+            
+            socket->lowest_layer().close();
+        }
+    });
 }
 
 bool AsyncSSLSocket::isOpen()
@@ -194,14 +203,18 @@ void AsyncSSLSocket::setWriteTimeoutCallback(SocketTimeoutCallback callback)
 // private member function
 void AsyncSSLSocket::initTimer()
 {
+    connect_timer.expires_at(boost::posix_time::pos_infin);
+    read_timer.expires_at(boost::posix_time::pos_infin);
+    write_timer.expires_at(boost::posix_time::pos_infin);
+    
     connect_timer.async_wait(
-        std::bind(&AsyncSSLSocket::checkConnectDeadline, this));
+        ios_st.wrap(std::bind(&AsyncSSLSocket::checkConnectDeadline, this)));
     
     read_timer.async_wait(
-        std::bind(&AsyncSSLSocket::checkReadDeadline, this));
+        ios_st.wrap(std::bind(&AsyncSSLSocket::checkReadDeadline, this)));
 
     write_timer.async_wait(
-        std::bind(&AsyncSSLSocket::checkWriteDeadline, this));
+        ios_st.wrap(std::bind(&AsyncSSLSocket::checkWriteDeadline, this)));
 }
 
 void AsyncSSLSocket::connectInternal(boost::system::error_code err,
@@ -243,7 +256,7 @@ void AsyncSSLSocket::checkConnectDeadline()
     
     if (socket->lowest_layer().is_open()) {
         connect_timer.async_wait(
-            std::bind(&AsyncSSLSocket::checkConnectDeadline, this));
+            ios_st.wrap(std::bind(&AsyncSSLSocket::checkConnectDeadline, this)));
     }
 }
 
@@ -263,7 +276,7 @@ void AsyncSSLSocket::checkReadDeadline()
     
     if (socket->lowest_layer().is_open()) {
         read_timer.async_wait(
-            std::bind(&AsyncSSLSocket::checkReadDeadline, this));
+            ios_st.wrap(std::bind(&AsyncSSLSocket::checkReadDeadline, this)));
     }
 }
 
@@ -283,7 +296,7 @@ void AsyncSSLSocket::checkWriteDeadline()
     
     if (socket->lowest_layer().is_open()) {
         write_timer.async_wait(
-            std::bind(&AsyncSSLSocket::checkWriteDeadline, this));
+            ios_st.wrap(std::bind(&AsyncSSLSocket::checkWriteDeadline, this)));
     }
 }
 

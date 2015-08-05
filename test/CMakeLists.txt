@@ -4,6 +4,7 @@ add_definitions("-Os -std=c++11 -stdlib=libc++ -DDEBUG")
 include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/lib 
   ${CMAKE_CURRENT_LIST_DIR}/libs/include 
+  ${CMAKE_CURRENT_LIST_DIR}/external_src/flatbuffers
 )
 
 link_directories(
@@ -22,6 +23,9 @@ add_executable(
   lib/network/websocket/client/websocket_async.cc 
   lib/network/websocket/client/frame_data.cc 
   lib/network/io/socket.cc
+  external_src/flatbuffers/idl_gen_text.cpp
+  external_src/flatbuffers/idl_parser.cpp
+  external_src/flatbuffers/reflection.cpp
 )
 
 target_link_libraries(

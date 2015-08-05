@@ -18,15 +18,18 @@ ClusterNodeDelegate::ClusterNodeDelegate(int _node_id,
 
 void ClusterNodeDelegate::onStart(client::WebsocketAsync* ws)
 {
-    auto ws_actor = new ClusterActor(node_id, ws);
+    ClusterActor::ptr ws_actor = new ClusterActor(node_id, ws);
     auto am = CommonObject::getInstance()->getDownActorManager();
 
     auto key = node_id;
     
     cluster->addActiveNode(node_id, ws);
+    
+    Logger::log("add new node: %d", node_id);
 
     am->addActor(key, ws_actor);
     am->getActorFromKey(key, [](WsActor::const_ptr actor) {
+        Logger::log("add new node2: %d", actor->getKey());
         actor->onStart();
     });
 }
@@ -42,35 +45,37 @@ void ClusterNodeDelegate::onReceive(
     });
 }
 
-void ClusterNodeDelegate::onReceiveFinish(client::WebsocketAsync* ws)
-{
-    auto am = CommonObject::getInstance()->getDownActorManager();
-    auto key = node_id;
-
-    am->getActorFromKey(key, [](WsActor::const_ptr actor) {
-        actor->onReceiveFinish();
-    });
-}
-
-void ClusterNodeDelegate::onSendFinish(client::WebsocketAsync* ws)
-{
-    auto am = CommonObject::getInstance()->getDownActorManager();
-    auto key = node_id;
-
-    am->getActorFromKey(key, [](WsActor::const_ptr actor) {
-        actor->onSendFinish();
-    });
-}
-
-void ClusterNodeDelegate::onError(
-    client::WebsocketAsync* ws, boost::system::error_code ec)
+void ClusterNodeDelegate::onReceiveFinish(client::WebsocketAsync* ws,
+    boost::system::error_code ec)
 {
     auto am = CommonObject::getInstance()->getDownActorManager();
     auto key = node_id;
 
     am->getActorFromKey(key, [ec](WsActor::const_ptr actor) {
-        actor->onError(ec);
+        actor->onReceiveFinish(ec);
+    });
+}
+
+void ClusterNodeDelegate::onSendFinish(client::WebsocketAsync* ws,
+    boost::system::error_code ec)
+{
+    auto am = CommonObject::getInstance()->getDownActorManager();
+    auto key = node_id;
+
+    am->getActorFromKey(key, [ec](WsActor::const_ptr actor) {
+        actor->onSendFinish(ec);
+    });
+}
+
+void ClusterNodeDelegate::onError(client::WebsocketAsync* ws, 
+    Operation operation, boost::system::error_code ec)
+{
+    auto am = CommonObject::getInstance()->getDownActorManager();
+    auto key = node_id;
+
+    am->getActorFromKey(key, [operation, ec](WsActor::const_ptr actor) {
+        actor->onError((WsActor::Operation)operation, ec);
     }, [ws]() {
-        ws->destroyAsync();
+//        ws->close();
     });
 }

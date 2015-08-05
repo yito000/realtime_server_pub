@@ -17,10 +17,77 @@
 
 #include "db/redis/redis_service.h"
 
+#if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
+#include <signal.h>
+
+static volatile sig_atomic_t sig_flag = 0;
+static Server* g_server_cache = nullptr;
+
+void HandleSigint(int no)
+{
+    sig_flag = 1;
+    if (g_server_cache) {
+        g_server_cache->setEndFlag(true);
+    }
+}
+
+void HandleSighup(int no)
+{
+    //
+}
+
+void HandleSigterm(int no)
+{
+    sig_flag = 1;
+    if (g_server_cache) {
+        g_server_cache->setEndFlag(true);
+    }
+}
+
+void SetupSignalAction()
+{
+    {
+        struct sigaction st;
+        memset(&st, 0, sizeof(st));
+
+        st.sa_handler = HandleSigint;
+        st.sa_mask |= SA_RESTART;
+
+        sigaction(SIGINT, &st, NULL);
+    }
+
+    {
+        struct sigaction st;
+        memset(&st, 0, sizeof(st));
+
+        st.sa_handler = HandleSighup;
+        st.sa_mask |= SA_RESTART;
+
+        sigaction(SIGHUP, &st, NULL);
+    }
+
+    {
+        struct sigaction st;
+        memset(&st, 0, sizeof(st));
+
+        st.sa_handler = HandleSigterm;
+        st.sa_mask |= SA_RESTART;
+
+        sigaction(SIGTERM, &st, NULL);
+    }
+}
+#endif
+
+namespace {
+    const char* DEFAULT_CONFIG_FILE = "config.json";
+    const char* DEFAULT_PROTOCOL = "realtime_battle";
+    const char* DEFAULT_CLUSTER_PROTOCOL = "cluster";
+};
+
 int App::start(int argc, char** argv)
 {
     ArgsInfo args_info;
-    args_info.config_file = "config.json";
+    args_info.config_file = DEFAULT_CONFIG_FILE;
 
     parseArgs(argc, argv, args_info);
     Setting::ptr setting = initSettings(args_info);
@@ -33,6 +100,10 @@ int App::start(int argc, char** argv)
         //
         Global global;
         global.onStart(g_setting);
+        
+#if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
+        SetupSignalAction();
+#endif
 
         if (setting->master_node) {
             AppSessionDelegate* inst = new AppSessionDelegate(task_comm);
@@ -42,23 +113,22 @@ int App::start(int argc, char** argv)
                 addr_type = Server::ADDR_V6;
             }
 
-            Server s(addr_type, setting->port);
+            server = new Server(addr_type, setting->port);
 
-            s.setDelegate(inst);
-            s.setTimeoutMillis(setting->timeout_millis);
-            s.setRetry(setting->retry);
-
+            server->setDelegate(inst);
+            server->setTimeoutMillis(setting->timeout_millis);
+            server->setValidProtocol(DEFAULT_PROTOCOL); // TODO
+            
+            g_server_cache = server.get();
+            
             Logger::log("start server port=%d", setting->port);
-
-            s.accept();
-            s.start();
-
-            delete inst;
+            
+            server->accept();
+            server->start();
         } else {
             auto sleep_time = boost::chrono::milliseconds(100);
 
-            while (1) {
-                // todo
+            while (sig_flag == 0) {
                 boost::this_thread::sleep_for(sleep_time);
             }
         }
@@ -67,7 +137,7 @@ int App::start(int argc, char** argv)
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;
     }
-
+    
     return 0;
 }
 
@@ -192,7 +262,7 @@ void App::initMainLoop(Setting::const_ptr setting)
 
     main_loop->addActorManager(user_actor_manager);
     main_loop->addActorManager(up_actor_manager);
-    main_loop->addActorManager(down_actor_manager);
+//    main_loop->addActorManager(down_actor_manager); // TODO: delete
 
     auto task = new DelayedTask;
     task->interval = 5;
@@ -243,11 +313,12 @@ void App::initNodeServer(Setting::const_ptr setting)
     const int SCHEDULER_INTERVAL = 3;
     const int SERVER_SCHEDULER_INTERVAL = 30;
 
-    auto node_server = new NodeServer(
-        addr_type, setting->node_port);
+    auto node_server = new NodeServer(addr_type, setting->node_port);
+    
     auto session_inst = new NodeSessionDelegate(task_comm);
 
     node_server->setDelegate(session_inst);
+    node_server->setValidProtocol(DEFAULT_CLUSTER_PROTOCOL);
     node_server->accept();
 
     //
@@ -351,6 +422,10 @@ void App::initRedisClient(Setting::const_ptr setting)
 
 void App::setupCluster(Setting::const_ptr setting)
 {
+    if (setting->worker_node) {
+        return;
+    }
+    
     const int SCHEDULER_INTERVAL = 5;
     const int CLUSTER_SCHEDULER_INTERVAL = 5000;
 

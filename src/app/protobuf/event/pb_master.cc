@@ -7,7 +7,7 @@
 #include "event/send_uiid.h"
 #include "log/logger.h"
 
-void PbMaster::sendWorker(const WsActor* user_client,
+void PbMaster::sendWorker(long actor_key,
     const char* data, int size)
 {
     const int OP_CODE = 1;
@@ -41,6 +41,6 @@ void PbMaster::sendWorker(const WsActor* user_client,
     });
 
     //
-    AppDirector::getInstance()->postWorker(
-        std::bind(SendUiid::exec, user_client, "ok_dayo"));
+//    AppDirector::getInstance()->postWorker(
+//        std::bind(SendUiid::exec, actor_key, "ok_dayo"));
 }

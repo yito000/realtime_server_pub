@@ -13,20 +13,26 @@ class WebsocketSession;
 class SessionDelegate
 {
 public:
+    enum class Operation {
+        WRITE,
+        READ
+    };
+    
     virtual ~SessionDelegate() {}
 
     virtual void onStart(WebsocketSession* session) = 0;
 
     virtual void onReceive(WebsocketSession* session,
         PacketData::ptr) = 0;
-    virtual void onReceiveFinish(WebsocketSession* session) = 0;
-    virtual void onSendFinish(WebsocketSession* session) = 0;
+    virtual void onReceiveFinish(WebsocketSession* session,
+        boost::system::error_code ec) = 0;
+    virtual void onSendFinish(WebsocketSession* session,
+        boost::system::error_code ec) = 0;
 
     virtual void onError(WebsocketSession* session, 
-        boost::system::error_code ec) = 0;
+        Operation operation, boost::system::error_code ec) = 0;
 };
 
 };
 
 #endif
-

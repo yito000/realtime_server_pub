@@ -6,7 +6,7 @@
 class PbEvResponseUiid
 {
 public:
-    static void response(const WsActor* user_client,
+    static void response(long actor_key,
         const char* data, int size);
 };
 

@@ -12,23 +12,23 @@
 
 #include "log/logger.h"
 
-void PbEvUiid::addUser(const WsActor* user_client,
+void PbEvUiid::addUser(long actor_key,
     const char* data, int size)
 {
     UiidPData uiid_data;
     uiid_data.ParseFromArray(data, size);
-
+    
     //
     auto u_r = UserRecordRedis::getInstance();
     auto uiid = uiid_data.value();
 
     u_r->add(uiid,
-        [user_client, uiid](const RedisValue& rv) {
+        [actor_key, uiid](const RedisValue& rv) {
             auto response = rv.toString();
 
             if (response != "NG") {
                 AppDirector::getInstance()->postWorker(
-                    std::bind(ReceiveUiid::exec, user_client, uiid));
+                    std::bind(ReceiveUiid::exec, actor_key, uiid));
             } else {
                 Logger::debug("user add ng.");
 

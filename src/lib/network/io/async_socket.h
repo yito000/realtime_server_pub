@@ -56,6 +56,7 @@ private:
     std::string protocol;
 
     boost::asio::io_service& ios;
+    boost::asio::io_service::strand ios_st;
     boost::asio::ip::tcp::socket socket;
     
     boost::asio::deadline_timer connect_timer;

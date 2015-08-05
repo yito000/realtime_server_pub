@@ -21,7 +21,7 @@ int charToInt(const char* s)
     return ret;
 }
 
-void PbCommandDispatcher::bulkDispatch(const WsActor* user_client, 
+void PbCommandDispatcher::bulkDispatch(long actor_key, 
     const std::vector<char>& data)
 {
     if (data.size() <= HEADER_SIZE) {
@@ -47,7 +47,7 @@ void PbCommandDispatcher::bulkDispatch(const WsActor* user_client,
 
         if (data_size <= data.size() - cur_pos) {
             int start_index = cur_pos;
-            dispatchData(user_client, op_code, 
+            dispatchData(actor_key, op_code, 
                 start_index, data_size, data);
 
             cur_pos += data_size;
@@ -59,7 +59,7 @@ void PbCommandDispatcher::bulkDispatch(const WsActor* user_client,
 
 // global function
 static bool DispatchProtobufCommand(
-    ProtobufRouter::ptr pb_router, const WsActor* user_client,
+    ProtobufRouter::ptr pb_router, long actor_key,
     int op_code, int start_index, int data_size,
     const std::vector<char>& data)
 {
@@ -74,7 +74,7 @@ static bool DispatchProtobufCommand(
             pos++;
         }
 
-        callback(user_client, buf, data_size);
+        callback(actor_key, buf, data_size);
 
         delete[] buf;
 
@@ -85,20 +85,20 @@ static bool DispatchProtobufCommand(
 }
 
 // private member function
-void PbCommandDispatcher::dispatchData(const WsActor* user_client, 
+void PbCommandDispatcher::dispatchData(long actor_key, 
     int op_code, int start_index, int data_size, 
     const std::vector<char>& data)
 {
     auto sys_pb_router = 
         CommonObject::getInstance()->getSystemProtobufRouter();
 
-    if (!DispatchProtobufCommand(sys_pb_router, user_client, 
+    if (!DispatchProtobufCommand(sys_pb_router, actor_key, 
         op_code, start_index, data_size, data)) {
 
         auto app_pb_router =
             CommonObject::getInstance()->getUserProtobufRouter();
 
-        DispatchProtobufCommand(app_pb_router, user_client, 
+        DispatchProtobufCommand(app_pb_router, actor_key, 
             op_code, start_index, data_size, data);
     }
 }

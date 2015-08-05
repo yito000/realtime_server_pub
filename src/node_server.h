@@ -45,15 +45,15 @@ public:
     {
         timeout_millis = ms;
     }
-
-    int getRetry()
+    
+    std::string getValidProtocol() const
     {
-        return retry;
+        return protocol;
     }
-
-    void setRetry(int n)
+    
+    void setValidProtocol(const std::string& str)
     {
-        retry = n;
+        protocol = str;
     }
 
 private:
@@ -64,7 +64,7 @@ private:
     server::SessionDelegate* session_delegate;
 
     int timeout_millis;
-    int retry;
+    std::string protocol;
 };
 
 #endif

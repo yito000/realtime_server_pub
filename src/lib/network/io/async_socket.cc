@@ -6,6 +6,7 @@
 
 AsyncSocket::AsyncSocket(boost::asio::io_service& _ios) :
     ios(_ios),
+    ios_st(ios),
     socket(ios),
     connect_timer(ios),
     read_timer(ios), 
@@ -17,6 +18,7 @@ AsyncSocket::AsyncSocket(boost::asio::io_service& _ios) :
 AsyncSocket::AsyncSocket(boost::asio::io_service& _ios,
     const std::string& _host, unsigned int _port) :
     ios(_ios),
+    ios_st(ios),
     socket(ios),
     connect_timer(ios),
     read_timer(ios), 
@@ -31,6 +33,7 @@ AsyncSocket::AsyncSocket(boost::asio::io_service& _ios,
 AsyncSocket::AsyncSocket(boost::asio::io_service& _ios,
     const std::string& _host, const std::string& _protocol) :
     ios(_ios),
+    ios_st(ios),
     socket(ios),
     connect_timer(ios),
     read_timer(ios), 
@@ -66,9 +69,15 @@ void AsyncSocket::connect(boost::posix_time::time_duration timeout,
 
 void AsyncSocket::close()
 {
-    if (socket.is_open()) {
-        socket.close();
-    }
+    ios.dispatch([this]() {
+        if (socket.is_open()) {
+            connect_timer.cancel();
+            read_timer.cancel();
+            write_timer.cancel();
+            
+            socket.close();
+        }
+    });
 }
 
 bool AsyncSocket::isOpen()
@@ -96,7 +105,7 @@ void AsyncSocket::read(boost::posix_time::time_duration timeout,
     };
     
     socket.async_read_some(boost::asio::buffer(data, MAX_LENGTH), 
-        boost::bind(func, _1, data, _2));
+        ios_st.wrap(boost::bind(func, _1, data, _2)));
 }
 
 void AsyncSocket::write(const ByteBuffer& buffer, 
@@ -109,13 +118,13 @@ void AsyncSocket::write(const ByteBuffer& buffer,
     }
     
     socket.async_write_some(boost::asio::buffer(buffer),
-        [this, callback](boost::system::error_code ec, std::size_t s) {
+        ios_st.wrap([this, callback](boost::system::error_code ec, std::size_t s) {
             if (callback) {
                 callback(ec, s);
             }
             
             write_timer.expires_at(boost::posix_time::pos_infin);
-        });
+        }));
 }
 
 std::string AsyncSocket::getHost()
@@ -146,14 +155,18 @@ void AsyncSocket::setWriteTimeoutCallback(SocketTimeoutCallback callback)
 // private member function
 void AsyncSocket::initTimer()
 {
+    connect_timer.expires_at(boost::posix_time::pos_infin);
+    read_timer.expires_at(boost::posix_time::pos_infin);
+    write_timer.expires_at(boost::posix_time::pos_infin);
+    
     connect_timer.async_wait(
-        std::bind(&AsyncSocket::checkConnectDeadline, this));
+        ios_st.wrap(std::bind(&AsyncSocket::checkConnectDeadline, this)));
     
     read_timer.async_wait(
-        std::bind(&AsyncSocket::checkReadDeadline, this));
+        ios_st.wrap(std::bind(&AsyncSocket::checkReadDeadline, this)));
 
     write_timer.async_wait(
-        std::bind(&AsyncSocket::checkWriteDeadline, this));
+        ios_st.wrap(std::bind(&AsyncSocket::checkWriteDeadline, this)));
 }
 
 void AsyncSocket::connectInternal(boost::system::error_code err,
@@ -164,7 +177,7 @@ void AsyncSocket::connectInternal(boost::system::error_code err,
     
     if (err && endpoint_it != end) {
         socket.async_connect(*endpoint_it++, 
-            [this, endpoint_it, callback](boost::system::error_code ec) {
+            ios_st.wrap([this, endpoint_it, callback](boost::system::error_code ec) {
                 if (ec) {
                     connectInternal(ec, endpoint_it, callback);
                 } else {
@@ -172,7 +185,7 @@ void AsyncSocket::connectInternal(boost::system::error_code err,
                     
                     connect_timer.expires_at(boost::posix_time::pos_infin);
                 }
-            });
+            }));
     } else {
         callback(boost::asio::error::host_not_found);
     }
@@ -194,7 +207,7 @@ void AsyncSocket::checkConnectDeadline()
     
     if (socket.is_open()) {
         connect_timer.async_wait(
-            std::bind(&AsyncSocket::checkConnectDeadline, this));
+            ios_st.wrap(std::bind(&AsyncSocket::checkConnectDeadline, this)));
     }
 }
 
@@ -214,7 +227,7 @@ void AsyncSocket::checkReadDeadline()
     
     if (socket.is_open()) {
         read_timer.async_wait(
-            std::bind(&AsyncSocket::checkReadDeadline, this));
+            ios_st.wrap(std::bind(&AsyncSocket::checkReadDeadline, this)));
     }
 }
 
@@ -234,6 +247,6 @@ void AsyncSocket::checkWriteDeadline()
     
     if (socket.is_open()) {
         write_timer.async_wait(
-            std::bind(&AsyncSocket::checkWriteDeadline, this));
+            ios_st.wrap(std::bind(&AsyncSocket::checkWriteDeadline, this)));
     }
 }

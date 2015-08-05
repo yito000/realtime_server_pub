@@ -15,10 +15,10 @@ AppSessionDelegate::AppSessionDelegate(BidirectionalCommunicator::ptr t_comm) :
 
 void AppSessionDelegate::onStart(server::WebsocketSession* session)
 {
-    auto ws_actor = new UserClient(session);
+    UserClient::ptr ws_actor = new UserClient(session);
     auto am = CommonObject::getInstance()->getUserActorManager();
 
-    auto key = reinterpret_cast<long>(session);
+    auto key = session->getKey();
 
     am->addActor(key, ws_actor);
     am->getActorFromKey(key, [](WsActor::const_ptr actor) {
@@ -30,7 +30,7 @@ void AppSessionDelegate::onReceive(
     server::WebsocketSession* session, PacketData::ptr r_pd)
 {
     auto am = CommonObject::getInstance()->getUserActorManager();
-    auto key = reinterpret_cast<long>(session);
+    auto key = session->getKey();
 
     am->getActorFromKey(key, [r_pd](WsActor::const_ptr actor) {
         actor->onReceive(r_pd);
@@ -38,35 +38,36 @@ void AppSessionDelegate::onReceive(
 }
 
 void AppSessionDelegate::onReceiveFinish(
-    server::WebsocketSession* session)
+    server::WebsocketSession* session, boost::system::error_code ec)
 {
     auto am = CommonObject::getInstance()->getUserActorManager();
-    auto key = reinterpret_cast<long>(session);
+    auto key = session->getKey();
 
-    am->getActorFromKey(key, [](WsActor::const_ptr actor) {
-        actor->onReceiveFinish();
+    am->getActorFromKey(key, [ec](WsActor::const_ptr actor) {
+        actor->onReceiveFinish(ec);
     });
 }
 
-void AppSessionDelegate::onSendFinish(server::WebsocketSession* session)
+void AppSessionDelegate::onSendFinish(server::WebsocketSession* session,
+    boost::system::error_code ec)
 {
     auto am = CommonObject::getInstance()->getUserActorManager();
-    auto key = reinterpret_cast<long>(session);
+    auto key = session->getKey();
 
-    am->getActorFromKey(key, [](WsActor::const_ptr actor) {
-        actor->onSendFinish();
+    am->getActorFromKey(key, [ec](WsActor::const_ptr actor) {
+        actor->onSendFinish(ec);
     });
 }
 
 void AppSessionDelegate::onError(server::WebsocketSession* session, 
-    boost::system::error_code ec)
+    Operation operation, boost::system::error_code ec)
 {
     auto am = CommonObject::getInstance()->getUserActorManager();
-    auto key = reinterpret_cast<long>(session);
+    auto key = session->getKey();
 
-    am->getActorFromKey(key, [ec](WsActor::const_ptr actor) {
-        actor->onError(ec);
+    am->getActorFromKey(key, [operation, ec](WsActor::const_ptr actor) {
+        actor->onError((WsActor::Operation)operation, ec);
     }, [session]() {
-        session->destroyAsync();
+//        session->close();
     });
 }

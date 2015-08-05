@@ -5,6 +5,8 @@
 #include <map>
 #include <functional>
 
+#include "lib/time/app_time.h"
+
 #include "ws_actor.h"
 #include "atomic/spin_lock.hpp"
 
@@ -35,10 +37,27 @@ public:
     void map(MapCallback callback);
 
     void getSize(SizeCallback callback);
+    void update();
 
 private:
+    struct ActorInfo : public SmartPtr<ActorInfo>
+    {
+        typedef boost::intrusive_ptr<ActorInfo> ptr;
+        
+        WsActor::const_ptr actor;
+        bool deleted;
+        AppTime::Point tp;
+        
+        ActorInfo()
+        {
+            deleted = false;
+        }
+    };
+    
+    typedef std::map<void*, ActorInfo::ptr> ActorGabageMap;
+    
     ActorList actor_list;
-    Spinlock<100> spin_lock;
+    std::map<long, ActorGabageMap> hazard_actor_list;
 
     BidirectionalCommunicator::ptr task_comm;
 };

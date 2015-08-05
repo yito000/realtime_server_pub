@@ -1,4 +1,5 @@
 #include "simple_random_router.h"
+#include "common/common_object.h"
 
 #include "common/global_rand.h"
 #include "network/websocket/client/websocket_async.h"

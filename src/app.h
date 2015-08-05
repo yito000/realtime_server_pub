@@ -6,6 +6,7 @@
 #include <string>
 
 #include "setting.h"
+#include "server.h"
 #include "thread/bidirectional_communicator.h"
 #include "scheduler/app_scheduler.h"
 #include "protobuf/protobuf_router.h"
@@ -27,6 +28,8 @@ struct ArgsInfo
         //
     }
 };
+
+class Server;
 
 class App
 {
@@ -52,7 +55,8 @@ private:
     void initRedisClient(Setting::const_ptr setting);
 
     void setupCluster(Setting::const_ptr setting);
-
+    
+    Server::ptr server;
     BidirectionalCommunicator::ptr task_comm;
 
     AppScheduler::ptr app_scheduler;

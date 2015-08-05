@@ -6,7 +6,7 @@
 class PbEvUiid
 {
 public:
-    static void addUser(const WsActor* user_client, 
+    static void addUser(long actor_key, 
         const char* data, int size);
 };
 

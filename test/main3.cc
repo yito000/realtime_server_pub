@@ -7,8 +7,10 @@
 #include "lib/network/websocket/client/websocket_async.h"
 #include "lib/network/websocket/client/handshake_helper.h"
 
-#include "jikken.pb.h"
-#include "uiid.pb.h"
+//#include "jikken.pb.h"
+//#include "uiid.pb.h"
+
+#include "uiid_generated.h"
 
 namespace {
     const int TIMEOUT_MILLIS = 5000;
@@ -21,21 +23,24 @@ namespace {
     const char* PROTOCOL_NAME = "realtime_battle";
 
     bool end_flag = false;
+
+    flatbuffers::FlatBufferBuilder fbb;
 };
 
-void createUiid(const std::string& value, UiidPData& u_data,
-    std::vector<char>& v)
+void createUiid(const std::string& value, std::vector<char>& v)
 {
+    auto fb_uiid = fbb.CreateString(value);
+
+    auto data = CreateUiidData(fbb, fb_uiid);
+    fbb.Finish(data);
+
     const int OP_CODE = 1;
     const int OP_CODE_SIZE = 4;
     const int INT_SIZE = 4;
 
-    u_data.set_value(value);
+    auto a_size = fbb.GetSize();
+    auto buf = (const char*)fbb.GetBufferPointer();
 
-    int a_size = u_data.ByteSize();
-    char* buf = new char[a_size];
-
-    memset(buf, 0, a_size);
     const int DATA_HEAD = OP_CODE_SIZE + INT_SIZE;
 
     //
@@ -61,12 +66,11 @@ void createUiid(const std::string& value, UiidPData& u_data,
         v.push_back(size_buf[i]);
     }
 
-    u_data.SerializeToArray(buf, a_size);
     for (int i = 0; i < a_size; i++) {
         v.push_back(buf[i]);
     }
 
-    delete[] buf;
+    fbb.Clear();
 }
 
 class WebsocketDelegateImpl : public client::WebsocketDelegate
@@ -76,7 +80,7 @@ public:
     {
         send_count = 0;
         receive_count = 0;
-        max_send = 10000;
+        max_send = 5000;
     }
 
     virtual void onStart(client::WebsocketAsync* ws)
@@ -85,8 +89,7 @@ public:
 
         {
             std::vector<char> v;
-            UiidPData u_data;
-            createUiid("aaaaabbbbbccccc0", u_data, v);
+            createUiid("aaaaabbbbbccccc0", v);
 
             char mask_key[4] = {0x1, 0x2, 0x3, 0x4};
 
@@ -114,21 +117,12 @@ public:
 
         {
             if (pd && pd->data.size() > 0) {
-                char* buf = new char[pd->data.size()];
-                for (int i = 0; i < pd->data.size(); i++) {
-                    buf[i] = pd->data[i];
-                }
+//                char* buf = new char[pd->data.size()];
+//                for (int i = 0; i < pd->data.size(); i++) {
+//                    buf[i] = pd->data[i];
+//                }
 
-                //
-//                std::printf("=== response data ===\n");
-//                std::printf("data size: %ld\n", pd->data.size());
-
-                AAA a;
-                a.ParseFromArray(buf, pd->data.size());
-//                std::printf("str=%s\n", a.str().c_str());
-//                std::printf("x=%d\n", a.x());
-
-                delete[] buf;
+//                delete[] buf;
 //                std::printf("=====================\n\n");
             }
 
@@ -137,7 +131,7 @@ public:
             if (receive_count < max_send) {
                 ws->read();
             } else {
-//                std::printf("==== end ====\n");
+                std::printf("==== end ====\n");
 //                end_flag = true;
             }
 
@@ -156,8 +150,7 @@ public:
 
         if (send_count < max_send) {
             std::vector<char> v;
-            UiidPData u_data;
-            createUiid("aaaaabbbbbccccc0", u_data, v);
+            createUiid("aaaaabbbbbccccc0", v);
 
             char mask_key[4] = {0x1, 0x2, 0x3, 0x4};
 
@@ -180,7 +173,7 @@ public:
         boost::system::error_code ec)
     {
         std::printf("error: %s\n", ec.message().c_str());
-//        end_flag = true;
+        end_flag = true;
     }
 
 private:
@@ -196,7 +189,7 @@ int main(int argc, char** argv)
 
         std::vector<client::WebsocketAsync::ptr> v;
 
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 1000; i++) {
             auto del = new WebsocketDelegateImpl;
             auto ws = new client::WebsocketAsync(ios, 
                 "0.0.0.0", 9000, 600 * 1000, 3);

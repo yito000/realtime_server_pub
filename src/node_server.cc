@@ -6,8 +6,9 @@
 using boost::asio::ip::tcp;
 
 NodeServer::NodeServer(const AddrType addr_type, short port) : 
-    work(ios), session_delegate(NULL), 
-    timeout_millis(30 * 1000), retry(3)
+    work(ios), 
+    session_delegate(NULL), 
+    timeout_millis(30 * 1000)
 {
     tcp addr = tcp::v4();
     if (addr_type == ADDR_V6) {
@@ -30,15 +31,15 @@ void NodeServer::accept()
 {
     auto ss = server::WebsocketSession::create(ios, timeout_millis);
     ss->setDelegate(session_delegate);
-    ss->setValidProtocol("cluster");
+    ss->setValidProtocol(protocol);
 
     acceptor->async_accept(ss->getSocket(),
         [this, ss](boost::system::error_code ec) {
             if (!ec) {
                 ss->start();
             } else {
-                delete ss;
-                Logger::log("node server: accept error");
+                ss->destroyAsync();
+                Logger::debug("node server: accept error");
             }
 
             accept();

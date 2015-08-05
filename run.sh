@@ -1,6 +1,6 @@
 p=`pwd`
 
-ulimit -n 4096
+ulimit -n 2048
 export DYLD_FALLBACK_LIBRARY_PATH=$p/libs/lib:$DYLD_FALLBACK_LIBRARY_PATH
 
 if test $# -gt 1; then
