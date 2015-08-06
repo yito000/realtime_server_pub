@@ -39,6 +39,8 @@ public:
 private:
     void parseArgs(int argc, char** argv, ArgsInfo& args);
     Setting::ptr initSettings(ArgsInfo& args);
+    
+    void setupTcpServer(Setting::const_ptr setting);
 
     void initRandomGenerator(Setting::const_ptr setting);
     void initThreadPool(Setting::const_ptr setting);

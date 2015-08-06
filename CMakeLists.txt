@@ -117,6 +117,7 @@ add_executable(
   src/main_loop.cc
   src/node_server.cc
   src/node_session_delegate.cc
+  src/server/tcp_server.cc
   src/server.cc
   src/setting_loader.cc
   src/external_src/flatbuffers/idl_gen_text.cpp
@@ -244,6 +245,7 @@ add_executable(
   src/main_loop.h
   src/node_server.h
   src/node_session_delegate.h
+  src/server/tcp_server.h
   src/server.h
   src/setting.h
   src/setting_loader.h

@@ -1,7 +1,10 @@
 #include "app.h"
 
 #include "global.h"
+
 #include "server.h"
+#include "server/tcp_server.h"
+
 #include "node_server.h"
 #include "setting_loader.h"
 #include "cluster_builder.h"
@@ -106,31 +109,10 @@ int App::start(int argc, char** argv)
 #endif
 
         if (setting->master_node) {
-            AppSessionDelegate* inst = new AppSessionDelegate(task_comm);
-
-            Server::AddrType addr_type = Server::ADDR_V4;
-            if (setting->addr_v6) {
-                addr_type = Server::ADDR_V6;
-            }
-            
-            // TODO: setting file
-            std::string cert = "/Users/ito/qtproj/realtime_server/key/server.crt";
-            std::string pkey = "/Users/ito/qtproj/realtime_server/key/server.key";
-            std::string tmp_dh = "/Users/ito/qtproj/realtime_server/key/dh512.pem";
-
-            server = new Server(addr_type, setting->port,
-                cert, pkey, tmp_dh);
-
-            server->setDelegate(inst);
-            server->setTimeoutMillis(setting->timeout_millis);
-            server->setValidProtocol(DEFAULT_PROTOCOL); // TODO: setting file
-            server->setPassword("traveler"); // TODO
+            server = new Server;
+            setupTcpServer(setting);
             
             g_server_cache = server.get();
-            
-            Logger::log("start server port=%d", setting->port);
-            
-            server->accept();
             server->start();
         } else {
             auto sleep_time = boost::chrono::milliseconds(100);
@@ -146,6 +128,35 @@ int App::start(int argc, char** argv)
     }
     
     return 0;
+}
+
+void App::setupTcpServer(Setting::const_ptr setting)
+{
+    // TODO: setting file
+    std::string cert = "/Users/ito/qtproj/realtime_server/key/server.crt";
+    std::string pkey = "/Users/ito/qtproj/realtime_server/key/server.key";
+    std::string tmp_dh = "/Users/ito/qtproj/realtime_server/key/dh512.pem";
+    
+    AppSessionDelegate* inst = new AppSessionDelegate(task_comm);
+    
+    TcpServer::AddrType addr_type = TcpServer::ADDR_V4;
+    if (setting->addr_v6) {
+        addr_type = TcpServer::ADDR_V6;
+    }
+    auto tcp_server = new TcpServer(server->getIOService(),
+        addr_type, setting->port,
+        cert, pkey, tmp_dh);
+    
+    tcp_server->setDelegate(inst);
+    tcp_server->setTimeoutMillis(setting->timeout_millis);
+    tcp_server->setValidProtocol(DEFAULT_PROTOCOL); // TODO: setting file
+//    tcp_server->setPassword("password"); // TODO
+    
+    server->setTcpServer(tcp_server);
+    
+    Logger::log("start server port=%d", setting->port);
+    
+    tcp_server->accept();
 }
 
 void App::parseArgs(int argc, char** argv, ArgsInfo& args)
