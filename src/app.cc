@@ -112,12 +112,18 @@ int App::start(int argc, char** argv)
             if (setting->addr_v6) {
                 addr_type = Server::ADDR_V6;
             }
+            
+            // TODO: setting file
+            std::string cert = "/Users/ito/qtproj/realtime_server/key/server.crt";
+            std::string pkey = "/Users/ito/qtproj/realtime_server/key/server.key";
+            std::string tmp_dh = "/Users/ito/qtproj/realtime_server/key/dh512.pem";
 
-            server = new Server(addr_type, setting->port);
+            server = new Server(addr_type, setting->port,
+                cert, pkey, tmp_dh);
 
             server->setDelegate(inst);
             server->setTimeoutMillis(setting->timeout_millis);
-            server->setValidProtocol(DEFAULT_PROTOCOL); // TODO
+            server->setValidProtocol(DEFAULT_PROTOCOL); // TODO: setting file
             
             g_server_cache = server.get();
             
@@ -318,7 +324,7 @@ void App::initNodeServer(Setting::const_ptr setting)
     auto session_inst = new NodeSessionDelegate(task_comm);
 
     node_server->setDelegate(session_inst);
-    node_server->setValidProtocol(DEFAULT_CLUSTER_PROTOCOL);
+    node_server->setValidProtocol(DEFAULT_CLUSTER_PROTOCOL); // TODO: setting file
     node_server->accept();
 
     //

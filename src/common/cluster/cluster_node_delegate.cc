@@ -25,11 +25,8 @@ void ClusterNodeDelegate::onStart(client::WebsocketAsync* ws)
     
     cluster->addActiveNode(node_id, ws);
     
-    Logger::log("add new node: %d", node_id);
-
     am->addActor(key, ws_actor);
     am->getActorFromKey(key, [](WsActor::const_ptr actor) {
-        Logger::log("add new node2: %d", actor->getKey());
         actor->onStart();
     });
 }

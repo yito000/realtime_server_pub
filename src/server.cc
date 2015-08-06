@@ -8,7 +8,10 @@
 
 using boost::asio::ip::tcp;
 
-Server::Server(const AddrType addr_type, short port) : 
+Server::Server(const AddrType addr_type, short port,
+    const std::string& cert_filepath, const std::string& pkey_filepath,
+    const std::string& tmp_dh_filepath) : 
+    ssl_context(ios, boost::asio::ssl::context::tlsv1),
     session_delegate(NULL), 
     timeout_millis(30 * 1000), 
     end_flag(false)
@@ -17,9 +20,15 @@ Server::Server(const AddrType addr_type, short port) :
     if (addr_type == ADDR_V6) {
         addr = tcp::v6();
     }
-
+    
     boost::asio::ip::tcp::endpoint ep(addr, port);
     acceptor = new tcp::acceptor(ios, ep);
+    
+    ssl_context.set_options(
+        boost::asio::ssl::context::default_workarounds | 
+        boost::asio::ssl::context::no_sslv2 |
+        boost::asio::ssl::context::single_dh_use);
+    ssl_context.set_password_callback(boost::bind(&Server::passwordCallback, this));
     
     protocol = "default";
     
@@ -29,8 +38,10 @@ Server::Server(const AddrType addr_type, short port) :
     // cert
     {
         // TODO
-        FileStream::ptr st = file_util->getFileStream("/Users/ito/qtproj/realtime_server/key/server.crt");
+        FileStream::ptr st = file_util->getFileStream(cert_filepath);
         auto data = st->readAll();
+        
+        std::vector<char> cert;
         
         cert.reserve(data->getSize());
         auto p = data->getBuffer();
@@ -38,13 +49,17 @@ Server::Server(const AddrType addr_type, short port) :
         for (int i = 0; i < data->getSize(); i++) {
             cert.push_back(p[i]);
         }
+        
+        ssl_context.use_certificate_chain(boost::asio::buffer(cert));
     }
     
     // pkey
     {
         // TODO
-        FileStream::ptr st = file_util->getFileStream("/Users/ito/qtproj/realtime_server/key/server.key");
+        FileStream::ptr st = file_util->getFileStream(pkey_filepath);
         auto data = st->readAll();
+        
+        std::vector<char> pkey;
         
         pkey.reserve(data->getSize());
         auto p = data->getBuffer();
@@ -52,20 +67,27 @@ Server::Server(const AddrType addr_type, short port) :
         for (int i = 0; i < data->getSize(); i++) {
             pkey.push_back(p[i]);
         }
+        
+        ssl_context.use_private_key(boost::asio::buffer(pkey),
+            boost::asio::ssl::context::pem);
     }
     
     // temp dh
     {
         // TODO
-        FileStream::ptr st = file_util->getFileStream("/Users/ito/qtproj/realtime_server/key/dh512.pem");
+        FileStream::ptr st = file_util->getFileStream(tmp_dh_filepath);
         auto data = st->readAll();
         
-        pkey.reserve(data->getSize());
+        std::vector<char> tmp_dh;
+        
+        tmp_dh.reserve(data->getSize());
         auto p = data->getBuffer();
         
         for (int i = 0; i < data->getSize(); i++) {
             tmp_dh.push_back(p[i]);
         }
+        
+        ssl_context.use_tmp_dh(boost::asio::buffer(tmp_dh));
     }
 }
 
@@ -83,7 +105,7 @@ void Server::accept()
         return;
     }
     
-    auto ss = server::WebsocketSession::createSSL(ios, timeout_millis, cert, pkey, tmp_dh);
+    auto ss = server::WebsocketSession::createSSL(ios, ssl_context, timeout_millis);
     ss->setDelegate(session_delegate);
     ss->setValidProtocol(protocol);
 
@@ -107,4 +129,21 @@ void Server::start()
         
         boost::this_thread::sleep_for(boost::chrono::milliseconds(1));
     }
+}
+
+std::string Server::getPassword() const
+{
+    return password_string;
+}
+
+void Server::setPassword(const std::string& value)
+{
+    password_string = value;
+}
+
+// private member function
+std::string Server::passwordCallback() const
+{
+    Logger::log("password callback");
+    return password_string;
 }

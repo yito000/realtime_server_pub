@@ -53,8 +53,7 @@ public:
     static WebsocketSession* create(boost::asio::io_service& _ios, 
         int _timeout_millis);
     static WebsocketSession* createSSL(boost::asio::io_service& _ios, 
-        int _timeout_millis, const ByteBuffer& certificate, 
-        const ByteBuffer& private_key, const ByteBuffer& temp_dh);
+        boost::asio::ssl::context& _ssl_context, int _timeout_millis);
     
     virtual ~WebsocketSession();
 
@@ -96,8 +95,7 @@ private:
         int _timeout_millis);
     bool init(boost::asio::io_service& _ios);
     bool initWithSSL(boost::asio::io_service& _ios, 
-        const ByteBuffer& certificate, const ByteBuffer& private_key, 
-        const ByteBuffer& temp_dh);
+        boost::asio::ssl::context& _ssl_context);
     
     void receiveSSLHandshake();
     void receiveWsHandshake(ByteBuffer* buf);

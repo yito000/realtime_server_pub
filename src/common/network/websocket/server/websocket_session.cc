@@ -36,11 +36,10 @@ WebsocketSession* WebsocketSession::create(boost::asio::io_service& _ios,
 }
 
 WebsocketSession* WebsocketSession::createSSL(boost::asio::io_service& _ios, 
-    int _timeout_millis, const ByteBuffer& certificate, 
-    const ByteBuffer& private_key, const ByteBuffer& temp_dh)
+    boost::asio::ssl::context& _ssl_context, int _timeout_millis)
 {
     auto inst = new WebsocketSession(_ios, _timeout_millis);
-    if (!inst->initWithSSL(_ios, certificate, private_key, temp_dh)) {
+    if (!inst->initWithSSL(_ios, _ssl_context)) {
         delete inst;
         return nullptr;
     }
@@ -68,7 +67,6 @@ void WebsocketSession::start()
 
     //
     if (ssl_mode) {
-        Logger::log("receive ssl handshake");
         receiveSSLHandshake();
     } else {
         ByteBuffer* tmp_buf = new ByteBuffer;
@@ -160,23 +158,9 @@ bool WebsocketSession::init(boost::asio::io_service& _ios)
 }
 
 bool WebsocketSession::initWithSSL(boost::asio::io_service& _ios, 
-    const ByteBuffer& certificate, const ByteBuffer& private_key,
-    const ByteBuffer& temp_dh)
+    boost::asio::ssl::context& _ssl_context)
 {
-    auto p_socket = new AsyncSSLSocket(_ios);
-    
-    if (certificate.size() > 0) {
-        p_socket->loadCertificate(certificate);
-    }
-    
-    if (private_key.size() > 0) {
-        p_socket->loadPrivateKey(private_key);
-    }
-    
-    if (temp_dh.size()) {
-        p_socket->loadTempDHParam(temp_dh);
-    }
-    
+    auto p_socket = new AsyncSSLSocket(_ios, _ssl_context);
     p_socket->setConnectTimeoutCallback([this](AsyncSocketInf&) {
         // TODO: callback
         return false;
@@ -205,10 +189,10 @@ void WebsocketSession::receiveSSLHandshake()
         s->handshake(du, 
             [this](boost::system::error_code ec) {
                 if (!ec) {
-                    Logger::log("receive ws handshake");
                     ByteBuffer* tmp_buf = new ByteBuffer;
                     receiveWsHandshake(tmp_buf);
                 } else {
+                    Logger::debug("ssl handshake error: %s", ec.message().c_str());
                     destroyAsync();
                 }
             });
@@ -237,6 +221,7 @@ void WebsocketSession::receiveWsHandshake(ByteBuffer* buf)
                     destroyAsync();
                 }
             } else {
+                Logger::debug("ws handshake error: %s", ec.message().c_str());
                 delete buf;
                 destroyAsync();
             }
@@ -290,6 +275,7 @@ void WebsocketSession::sendWsHandshakeOK(HandShakeResponse::ptr h_res)
                     destroyAsync();
                 }
             } else {
+                Logger::debug("sendWsHandshakeOK error: %s", ec.message().c_str());
                 destroyAsync();
             }
 

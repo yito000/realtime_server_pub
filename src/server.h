@@ -2,6 +2,8 @@
 #define SERVER_H
 
 #include <boost/asio.hpp>
+#include <boost/asio/ssl.hpp>
+
 #include "smart_ptr.hpp"
 
 #include <vector>
@@ -20,7 +22,10 @@ public:
         ADDR_V6
     };
 
-    Server(const AddrType addr_type, short port);
+    Server(const AddrType addr_type, short port,
+        const std::string& cert_filepath, 
+        const std::string& pkey_filepath,
+        const std::string& tmp_dh_filepath);
     virtual ~Server();
 
     void accept();
@@ -65,9 +70,15 @@ public:
     {
         end_flag = b;
     }
+    
+    std::string getPassword() const;
+    void setPassword(const std::string& value);
 
 private:
+    std::string passwordCallback() const;
+    
     boost::asio::io_service ios;
+    boost::asio::ssl::context ssl_context;
 
     boost::asio::ip::tcp::acceptor* acceptor;
     server::SessionDelegate* session_delegate;
@@ -78,9 +89,7 @@ private:
     std::string protocol;
     bool end_flag;
     
-    std::vector<char> cert;
-    std::vector<char> pkey;
-    std::vector<char> tmp_dh;
+    std::string password_string;
 };
 
 #endif

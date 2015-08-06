@@ -17,24 +17,18 @@ public:
     };
     
     // server mode
-    AsyncSSLSocket(boost::asio::io_service& _ios);
+    AsyncSSLSocket(boost::asio::io_service& _ios,
+        boost::asio::ssl::context& _ssl_context);
     
     // client mode
     AsyncSSLSocket(boost::asio::io_service& _ios, 
+        boost::asio::ssl::context& _ssl_context, 
         const std::string& _host, unsigned int _port);
     AsyncSSLSocket(boost::asio::io_service& _ios, 
+        boost::asio::ssl::context& _ssl_context,
         const std::string& _host, const std::string& _protocol);
     
     ~AsyncSSLSocket();
-    
-    // server mode
-    void setVerifyMode(int verify_mode);
-    void loadCertificate(const ByteBuffer& buffer);
-    void loadPrivateKey(const ByteBuffer& buffer);
-    void loadTempDHParam(const ByteBuffer& buffer);
-    
-    // client mode
-    void loadVerifyCertificate(const ByteBuffer& buffer);
     
     virtual void connect(boost::posix_time::time_duration timeout, 
         SocketConnectCallback callback) override;
@@ -55,15 +49,12 @@ public:
     
     virtual boost::asio::ip::tcp::socket& getDetail() override
     {
-        return (boost::asio::ip::tcp::socket&)socket->lowest_layer();
+        return (boost::asio::ip::tcp::socket&)socket.lowest_layer();
     }
     
     virtual void setConnectTimeoutCallback(SocketTimeoutCallback callback) override;
     virtual void setReadTimeoutCallback(SocketTimeoutCallback callback) override;
     virtual void setWriteTimeoutCallback(SocketTimeoutCallback callback) override;
-    
-    std::string getPassword();
-    void setPassword(const std::string& value);
     
 private:
     void initTimer();
@@ -76,19 +67,14 @@ private:
     void checkReadDeadline();
     void checkWriteDeadline();
     
-    bool verifyCertificate(bool preverified, 
-        boost::asio::ssl::verify_context& ctx);
-    std::string passwordCallback() const;
-    
     std::string host;
     std::string protocol;
     bool server_mode;
-    std::string password_string;
 
     boost::asio::io_service& ios;
     boost::asio::io_service::strand ios_st;
-    boost::asio::ssl::stream<boost::asio::ip::tcp::socket>* socket;
-    boost::asio::ssl::context* ssl_context;
+    boost::asio::ssl::context& ssl_context;
+    boost::asio::ssl::stream<boost::asio::ip::tcp::socket> socket;
     
     boost::asio::deadline_timer connect_timer;
     boost::asio::deadline_timer read_timer;

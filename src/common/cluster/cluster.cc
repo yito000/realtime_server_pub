@@ -21,7 +21,7 @@ void Cluster::addNode(long node_id,
 {
     try {
         std::string a_host = host;
-        Logger::log("add new node");
+        Logger::debug("add new node");
 
         task_comm->postMaster([this, node_id, a_host, port]() {
             client::HandShakeRequest::ptr hs_req = 
@@ -33,7 +33,7 @@ void Cluster::addNode(long node_id,
             hs_req->protocols.insert(CLUSTER_PROTOCOL_NAME);
 
             //
-            Logger::log("child node connect: %s:%d", a_host.c_str(), port);
+            Logger::debug("child node connect: %s:%d", a_host.c_str(), port);
 
             auto del = new ClusterNodeDelegate(node_id, task_comm, this);
             auto ws = client::WebsocketAsync::create(
@@ -140,7 +140,7 @@ void Cluster::run()
                 am->getActorFromKey(node_info->node_id, 
                     [this, am, node_info, &remove_list](WsActor::const_ptr actor) {
                         if (!actor->isOpen()) {
-                            Logger::log("process reconnect cluster");
+                            Logger::debug("process reconnect cluster");
                             
                             remove_list.push_back(actor);
                             
@@ -150,7 +150,7 @@ void Cluster::run()
                         }
                     }, [this, node_info]() {
                         // error callback
-                        Logger::log("process connect cluster");
+                        Logger::debug("process connect cluster");
                         
                         removeActiveNode(node_info->node_id);
                         addNode(node_info->node_id,
@@ -191,11 +191,9 @@ void Cluster::addNewNodeInfo(long node_id,
     const std::string& host, unsigned short port)
 {
     std::string a_host = host;
-    Logger::log("add new node info1");
     
     task_comm->postMaster([this, a_host, node_id, port]() {
         bool found = false;
-        Logger::log("add new node info2");
 
         for (auto node_info: node_list) {
             if (node_info->node_id == node_id) {
@@ -244,9 +242,7 @@ void Cluster::addActiveNode(long node_id,
 
 void Cluster::removeActiveNode(long node_id)
 {
-    Logger::log("remove active node");
     task_comm->postMaster([this, node_id]() {
-        Logger::log("remove active node: Process");
         auto it = active_node_list.begin();
         for (; it != active_node_list.end(); ++it) {
             if ((*it)->node_id == node_id) {

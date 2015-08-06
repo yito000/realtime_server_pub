@@ -31,7 +31,7 @@ ClusterActor::ClusterActor(int _node_id, client::WebsocketAsync* ws) :
 ClusterActor::~ClusterActor()
 {
     if (websocket) {
-        Logger::log("destroy cluster actor");
+        Logger::debug("destroy cluster actor");
         websocket->destroyAsync();
     }
 }
@@ -62,8 +62,6 @@ void ClusterActor::close() const
 
 void ClusterActor::onStart() const
 {
-    Logger::log("cluster actor onStart");
-    
     AtomicOperator<size_t>::increment(&read_cnt);
     AtomicOperator<bool>::lock_test_and_set(&first_process, false);
     

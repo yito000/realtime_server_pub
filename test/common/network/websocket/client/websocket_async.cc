@@ -50,11 +50,12 @@ WebsocketAsync* WebsocketAsync::create(boost::asio::io_service& _ios,
 }
 
 WebsocketAsync* WebsocketAsync::createSSL(boost::asio::io_service& _ios, 
+    boost::asio::ssl::context& _ssl_context, 
     const std::string& _host, unsigned short _port,
-    int _timeout_millis, int verify_mode, const ByteBuffer& verify_cert)
+    int _timeout_millis)
 {
     auto inst = new WebsocketAsync(_ios, _timeout_millis);
-    if (!inst->initWithSSL(_ios, _host, _port, verify_mode, verify_cert)) {
+    if (!inst->initWithSSL(_ios, _ssl_context, _host, _port)) {
         delete inst;
         return nullptr;
     }
@@ -77,7 +78,6 @@ void WebsocketAsync::connect(HandShakeRequest::ptr handshake_req)
     socket->connect(du, [this, handshake_req](boost::system::error_code ec) {
         if (!ec) {
             if (ssl_mode) {
-                Logger::log("process ssl handshake");
                 receiveSSLHandshake(handshake_req);
             } else {
                 first_process = false;
@@ -85,7 +85,6 @@ void WebsocketAsync::connect(HandShakeRequest::ptr handshake_req)
                 wsHandShake(handshake_req);
             }
         } else {
-            Logger::log("WebsocketAsync: connect error");
             destroyAsync();
         }
     });
@@ -95,7 +94,7 @@ void WebsocketAsync::receiveSSLHandshake(HandShakeRequest::ptr handshake_req)
 {
     auto s = boost::dynamic_pointer_cast<AsyncSSLSocket>(socket);
     if (!s) {
-        Logger::log("WebsocketAsync: invalid status");
+        Logger::debug("WebsocketAsync: invalid status");
         destroyAsync();
         return;
     }
@@ -103,13 +102,12 @@ void WebsocketAsync::receiveSSLHandshake(HandShakeRequest::ptr handshake_req)
     auto du = boost::posix_time::milliseconds(timeout_millis);
     s->handshake(du, [this, handshake_req](boost::system::error_code ec) {
         if (!ec) {
-            Logger::log("process websocket handshake");
             first_process = false;
             connected = true;
             
             wsHandShake(handshake_req);
         } else {
-            Logger::log("WebsocketAsync: handshake error");
+            Logger::debug("ssl handshake error: %s", ec.message().c_str());
             destroyAsync();
         }
     });
@@ -212,15 +210,10 @@ bool WebsocketAsync::init(boost::asio::io_service& _ios,
 }
 
 bool WebsocketAsync::initWithSSL(boost::asio::io_service& _ios, 
-    const std::string& _host, unsigned short _port,
-    int verify_mode, const ByteBuffer& verify_cert)
+    boost::asio::ssl::context& _ssl_context, 
+    const std::string& _host, unsigned short _port)
 {
-    auto p_socket = new AsyncSSLSocket(_ios, _host, _port);
-    p_socket->setVerifyMode(verify_mode);
-    
-    if (verify_cert.size() > 0) {
-        p_socket->loadVerifyCertificate(verify_cert);
-    }
+    auto p_socket = new AsyncSSLSocket(_ios, _ssl_context, _host, _port);
     
     p_socket->setConnectTimeoutCallback([this](AsyncSocketInf&) {
         // TODO: callback
@@ -282,10 +275,12 @@ void WebsocketAsync::wsHandShake(HandShakeRequest::ptr handshake_req)
     req_str += "Sec-WebSocket-Protocol: " + protocol + "\r\n";
     req_str += "Sec-WebSocket-Version: " + version + "\r\n";
     req_str += "\r\n";
+    
+    Logger::debug("%s", req_str.c_str());
 
     ByteBuffer* req = new ByteBuffer;
     req->insert(req->end(), req_str.begin(), req_str.end());
-
+    
     //
     auto du = boost::posix_time::milliseconds(timeout_millis);
     
@@ -298,7 +293,7 @@ void WebsocketAsync::wsHandShake(HandShakeRequest::ptr handshake_req)
 
                 receiveWsHandShake(tmp_buf, handshake_req);
             } else {
-                Logger::log("WebsocketAsync: handshake error");
+                Logger::debug("WebsocketAsync: ws handshake error, %s", ec.message().c_str());
                 destroyAsync();
             }
 
@@ -332,7 +327,7 @@ void WebsocketAsync::receiveWsHandShake(ByteBuffer* buf,
                     destroyAsync();
                 }
             } else {
-                Logger::log("WebsocketAsync: receive handshake error");
+                Logger::debug("WebsocketAsync: receive handshake error, %s", ec.message().c_str());
                 
                 delete buf;
                 destroyAsync();

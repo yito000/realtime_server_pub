@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
-add_definitions("-O0 -std=c++11 -stdlib=libc++ -g -DNDEBUG")
-#add_definitions("-O3 -std=c++11 -stdlib=libc++ -DNDEBUG")
+#add_definitions("-O0 -std=c++11 -stdlib=libc++ -g -DNDEBUG")
+add_definitions("-O3 -std=c++11 -stdlib=libc++ -DNDEBUG")
 
 if (APPLE)
     add_definitions("-DTARGET_OS_MACOSX")

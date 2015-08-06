@@ -185,6 +185,18 @@ private:
     int receive_count;
 };
 
+bool VerifyCertificate(bool preverified,
+    boost::asio::ssl::verify_context& ctx)
+{
+    char subject_name[256];
+    X509* cert = X509_STORE_CTX_get_current_cert(ctx.native_handle());
+    X509_NAME_oneline(X509_get_subject_name(cert), subject_name, 256);
+
+//    std::cout << "Verifying " << subject_name << "\n";
+
+    return preverified;
+}
+
 int main(int argc, char** argv)
 {
     try {
@@ -203,14 +215,21 @@ int main(int argc, char** argv)
         }
 
         boost::asio::io_service ios;
+        boost::asio::ssl::context ssl_context(ios,
+            boost::asio::ssl::context::tlsv1);
+
+        ssl_context.set_verify_mode(boost::asio::ssl::context::verify_peer);
+        ssl_context.set_verify_callback(boost::bind(
+            VerifyCertificate, _1, _2));
+        ssl_context.add_certificate_authority(
+            boost::asio::buffer(verify_file));
 
         std::vector<client::WebsocketAsync*> v;
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 1000; i++) {
             auto del = new WebsocketDelegateImpl;
             auto ws = client::WebsocketAsync::createSSL(ios, 
-                "0.0.0.0", 9000, 600 * 1000, 
-                (int)client::SSLVerifyMode::VERIFY_PEER, verify_file);
+                ssl_context, "0.0.0.0", 9000, 600 * 1000);
             ws->setDelegate(del);
 
             //
