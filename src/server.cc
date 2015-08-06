@@ -141,6 +141,5 @@ void Server::setPassword(const std::string& value)
 // private member function
 std::string Server::passwordCallback() const
 {
-    Logger::log("password callback");
     return password_string;
 }

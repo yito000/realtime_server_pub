@@ -124,6 +124,7 @@ int App::start(int argc, char** argv)
             server->setDelegate(inst);
             server->setTimeoutMillis(setting->timeout_millis);
             server->setValidProtocol(DEFAULT_PROTOCOL); // TODO: setting file
+            server->setPassword("traveler"); // TODO
             
             g_server_cache = server.get();
             
