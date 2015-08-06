@@ -37,7 +37,6 @@ Server::Server(const AddrType addr_type, short port,
     
     // cert
     {
-        // TODO
         FileStream::ptr st = file_util->getFileStream(cert_filepath);
         auto data = st->readAll();
         
@@ -55,7 +54,6 @@ Server::Server(const AddrType addr_type, short port,
     
     // pkey
     {
-        // TODO
         FileStream::ptr st = file_util->getFileStream(pkey_filepath);
         auto data = st->readAll();
         
@@ -74,7 +72,6 @@ Server::Server(const AddrType addr_type, short port,
     
     // temp dh
     {
-        // TODO
         FileStream::ptr st = file_util->getFileStream(tmp_dh_filepath);
         auto data = st->readAll();
         
