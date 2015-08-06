@@ -9,13 +9,6 @@
 class AsyncSSLSocket : public AsyncSocketInf
 {
 public:
-    enum class VerifyMode {
-        VERIFY_NODE = boost::asio::ssl::context::verify_none,
-        VERIFY_PEER = boost::asio::ssl::context::verify_peer,
-        VERIFY_CLIENT_ONCE = boost::asio::ssl::context::verify_client_once,
-        VERIFY_PEER_FAIL_IF_NO_PEER_CERT = boost::asio::ssl::context::verify_fail_if_no_peer_cert
-    };
-    
     // server mode
     AsyncSSLSocket(boost::asio::io_service& _ios,
         boost::asio::ssl::context& _ssl_context);
