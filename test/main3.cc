@@ -4,8 +4,8 @@
 #include <boost/thread.hpp>
 #include <boost/asio.hpp>
 
-#include "lib/network/websocket/client/websocket_async.h"
-#include "lib/network/websocket/client/handshake_helper.h"
+#include "network/websocket/client/websocket_async.h"
+#include "network/websocket/client/handshake_helper.h"
 
 //#include "jikken.pb.h"
 //#include "uiid.pb.h"
@@ -25,6 +25,7 @@ namespace {
     bool end_flag = false;
 
     flatbuffers::FlatBufferBuilder fbb;
+    std::vector<char> verify_file;
 };
 
 void createUiid(const std::string& value, std::vector<char>& v)
@@ -139,12 +140,14 @@ public:
         }
     }
 
-    virtual void onReceiveFinish(client::WebsocketAsync* ws)
+    virtual void onReceiveFinish(client::WebsocketAsync* ws,
+        boost::system::error_code ec)
     {
 //        std::printf("receive finish\n");
     }
 
-    virtual void onSendFinish(client::WebsocketAsync* ws)
+    virtual void onSendFinish(client::WebsocketAsync* ws,
+        boost::system::error_code ec)
     {
 //        std::printf("send finish!\n");
 
@@ -170,7 +173,7 @@ public:
     }
 
     virtual void onError(client::WebsocketAsync* ws,
-        boost::system::error_code ec)
+        Operation operation, boost::system::error_code ec)
     {
         std::printf("error: %s\n", ec.message().c_str());
         end_flag = true;
@@ -185,14 +188,29 @@ private:
 int main(int argc, char** argv)
 {
     try {
+        {
+            FILE* fp = 
+                fopen("/Users/ito/qtproj/realtime_server/key/server.crt", "r");
+
+            if (fp) {
+                int c = 0;
+                while ((c = fgetc(fp)) != EOF) {
+                    verify_file.push_back(c);
+                }
+
+                fclose(fp);
+            }
+        }
+
         boost::asio::io_service ios;
 
-        std::vector<client::WebsocketAsync::ptr> v;
+        std::vector<client::WebsocketAsync*> v;
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1; i++) {
             auto del = new WebsocketDelegateImpl;
-            auto ws = new client::WebsocketAsync(ios, 
-                "0.0.0.0", 9000, 600 * 1000, 3);
+            auto ws = client::WebsocketAsync::createSSL(ios, 
+                "0.0.0.0", 9000, 600 * 1000, 
+                (int)client::SSLVerifyMode::VERIFY_PEER, verify_file);
             ws->setDelegate(del);
 
             //
@@ -214,6 +232,10 @@ int main(int argc, char** argv)
         ios.stop();
 
 //        sleep(1);
+
+        for (auto& vv: v) {
+            delete vv;
+        }
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;
     }

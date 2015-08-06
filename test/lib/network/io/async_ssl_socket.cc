@@ -3,8 +3,6 @@
 #include <boost/bind.hpp>
 #include "log/logger.h"
 
-#include "openssl/ssl.h"
-
 AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios) :
     ios(_ios),
     ios_st(ios),
@@ -88,7 +86,7 @@ void AsyncSSLSocket::loadCertificate(const ByteBuffer& buffer)
         
         // pem file only
 //        ssl_context->use_certificate_chain(boost::asio::buffer(buffer));
-        ssl_context->use_certificate_chain_file("/Users/ito/qtproj/realtime_server/key/server.crt");
+//        ssl_context->use_certificate_chain_file("/Users/ito/qtproj/realtime_server/key/server.crt");
     }
 }
 
@@ -378,7 +376,7 @@ bool AsyncSSLSocket::verifyCertificate(bool preverified,
     boost::asio::ssl::verify_context& ctx)
 {
     Logger::log("verify callback");
-    return true;
+    return preverified;
 }
 
 std::string AsyncSSLSocket::passwordCallback() const

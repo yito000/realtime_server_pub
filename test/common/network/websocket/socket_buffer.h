@@ -6,4 +6,3 @@
 typedef std::vector<char> ByteBuffer;
 
 #endif
-

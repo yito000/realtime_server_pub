@@ -2,6 +2,7 @@
 #define CLIENT_FRAME_DATA_H
 
 #include <vector>
+#include <string>
 
 #include "../packet.h"
 
@@ -53,4 +54,3 @@ public:
 };
 
 #endif
-

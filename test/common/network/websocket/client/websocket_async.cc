@@ -1,5 +1,8 @@
 #include "websocket_async.h"
 
+#include "network/io/async_socket.h"
+#include "network/io/async_ssl_socket.h"
+
 #include <sstream>
 #include <regex>
 
@@ -8,8 +11,12 @@
 #include <boost/thread.hpp>
 
 #include "handshake_helper.h"
-#include "exception/websocket_exception.hpp"
+#include "common/network/websocket/websocket_exception.hpp"
 #include "log/logger.h"
+
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
 namespace {
     const int DEFAULT_TIMEOUT = 60 * 1000;
@@ -20,35 +27,39 @@ namespace {
         std::regex_constants::icase);
     std::regex sec_protocol("Sec-WebSocket-Protocol", 
         std::regex_constants::icase);
+    
+    // TODO
+    auto uuid_gen = boost::uuids::random_generator();
 };
 
 namespace client {
 
 using boost::asio::ip::tcp;
 
-WebsocketAsync::WebsocketAsync(boost::asio::io_service& _ios,
+WebsocketAsync* WebsocketAsync::create(boost::asio::io_service& _ios, 
     const std::string& _host, unsigned short _port,
-    int _timeout_millis, int _retry) : host(_host), port(_port),
-    ios(_ios), ios_st(ios), socket(ios), 
-    read_timer(ios), write_timer(ios)
+    int _timeout_millis)
 {
-    first_process = true;
-    connected = false;
-    handshake_ok = false;
+    auto inst = new WebsocketAsync(_ios, _timeout_millis);
+    if (!inst->init(_ios, _host, _port)) {
+        delete inst;
+        return nullptr;
+    }
+    
+    return inst;
+}
 
-    timeout_millis = _timeout_millis;
-    retry = _retry;
-
-    ws_delegate = NULL;
-
-    //
-    read_timer.async_wait(
-        ios_st.wrap(std::bind(&WebsocketAsync::checkDeadline,
-            this, &read_timer)));
-
-    write_timer.async_wait(
-        ios_st.wrap(std::bind(&WebsocketAsync::checkDeadline,
-            this, &write_timer)));
+WebsocketAsync* WebsocketAsync::createSSL(boost::asio::io_service& _ios, 
+    const std::string& _host, unsigned short _port,
+    int _timeout_millis, int verify_mode, const ByteBuffer& verify_cert)
+{
+    auto inst = new WebsocketAsync(_ios, _timeout_millis);
+    if (!inst->initWithSSL(_ios, _host, _port, verify_mode, verify_cert)) {
+        delete inst;
+        return nullptr;
+    }
+    
+    return inst;
 }
 
 WebsocketAsync::~WebsocketAsync()
@@ -61,22 +72,52 @@ void WebsocketAsync::connect(HandShakeRequest::ptr handshake_req)
     if (connected) {
         return;
     }
-
-    boost::asio::ip::tcp::resolver resolver(ios);
-    boost::asio::ip::tcp::resolver::query query(host, std::to_string(port));
-    auto endpoint_it = resolver.resolve(query);
-
-    //
+    
     auto du = boost::posix_time::milliseconds(timeout_millis);
-    read_timer.expires_from_now(du);
+    socket->connect(du, [this, handshake_req](boost::system::error_code ec) {
+        if (!ec) {
+            if (ssl_mode) {
+                Logger::log("process ssl handshake");
+                receiveSSLHandshake(handshake_req);
+            } else {
+                first_process = false;
+                connected = true;
+                wsHandShake(handshake_req);
+            }
+        } else {
+            Logger::log("WebsocketAsync: connect error");
+            destroyAsync();
+        }
+    });
+}
 
-    auto err = boost::asio::error::host_not_found;
-    connectInternal(err, endpoint_it, handshake_req);
+void WebsocketAsync::receiveSSLHandshake(HandShakeRequest::ptr handshake_req)
+{
+    auto s = boost::dynamic_pointer_cast<AsyncSSLSocket>(socket);
+    if (!s) {
+        Logger::log("WebsocketAsync: invalid status");
+        destroyAsync();
+        return;
+    }
+    
+    auto du = boost::posix_time::milliseconds(timeout_millis);
+    s->handshake(du, [this, handshake_req](boost::system::error_code ec) {
+        if (!ec) {
+            Logger::log("process websocket handshake");
+            first_process = false;
+            connected = true;
+            
+            wsHandShake(handshake_req);
+        } else {
+            Logger::log("WebsocketAsync: handshake error");
+            destroyAsync();
+        }
+    });
 }
 
 bool WebsocketAsync::isOpen()
 {
-    return socket.is_open();
+    return socket->isOpen();
 }
 
 void WebsocketAsync::read()
@@ -85,9 +126,7 @@ void WebsocketAsync::read()
         return;
     }
 
-    ios.dispatch([this]() {
-        readAsync();
-    });
+    readAsync();
 }
 
 void WebsocketAsync::write(PacketData::ptr packet_data, 
@@ -98,25 +137,18 @@ void WebsocketAsync::write(PacketData::ptr packet_data,
     }
 
     std::string mk(mask_key, 0, 4);
-
-    ios.dispatch([this, packet_data, mk, send_callback]() {
-        writeAsync(packet_data, mk, send_callback);
-    });
+    
+    writeAsync(packet_data, mk, send_callback);
 }
 
 void WebsocketAsync::close()
 {
     ios.dispatch([this]() {
         try {
-            if (socket.is_open()) {
-                socket.close();
-            }
+            socket->close();
 
             Logger::debug("close websocket client");
             connected = false;
-
-            read_timer.cancel();
-            write_timer.cancel();
         } catch (BaseException& e) {
             e.printAll();
         }
@@ -127,45 +159,89 @@ void WebsocketAsync::destroyAsync()
 {
     ios.dispatch([this]() {
         try {
-            if (socket.is_open()) {
-                socket.close();
-            }
-
-            read_timer.cancel();
-            write_timer.cancel();
+            socket->close();
         } catch (BaseException& e) {
             e.printAll();
         }
-
+        
+        Logger::log("websocket async: destroy");
         delete this;
     });
 }
 
-// private member function
-void WebsocketAsync::connectInternal(boost::system::error_code err,
-    boost::asio::ip::tcp::resolver::iterator endpoint_it,
-    HandShakeRequest::ptr handshake_req)
+long WebsocketAsync::getKey() const
 {
-    boost::asio::ip::tcp::resolver::iterator end;
-
-    if (err && endpoint_it != end) {
-        socket.async_connect(*endpoint_it++, 
-            [this, endpoint_it, handshake_req](boost::system::error_code ec) {
-                if (ec) {
-                    connectInternal(ec, endpoint_it, handshake_req);
-                } else {
-                    first_process = false;
-                    connected = true;
-
-                    handShake(handshake_req);
-                }
-            });
-    } else {
-        first_process = false;
-    }
+    return std::hash<long>()(reinterpret_cast<long>(this)) ^
+        std::hash<std::string>()(uuid);
 }
 
-void WebsocketAsync::handShake(HandShakeRequest::ptr handshake_req)
+// private member function
+WebsocketAsync::WebsocketAsync(boost::asio::io_service& _ios, 
+    int _timeout_millis) :
+    ios(_ios),
+    ssl_mode(false)
+{
+    first_process = true;
+    connected = false;
+    handshake_ok = false;
+
+    timeout_millis = _timeout_millis;
+    ws_delegate = NULL;
+    
+    uuid = boost::lexical_cast<std::string>(boost::uuids::uuid(uuid_gen()));
+}
+
+bool WebsocketAsync::init(boost::asio::io_service& _ios, 
+    const std::string& _host, unsigned short _port)
+{
+    socket = new AsyncSocket(_ios, _host, _port);
+    socket->setConnectTimeoutCallback([this](AsyncSocketInf&) {
+        // TODO: callback
+        return false;
+    });
+    socket->setReadTimeoutCallback([this](AsyncSocketInf&) {
+        // TODO: callback
+        return false;
+    });
+    socket->setWriteTimeoutCallback([this](AsyncSocketInf&) {
+        // TODO: callback
+        return false;
+    });
+    
+    return true;
+}
+
+bool WebsocketAsync::initWithSSL(boost::asio::io_service& _ios, 
+    const std::string& _host, unsigned short _port,
+    int verify_mode, const ByteBuffer& verify_cert)
+{
+    auto p_socket = new AsyncSSLSocket(_ios, _host, _port);
+    p_socket->setVerifyMode(verify_mode);
+    
+    if (verify_cert.size() > 0) {
+        p_socket->loadVerifyCertificate(verify_cert);
+    }
+    
+    p_socket->setConnectTimeoutCallback([this](AsyncSocketInf&) {
+        // TODO: callback
+        return false;
+    });
+    p_socket->setReadTimeoutCallback([this](AsyncSocketInf&) {
+        // TODO: callback
+        return false;
+    });
+    p_socket->setWriteTimeoutCallback([this](AsyncSocketInf&) {
+        // TODO: callback
+        return false;
+    });
+    
+    socket = p_socket;
+    ssl_mode = true;
+    
+    return true;
+}
+
+void WebsocketAsync::wsHandShake(HandShakeRequest::ptr handshake_req)
 {
     if (!connected || handshake_req->path == "" ||
         handshake_req->secret_key == "" ||
@@ -195,11 +271,11 @@ void WebsocketAsync::handShake(HandShakeRequest::ptr handshake_req)
 
     boost::posix_time::time_duration timeout =
         boost::posix_time::milliseconds(t);
-
+    
     //
     std::string req_str;
     req_str += "GET " + path + " HTTP/1.1\r\n";
-    req_str += "Host: " + host + "\r\n";
+    req_str += "Host: " + socket->getHost() + "\r\n";
     req_str += "Upgrade: websocket\r\n";
     req_str += "Connection: Upgrade\r\n";
     req_str += "Sec-WebSocket-Key: " + key + "\r\n";
@@ -212,42 +288,39 @@ void WebsocketAsync::handShake(HandShakeRequest::ptr handshake_req)
 
     //
     auto du = boost::posix_time::milliseconds(timeout_millis);
-    write_timer.expires_from_now(du);
-
-    socket.async_write_some(boost::asio::buffer(*req),
+    
+    socket->write(*req, du, 
         [this, handshake_req, req](boost::system::error_code ec, 
             std::size_t s) {
 
-            // todo retry
             if (!ec) {
                 ByteBuffer* tmp_buf = new ByteBuffer;
 
-                receiveHandShake(tmp_buf, handshake_req);
+                receiveWsHandShake(tmp_buf, handshake_req);
             } else {
-                close();
+                Logger::log("WebsocketAsync: handshake error");
+                destroyAsync();
             }
 
             delete req;
-            write_timer.expires_at(boost::posix_time::pos_infin);
         });
 }
 
-void WebsocketAsync::receiveHandShake(ByteBuffer* buf, 
+void WebsocketAsync::receiveWsHandShake(ByteBuffer* buf, 
     HandShakeRequest::ptr handshake_req)
 {
     auto du = boost::posix_time::milliseconds(timeout_millis);
-    read_timer.expires_from_now(du);
-
-    socket.async_read_some(boost::asio::buffer(data, MAX_LENGTH),
+    
+    socket->read(du, 
         [this, buf, handshake_req]
-            (boost::system::error_code ec, std::size_t s) {
-
+            (boost::system::error_code ec, char* data, std::size_t s) {
+            
             if (!ec) {
                 for (int i = 0; i < s; i++) {
                     buf->push_back(data[i]);
                 }
 
-                bool response_ok = validateHandshakeResponse(
+                bool response_ok = validateWsHandshakeResponse(
                     buf, handshake_req);
                 delete buf;
 
@@ -256,18 +329,18 @@ void WebsocketAsync::receiveHandShake(ByteBuffer* buf,
 
                     ws_delegate->onStart(this);
                 } else {
-                    close();
+                    destroyAsync();
                 }
             } else {
+                Logger::log("WebsocketAsync: receive handshake error");
+                
                 delete buf;
-                close();
+                destroyAsync();
             }
-
-            read_timer.expires_at(boost::posix_time::pos_infin);
         });
 }
 
-bool WebsocketAsync::validateHandshakeResponse(ByteBuffer* buf,
+bool WebsocketAsync::validateWsHandshakeResponse(ByteBuffer* buf,
     HandShakeRequest::ptr handshake_req)
 {
     return HandshakeHelper::validate(buf, handshake_req);
@@ -275,37 +348,30 @@ bool WebsocketAsync::validateHandshakeResponse(ByteBuffer* buf,
 
 void WebsocketAsync::readAsync()
 {
-    ByteBuffer* tmp_buf = new ByteBuffer;
-
-    receivePacket(tmp_buf);
+    receivePacket();
 }
 
 void WebsocketAsync::writeAsync(PacketData::ptr packet_data,
     const std::string mask_key, SendCallback send_callback)
 {
     auto du = boost::posix_time::milliseconds(timeout_millis);
-    write_timer.expires_from_now(du);
-
+    
     ByteBuffer* ser_packet_data = new ByteBuffer;
     serializeFramingData(packet_data->fin, packet_data->packet_type,
         mask_key, packet_data->data, *ser_packet_data);
-
-    socket.async_write_some(boost::asio::buffer(*ser_packet_data),
+    
+    socket->write(*ser_packet_data, du, 
         [this, send_callback, ser_packet_data](
             boost::system::error_code ec, std::size_t s) {
-
+            
             if (!ec) {
-                if (ws_delegate) {
-                    ws_delegate->onSendFinish(this);
-                }
-
                 if (send_callback) {
                     send_callback(ec);
                 }
             } else {
-                // todo retry (boost::asio::error::timed_out)
                 if (ws_delegate) {
-                    ws_delegate->onError(this, ec);
+                    ws_delegate->onError(this, 
+                        client::WebsocketDelegate::Operation::WRITE, ec);
                 }
 
                 if (send_callback) {
@@ -314,57 +380,48 @@ void WebsocketAsync::writeAsync(PacketData::ptr packet_data,
 
                 close();
             }
+            
+            if (ws_delegate) {
+                ws_delegate->onSendFinish(this, ec);
+            }
 
             delete ser_packet_data;
-            write_timer.expires_at(boost::posix_time::pos_infin);
         });
 }
 
-void WebsocketAsync::receivePacket(ByteBuffer* buf)
+void WebsocketAsync::receivePacket()
 {
-    socket.async_read_some(boost::asio::buffer(data, MAX_LENGTH),
-        [this, buf](boost::system::error_code ec, std::size_t s) {
+    socket->read(boost::posix_time::pos_infin, 
+        [this](boost::system::error_code ec, char* data, std::size_t s) {
             if (!ec) {
                 for (int i = 0; i < s; i++) {
-                    buf->push_back(data[i]);
+                    tmp_buffer.push_back(data[i]);
                 }
-
+                
                 std::list<PacketData::ptr> pd_list;
-                int ret = createWebsocketData(buf, pd_list);
+                createWebsocketData(&tmp_buffer, pd_list);
 
                 for (auto pd: pd_list) {
                     if (ws_delegate) {
                         ws_delegate->onReceive(this, pd);
                     }
                 }
-
-                if (ws_delegate) {
-                    ws_delegate->onReceiveFinish(this);
-                }
-
-                if (ret == 0) {
-                    delete buf;
-                } else if (ret == 1) {
-                    receivePacket(buf);
-                } else {
-                    Logger::debug("create websocket data error");
-                    delete buf;
-                }
             } else {
-                // todo retry (boost::asio::error::timed_out)
                 if (ws_delegate) {
-                    ws_delegate->onError(this, ec);
+                    ws_delegate->onError(this, 
+                        client::WebsocketDelegate::Operation::READ, ec);
                 }
 
-                delete buf;
                 close();
             }
-
-            read_timer.expires_at(boost::posix_time::pos_infin);
+            
+            if (ws_delegate) {
+                ws_delegate->onReceiveFinish(this, ec);
+            }
         });
 }
 
-int WebsocketAsync::createWebsocketData(ByteBuffer* buf, 
+void WebsocketAsync::createWebsocketData(ByteBuffer* buf, 
     std::list<PacketData::ptr>& pd_list)
 {
     ByteBuffer& data = *buf;
@@ -402,25 +459,26 @@ int WebsocketAsync::createWebsocketData(ByteBuffer* buf,
                     break;
                 }
             } else {
-                // delete value
-                auto start_it = buf->begin();
-                auto it = buf->begin();
-                for (int i = 0; i < start_index; i++) {
-                    ++it;
-                }
-
-                if (start_index > 0) {
-                    buf->erase(start_it, it);
-                }
-
-                return 1;
+                break;
             }
         } catch (std::exception& e) {
-            return 2;
+            Logger::debug("error start index: %d", start_index);
+            return;
         }
     }
+    
+    // delete value
+    auto start_it = buf->begin();
+    auto it = buf->begin();
+    for (int i = 0; i < start_index; i++) {
+        ++it;
+    }
 
-    return 0;
+    if (start_index > 0) {
+        buf->erase(start_it, it);
+    }
+
+    return;
 }
 
 void WebsocketAsync::serializeFramingData(bool end, PacketType packet_type,
@@ -441,21 +499,4 @@ bool WebsocketAsync::deserializeFramingData(std::vector<char>& data,
     return FrameData::deserialize(tmp_data, socket_frame);
 }
 
-void WebsocketAsync::checkDeadline(boost::asio::deadline_timer* timer)
-{
-    if (timer->expires_at() <=
-        boost::asio::deadline_timer::traits_type::now()) {
-        close();
-
-        timer->expires_at(boost::posix_time::pos_infin);
-    }
-
-    if (socket.is_open()) {
-        timer->async_wait(
-            ios_st.wrap(std::bind(&WebsocketAsync::checkDeadline,
-                this, timer)));
-    }
-}
-
 };
-

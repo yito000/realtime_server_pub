@@ -4,6 +4,8 @@
 #include <boost/thread.hpp>
 #include "log/logger.h"
 
+#include "common/file/file_util.h"
+
 using boost::asio::ip::tcp;
 
 Server::Server(const AddrType addr_type, short port) : 
@@ -20,6 +22,51 @@ Server::Server(const AddrType addr_type, short port) :
     acceptor = new tcp::acceptor(ios, ep);
     
     protocol = "default";
+    
+    //
+    auto file_util = FileUtil::getInstance();
+    
+    // cert
+    {
+        // TODO
+        FileStream::ptr st = file_util->getFileStream("/Users/ito/qtproj/realtime_server/key/server.crt");
+        auto data = st->readAll();
+        
+        cert.reserve(data->getSize());
+        auto p = data->getBuffer();
+        
+        for (int i = 0; i < data->getSize(); i++) {
+            cert.push_back(p[i]);
+        }
+    }
+    
+    // pkey
+    {
+        // TODO
+        FileStream::ptr st = file_util->getFileStream("/Users/ito/qtproj/realtime_server/key/server.key");
+        auto data = st->readAll();
+        
+        pkey.reserve(data->getSize());
+        auto p = data->getBuffer();
+        
+        for (int i = 0; i < data->getSize(); i++) {
+            pkey.push_back(p[i]);
+        }
+    }
+    
+    // temp dh
+    {
+        // TODO
+        FileStream::ptr st = file_util->getFileStream("/Users/ito/qtproj/realtime_server/key/dh512.pem");
+        auto data = st->readAll();
+        
+        pkey.reserve(data->getSize());
+        auto p = data->getBuffer();
+        
+        for (int i = 0; i < data->getSize(); i++) {
+            tmp_dh.push_back(p[i]);
+        }
+    }
 }
 
 Server::~Server()
@@ -36,7 +83,7 @@ void Server::accept()
         return;
     }
     
-    auto ss = server::WebsocketSession::create(ios, timeout_millis);
+    auto ss = server::WebsocketSession::createSSL(ios, timeout_millis, cert, pkey, tmp_dh);
     ss->setDelegate(session_delegate);
     ss->setValidProtocol(protocol);
 

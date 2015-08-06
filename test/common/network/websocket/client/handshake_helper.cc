@@ -1,5 +1,7 @@
 #include "handshake_helper.h"
 
+#include "../secret/secret_key.h"
+
 #include <sstream>
 #include <regex>
 
@@ -35,7 +37,7 @@ HandShakeResponse::ptr createResponseObject(ByteBuffer* packet)
     HandShakeResponse::ptr res = new HandShakeResponse;
 
     std::getline(ss, tmp_str);
-    std::cout << tmp_str << std::endl;
+//    std::cout << tmp_str << std::endl;
 
     if (!getResponseCode(tmp_str, res)) {
         return NULL;
@@ -46,7 +48,7 @@ HandShakeResponse::ptr createResponseObject(ByteBuffer* packet)
     }
 
     while (std::getline(ss, tmp_str)) {
-        std::cout << tmp_str << std::endl;
+//        std::cout << tmp_str << std::endl;
 
         if (!readHeaderLine(tmp_str, res)) {
             return NULL;
@@ -59,14 +61,12 @@ HandShakeResponse::ptr createResponseObject(ByteBuffer* packet)
 //
 std::string HandshakeHelper::createSecret()
 {
-    // todo
-    return "dGhlIHNhbXBsZSBub25jZQ==";
+    return SecretKey::generate();
 }
 
 std::string HandshakeHelper::calcResponseSecret(const std::string secret)
 {
-    // todo
-    return "s3pPLMBiTxaQ9kYGzzhZRbK+xOo=";
+    return SecretKey::calcResponse(secret);
 }
 
 bool HandshakeHelper::validate(ByteBuffer* packet,
@@ -74,7 +74,37 @@ bool HandshakeHelper::validate(ByteBuffer* packet,
 {
     auto response = createResponseObject(packet);
 
-    // todo
+    if (!response) {
+        return false;
+    }
+
+    if (response->status_code != 101) {
+        return false;
+    }
+
+    //
+    auto u_name = response->upgrade;
+    std::transform(response->upgrade.begin(), 
+        response->upgrade.end(), u_name.begin(), tolower);
+
+    if (u_name != "websocket") {
+        return false;
+    }
+
+    //
+    auto c_name = response->connection;
+    std::transform(response->connection.begin(),
+        response->connection.end(), c_name.begin(), tolower);
+
+    if (c_name != "upgrade") {
+        return false;
+    }
+
+    //
+    auto secret = calcResponseSecret(handshake_req->secret_key);
+    if (response->secret_accept != secret) {
+        return false;
+    }
 
     return true;
 }
@@ -161,4 +191,3 @@ bool setHeaderValue(const std::string& key,
 }
 
 };
-

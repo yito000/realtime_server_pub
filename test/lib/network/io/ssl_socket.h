@@ -1,14 +1,14 @@
 #ifndef SSL_SOCKET_H
 #define SSL_SOCKET_H
 
-#include "smart_ptr.hpp"
+#include "socket_inf.h"
 
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 
 #include "socket_buffer.h"
 
-class SSLSocket : public SmartPtr<SSLSocket>
+class SSLSocket : public SocketInf
 {
 public:
     typedef boost::intrusive_ptr<SSLSocket> ptr;
@@ -18,27 +18,27 @@ public:
     ~SSLSocket();
 
     void setCAPath(const std::string& _ca_path);
-    void connect(boost::posix_time::time_duration timeout);
-    void close();
+    virtual void connect(boost::posix_time::time_duration timeout) override;
+    virtual void close() override;
 
-    void write(const std::string& request, 
-        boost::posix_time::time_duration timeout);
-    void write(const ByteBuffer& request, 
-        boost::posix_time::time_duration timeout);
-    void write_some(const std::string& request, 
-        boost::posix_time::time_duration time_out);
-    void write_some(const ByteBuffer& request, 
-        boost::posix_time::time_duration timeout);
+    virtual void write(const std::string& request, 
+        boost::posix_time::time_duration timeout) override;
+    virtual void write(const ByteBuffer& request, 
+        boost::posix_time::time_duration timeout) override;
+    virtual void write_some(const std::string& request, 
+        boost::posix_time::time_duration time_out) override;
+    virtual void write_some(const ByteBuffer& request, 
+        boost::posix_time::time_duration timeout) override;
 
-    bool read(int at_least, ByteBuffer& byte_buffer, 
-        boost::posix_time::time_duration timeout);
-    void read_until(const std::string delim, ByteBuffer& byte_buffer, 
-        boost::posix_time::time_duration timeout);
-    bool read_some(ByteBuffer& byte_buffer, 
-        boost::posix_time::time_duration timeout);
+    virtual bool read(int at_least, ByteBuffer& byte_buffer, 
+        boost::posix_time::time_duration timeout) override;
+    virtual void read_until(const std::string delim, ByteBuffer& byte_buffer, 
+        boost::posix_time::time_duration timeout) override;
+    virtual bool read_some(ByteBuffer& byte_buffer, 
+        boost::posix_time::time_duration timeout) override;
 
-    const std::string& getHostName();
-    const std::string& getProtocol();
+    virtual const std::string& getHostName() override;
+    virtual const std::string& getProtocol() override;
     const std::string& getCAPath();
 
     bool isErrorAfterClose();

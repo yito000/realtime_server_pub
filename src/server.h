@@ -4,6 +4,8 @@
 #include <boost/asio.hpp>
 #include "smart_ptr.hpp"
 
+#include <vector>
+
 namespace server {
     class SessionDelegate;
 };
@@ -75,6 +77,10 @@ private:
     
     std::string protocol;
     bool end_flag;
+    
+    std::vector<char> cert;
+    std::vector<char> pkey;
+    std::vector<char> tmp_dh;
 };
 
 #endif

@@ -35,6 +35,19 @@ WebsocketSession* WebsocketSession::create(boost::asio::io_service& _ios,
     return inst;
 }
 
+WebsocketSession* WebsocketSession::createSSL(boost::asio::io_service& _ios, 
+    int _timeout_millis, const ByteBuffer& certificate, 
+    const ByteBuffer& private_key, const ByteBuffer& temp_dh)
+{
+    auto inst = new WebsocketSession(_ios, _timeout_millis);
+    if (!inst->initWithSSL(_ios, certificate, private_key, temp_dh)) {
+        delete inst;
+        return nullptr;
+    }
+    
+    return inst;
+}
+
 WebsocketSession::~WebsocketSession()
 {
     //
@@ -54,9 +67,13 @@ void WebsocketSession::start()
     start_flag = true;
 
     //
-    ByteBuffer* tmp_buf = new ByteBuffer;
-
-    receiveHandShake(tmp_buf);
+    if (ssl_mode) {
+        Logger::log("receive ssl handshake");
+        receiveSSLHandshake();
+    } else {
+        ByteBuffer* tmp_buf = new ByteBuffer;
+        receiveWsHandshake(tmp_buf);
+    }
 }
 
 bool WebsocketSession::isOpen()
@@ -110,7 +127,8 @@ long WebsocketSession::getKey() const
 // private member function
 WebsocketSession::WebsocketSession(boost::asio::io_service& _ios,
     int _timeout_millis) : 
-    ios(_ios)
+    ios(_ios),
+    ssl_mode(false)
 {
     start_flag = false;
     handshake_ok = false;
@@ -141,7 +159,65 @@ bool WebsocketSession::init(boost::asio::io_service& _ios)
     return true;
 }
 
-void WebsocketSession::receiveHandShake(ByteBuffer* buf)
+bool WebsocketSession::initWithSSL(boost::asio::io_service& _ios, 
+    const ByteBuffer& certificate, const ByteBuffer& private_key,
+    const ByteBuffer& temp_dh)
+{
+    auto p_socket = new AsyncSSLSocket(_ios);
+    
+    if (certificate.size() > 0) {
+        p_socket->loadCertificate(certificate);
+    }
+    
+    if (private_key.size() > 0) {
+        p_socket->loadPrivateKey(private_key);
+    }
+    
+    if (temp_dh.size()) {
+        p_socket->loadTempDHParam(temp_dh);
+    }
+    
+    p_socket->setConnectTimeoutCallback([this](AsyncSocketInf&) {
+        // TODO: callback
+        return false;
+    });
+    p_socket->setReadTimeoutCallback([this](AsyncSocketInf&) {
+        // TODO: callback
+        return false;
+    });
+    p_socket->setWriteTimeoutCallback([this](AsyncSocketInf&) {
+        // TODO: callback
+        return false;
+    });
+    
+    socket = p_socket;
+    ssl_mode = true;
+    
+    return true;
+}
+
+void WebsocketSession::receiveSSLHandshake()
+{
+    auto s = boost::dynamic_pointer_cast<AsyncSSLSocket>(socket);
+    if (s) {
+        auto du = boost::posix_time::milliseconds(timeout_millis);
+        
+        s->handshake(du, 
+            [this](boost::system::error_code ec) {
+                if (!ec) {
+                    Logger::log("receive ws handshake");
+                    ByteBuffer* tmp_buf = new ByteBuffer;
+                    receiveWsHandshake(tmp_buf);
+                } else {
+                    destroyAsync();
+                }
+            });
+    } else {
+        destroyAsync();
+    }
+}
+
+void WebsocketSession::receiveWsHandshake(ByteBuffer* buf)
 {
     auto du = boost::posix_time::milliseconds(timeout_millis);
     
@@ -153,7 +229,7 @@ void WebsocketSession::receiveHandShake(ByteBuffer* buf)
                 }
 
                 try {
-                    handShake(buf);
+                    wsHandshake(buf);
                 } catch (BaseException& e) {
                     e.printAll();
 
@@ -167,21 +243,21 @@ void WebsocketSession::receiveHandShake(ByteBuffer* buf)
         });
 }
 
-void WebsocketSession::handShake(ByteBuffer* buf)
+void WebsocketSession::wsHandshake(ByteBuffer* buf)
 {
-    auto res = validateHandShakeRequest(buf);
+    auto res = validateWsHandshakeRequest(buf);
 
     if (res) {
         delete buf;
         handshake_ok = true;
 
-        sendHandShakeOK(res);
+        sendWsHandshakeOK(res);
     } else {
-        receiveHandShake(buf);
+        receiveWsHandshake(buf);
     }
 }
 
-void WebsocketSession::sendHandShakeOK(HandShakeResponse::ptr h_res)
+void WebsocketSession::sendWsHandshakeOK(HandShakeResponse::ptr h_res)
 {
     std::string protocol = h_res->protocol;
     std::string sec_key = h_res->secret_accept;
@@ -221,7 +297,7 @@ void WebsocketSession::sendHandShakeOK(HandShakeResponse::ptr h_res)
         });
 }
 
-HandShakeResponse::ptr WebsocketSession::validateHandShakeRequest(
+HandShakeResponse::ptr WebsocketSession::validateWsHandshakeRequest(
     ByteBuffer* buf)
 {
     HandShakeRequest::ptr req = HandShake::parseReqHeader(buf);
