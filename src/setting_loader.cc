@@ -25,6 +25,11 @@ namespace {
     const char* ATTR_WORKER_THREAD_SIZE = "worker_thread_size";
     const char* ATTR_IO_THREAD_SIZE = "io_thread_size";
     const char* ATTR_SCHEDULER_INTERVAL = "scheduler_interval";
+    
+    // for SSL connection
+    const char* ATTR_CERT_FILE_PATH = "certificate_path";
+    const char* ATTR_PKEY_FILE_PATH = "private_key_path";
+    const char* ATTR_DH_FILE_PATH = "temp_dh_path";
 
     const char* ATTR_CONNECT_VOLTDB = "connect_voltdb";
     const char* ATTR_VOLTDB_HOST = "voltdb_host";
@@ -77,6 +82,10 @@ Setting::ptr SettingLoader::load(const std::string& filename)
     int io_thread_size = IO_THREAD_SIZE;
     int scheduler_thread_size = SCHEDULER_THREAD_SIZE;
     int scheduler_interval = 20;
+    
+    std::string cert_path;
+    std::string pkey_path;
+    std::string dh_path;
     
     UdpServerSetting udp_setting;
 
@@ -137,6 +146,12 @@ Setting::ptr SettingLoader::load(const std::string& filename)
                     io_thread_size = std::stoi(v.second.data());
                 } else if (node_name == ATTR_SCHEDULER_INTERVAL) {
                     scheduler_interval = std::stoi(v.second.data());
+                } else if (node_name == ATTR_CERT_FILE_PATH) {
+                    cert_path = v.second.data();
+                } else if (node_name == ATTR_PKEY_FILE_PATH) {
+                    pkey_path = v.second.data();
+                } else if (node_name == ATTR_DH_FILE_PATH) {
+                    dh_path = v.second.data();
                 } else if (node_name == ATTR_UDP_SERVER) {
                     createUdpServer(v.second, udp_setting);
                 } else if (node_name == ATTR_CONNECT_VOLTDB) {
@@ -188,6 +203,10 @@ Setting::ptr SettingLoader::load(const std::string& filename)
         io_thread_size + scheduler_thread_size;
     setting->io_thread_size = io_thread_size;
     setting->scheduler_interval = scheduler_interval;
+    
+    setting->cert_path = cert_path;
+    setting->pkey_path = pkey_path;
+    setting->dh_path = dh_path;
     
     setting->enable_udp_server = udp_setting.enable;
     setting->udp_server_is_ipv6 = udp_setting.is_ipv6;

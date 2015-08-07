@@ -46,6 +46,10 @@ struct Setting : public SmartPtr<Setting>
     int io_thread_size;
     int scheduler_interval;
     
+    std::string cert_path;
+    std::string pkey_path;
+    std::string dh_path;
+    
     // udp server
     bool enable_udp_server;
     bool udp_server_is_ipv6;

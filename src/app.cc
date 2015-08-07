@@ -134,9 +134,9 @@ int App::start(int argc, char** argv)
 void App::setupTcpServer(Setting::const_ptr setting)
 {
     // TODO: setting file
-    std::string cert = "/Users/ito/qtproj/realtime_server/key/server.crt";
-    std::string pkey = "/Users/ito/qtproj/realtime_server/key/server.key";
-    std::string tmp_dh = "/Users/ito/qtproj/realtime_server/key/dh512.pem";
+    std::string cert = setting->cert_path;
+    std::string pkey = setting->pkey_path;
+    std::string tmp_dh = setting->dh_path;
     
     AppSessionDelegate* inst = new AppSessionDelegate(task_comm);
     
