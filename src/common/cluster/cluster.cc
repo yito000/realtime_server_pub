@@ -13,25 +13,30 @@ namespace {
 
     //
     const char* WS_CLUSTER_PATH = "/";
-    const char* CLUSTER_PROTOCOL_NAME = "cluster";
+    const char* DEFAULT_CLUSTER_PROTOCOL_NAME = "default";
 };
 
 void Cluster::addNode(long node_id, 
-    const std::string& host, unsigned short port)
+    const std::string& host, unsigned short port,
+    const std::string& protocol)
 {
     try {
         std::string a_host = host;
+        std::string a_protocol = protocol;
         Logger::debug("add new node");
 
-        task_comm->postMaster([this, node_id, a_host, port]() {
+        task_comm->postMaster([this, node_id, a_host, port, a_protocol]() {
             client::HandShakeRequest::ptr hs_req = 
                 new client::HandShakeRequest;
             hs_req->path = WS_CLUSTER_PATH;
             hs_req->secret_key = 
                 client::HandshakeHelper::createSecret();
-
-            hs_req->protocols.insert(CLUSTER_PROTOCOL_NAME);
-
+            
+            std::string protocol = a_protocol != "" ?
+                a_protocol : DEFAULT_CLUSTER_PROTOCOL_NAME;
+            
+            hs_req->protocols.insert(protocol);
+            
             //
             Logger::debug("child node connect: %s:%d", a_host.c_str(), port);
 
@@ -43,7 +48,7 @@ void Cluster::addNode(long node_id,
             ws->setDelegate(del);
             ws->connect(hs_req);
 
-            addNewNodeInfo(node_id, a_host, port);
+            addNewNodeInfo(node_id, a_host, port, protocol);
         });
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;
@@ -146,7 +151,8 @@ void Cluster::run()
                             
                             removeActiveNode(node_info->node_id);
                             addNode(node_info->node_id,
-                                node_info->host, node_info->port);
+                                node_info->host, node_info->port,
+                                node_info->protocol);
                         }
                     }, [this, node_info]() {
                         // error callback
@@ -154,7 +160,8 @@ void Cluster::run()
                         
                         removeActiveNode(node_info->node_id);
                         addNode(node_info->node_id,
-                            node_info->host, node_info->port);
+                            node_info->host, node_info->port,
+                            node_info->protocol);
                     });
             }
             
@@ -188,11 +195,15 @@ Cluster::Cluster(BidirectionalCommunicator::ptr t_comm) :
 }
 
 void Cluster::addNewNodeInfo(long node_id, 
-    const std::string& host, unsigned short port)
+    const std::string& host, unsigned short port,
+    const std::string& protocol)
 {
     std::string a_host = host;
+    std::string a_protocol = protocol;
     
-    task_comm->postMaster([this, a_host, node_id, port]() {
+    task_comm->postMaster([this, a_host, node_id, 
+        port, a_protocol]() {
+        
         bool found = false;
 
         for (auto node_info: node_list) {
@@ -207,6 +218,7 @@ void Cluster::addNewNodeInfo(long node_id,
             node_info->node_id = node_id;
             node_info->host = a_host;
             node_info->port = port;
+            node_info->protocol = a_protocol;
             
             node_list.push_back(node_info);
         }

@@ -104,6 +104,7 @@ add_executable(
   src/lib/math/vec4.cc
   src/lib/network/io/async_socket.cc
   src/lib/network/io/async_ssl_socket.cc
+  src/lib/network/io/async_udp_socket.cc
   src/lib/network/io/socket.cc
   src/lib/network/io/ssl_socket.cc
   src/lib/random/random.cc
@@ -118,6 +119,7 @@ add_executable(
   src/node_server.cc
   src/node_session_delegate.cc
   src/server/tcp_server.cc
+  src/server/udp_server.cc
   src/server.cc
   src/setting_loader.cc
   src/external_src/flatbuffers/idl_gen_text.cpp
@@ -231,6 +233,7 @@ add_executable(
   src/lib/network/io/async_socket.h
   src/lib/network/io/async_socket_inf.h
   src/lib/network/io/async_ssl_socket.h
+  src/lib/network/io/async_udp_socket.h
   src/lib/network/io/socket.h
   src/lib/network/io/socket_buffer.h
   src/lib/network/io/socket_inf.h
@@ -246,6 +249,7 @@ add_executable(
   src/node_server.h
   src/node_session_delegate.h
   src/server/tcp_server.h
+  src/server/udp_server.h
   src/server.h
   src/setting.h
   src/setting_loader.h

@@ -4,6 +4,7 @@
 #include "smart_ptr.hpp"
 
 #include "server/tcp_server.h"
+#include "server/udp_server.h"
 
 class Server : public SmartPtr<Server>
 {
@@ -22,9 +23,13 @@ public:
     TcpServer::ptr getTcpServer() const;
     void setTcpServer(TcpServer::ptr s);
     
+    UdpServer::ptr getUdpServer() const;
+    void setUdpServer(UdpServer::ptr s);
+    
 private:
     boost::asio::io_service ios;
     TcpServer::ptr tcp_server;
+    UdpServer::ptr udp_server;
 
     bool end_flag;
 };

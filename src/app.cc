@@ -83,8 +83,8 @@ void SetupSignalAction()
 
 namespace {
     const char* DEFAULT_CONFIG_FILE = "config.json";
-    const char* DEFAULT_PROTOCOL = "realtime_battle";
-    const char* DEFAULT_CLUSTER_PROTOCOL = "cluster";
+    const char* DEFAULT_PROTOCOL = "default";
+    const char* DEFAULT_CLUSTER_PROTOCOL = "default";
 };
 
 int App::start(int argc, char** argv)
@@ -111,6 +111,7 @@ int App::start(int argc, char** argv)
         if (setting->master_node) {
             server = new Server;
             setupTcpServer(setting);
+            setupUdpServer(setting);
             
             g_server_cache = server.get();
             server->start();
@@ -147,16 +148,39 @@ void App::setupTcpServer(Setting::const_ptr setting)
         addr_type, setting->port,
         cert, pkey, tmp_dh);
     
+    std::string protocol = setting->protocol != "" ?
+        setting->protocol : DEFAULT_PROTOCOL;
+    
     tcp_server->setDelegate(inst);
     tcp_server->setTimeoutMillis(setting->timeout_millis);
-    tcp_server->setValidProtocol(DEFAULT_PROTOCOL); // TODO: setting file
+    tcp_server->setValidProtocol(protocol);
 //    tcp_server->setPassword("password"); // TODO
     
     server->setTcpServer(tcp_server);
     
-    Logger::log("start server port=%d", setting->port);
+    Logger::log("start tcp server port=%d", setting->port);
     
     tcp_server->accept();
+}
+
+void App::setupUdpServer(Setting::const_ptr setting)
+{
+    if (!setting->enable_udp_server) {
+        return;
+    }
+    
+    UdpServer::AddrType addr_type = UdpServer::ADDR_V4;
+    if (setting->udp_server_is_ipv6) {
+        addr_type = UdpServer::ADDR_V6;
+    }
+    auto udp_server = new UdpServer(server->getIOService(),
+        addr_type, setting->udp_server_port);
+    
+    server->setUdpServer(udp_server);
+    
+    Logger::log("start udp server port=%d", setting->udp_server_port);
+    
+    udp_server->receive();
 }
 
 void App::parseArgs(int argc, char** argv, ArgsInfo& args)
@@ -329,14 +353,16 @@ void App::initNodeServer(Setting::const_ptr setting)
     }
 
     const int SCHEDULER_INTERVAL = 3;
-    const int SERVER_SCHEDULER_INTERVAL = 30;
+    const int SERVER_SCHEDULER_INTERVAL = 20;
 
     auto node_server = new NodeServer(addr_type, setting->node_port);
     
     auto session_inst = new NodeSessionDelegate(task_comm);
-
+    std::string node_protocol = setting->node_protocol != "" ?
+        setting->node_protocol : DEFAULT_CLUSTER_PROTOCOL;
+    
     node_server->setDelegate(session_inst);
-    node_server->setValidProtocol(DEFAULT_CLUSTER_PROTOCOL); // TODO: setting file
+    node_server->setValidProtocol(node_protocol);
     node_server->accept();
 
     //

@@ -7,14 +7,16 @@ Cluster::ptr ClusterBuilder::build(Setting::const_ptr setting,
     BidirectionalCommunicator::ptr t_comm)
 {
     auto cluster = new Cluster(t_comm);
-
+    
+    // TODO: setting
 //    cluster->setNodeRouter(new RoundRobinRouter);
     cluster->setNodeRouter(new SimpleRandomRouter);
 
     //
-    auto cluster_nodes = setting->cluster_nodes;
-    for (auto node: cluster_nodes) {
-        cluster->addNode(node->node_id, node->host, node->port);
+    auto& cluster_nodes = setting->cluster_nodes;
+    for (auto& node: cluster_nodes) {
+        cluster->addNode(node->node_id, node->host, 
+            node->port, node->protocol);
     }
 
     return cluster;

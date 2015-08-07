@@ -1,10 +1,11 @@
 {
   "is_master_node":0,
-  "is_ipv6":0,
+  "is_ipv6":1,
   "port":0,
   "is_worker_node":1,
   "is_ipv6_node":1,
   "node_port":12001,
+  "node_protocol":"cluster",
   "timeout":30000,
   "retry":3,
   "worker_thread_size":4,

@@ -229,7 +229,7 @@ int main(int argc, char** argv)
         for (int i = 0; i < 1000; i++) {
             auto del = new WebsocketDelegateImpl;
             auto ws = client::WebsocketAsync::createSSL(ios, 
-                ssl_context, "0.0.0.0", 9000, 600 * 1000);
+                ssl_context, "::1", 9000, 600 * 1000);
             ws->setDelegate(del);
 
             //

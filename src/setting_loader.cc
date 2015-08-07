@@ -12,10 +12,12 @@ namespace {
     const char* ATTR_IS_MASTER_NODE = "is_master_node";
     const char* ATTR_IS_IPV6 = "is_ipv6";
     const char* ATTR_PORT = "port";
+    const char* ATTR_PROTOCOL = "protocol";
 
     const char* ATTR_IS_WORKER_NODE = "is_worker_node";
     const char* ATTR_IS_IPV6_NODE = "is_ipv6_node";
     const char* ATTR_NODE_PORT = "node_port";
+    const char* ATTR_NODE_PROTOCOL = "node_protocol";
 
     const char* ATTR_TIMEOUT = "timeout";
     const char* ATTR_RETRY = "retry";
@@ -31,7 +33,13 @@ namespace {
     const char* ATTR_CONNECT_REDIS = "connect_redis";
     const char* ATTR_REDIS_HOST = "redis_host";
     const char* ATTR_REDIS_PORT = "redis_port";
-
+    
+    // udp server
+    const char* ATTR_UDP_SERVER = "udp_server";
+    const char* ATTR_US_ENABLE = "enable";
+    const char* ATTR_US_IS_IPV6 = "is_ipv6";
+    const char* ATTR_US_PORT = "port";
+    
     // variables
     const char* ATTR_VARIABLES = "variables";
 
@@ -40,6 +48,7 @@ namespace {
     const char* ATTR_CLUSTER_NODE_ID = "id";
     const char* ATTR_CLUSTER_NODE_HOST = "host";
     const char* ATTR_CLUSTER_NODE_PORT = "port";
+    const char* ATTR_CLUSTER_NODE_PROTOCOL = "protocol";
 };
 
 Setting::ptr SettingLoader::load(const std::string& filename)
@@ -54,10 +63,12 @@ Setting::ptr SettingLoader::load(const std::string& filename)
     bool is_master_node = true;
     bool is_ipv6 = true;
     int port = 9000;
+    std::string protocol;
 
     bool is_worker_node = false;
     bool is_ipv6_node = false;
     int node_port = 12000;
+    std::string node_protocol;
 
     int timeout_millis = 30 * 1000;
     int retry = 3;
@@ -66,6 +77,8 @@ Setting::ptr SettingLoader::load(const std::string& filename)
     int io_thread_size = IO_THREAD_SIZE;
     int scheduler_thread_size = SCHEDULER_THREAD_SIZE;
     int scheduler_interval = 20;
+    
+    UdpServerSetting udp_setting;
 
     bool connect_voltdb = false;
     std::string voltdb_host = "0.0.0.0";
@@ -100,6 +113,8 @@ Setting::ptr SettingLoader::load(const std::string& filename)
                     is_ipv6 = n == 1;
                 } else if (node_name == ATTR_PORT) {
                     port = std::stoi(v.second.data());
+                } else if (node_name == ATTR_PROTOCOL) {
+                    protocol = v.second.data();
                 } else if (node_name == ATTR_IS_WORKER_NODE) {
                     int n = std::stoi(v.second.data());
 
@@ -110,6 +125,8 @@ Setting::ptr SettingLoader::load(const std::string& filename)
                     is_ipv6_node = n == 1;
                 } else if (node_name == ATTR_NODE_PORT) {
                     node_port = std::stoi(v.second.data());
+                } else if (node_name == ATTR_NODE_PROTOCOL) {
+                    node_protocol = v.second.data();
                 } else if (node_name == ATTR_TIMEOUT) {
                     timeout_millis = std::stoi(v.second.data());
                 } else if (node_name == ATTR_RETRY) {
@@ -120,6 +137,8 @@ Setting::ptr SettingLoader::load(const std::string& filename)
                     io_thread_size = std::stoi(v.second.data());
                 } else if (node_name == ATTR_SCHEDULER_INTERVAL) {
                     scheduler_interval = std::stoi(v.second.data());
+                } else if (node_name == ATTR_UDP_SERVER) {
+                    createUdpServer(v.second, udp_setting);
                 } else if (node_name == ATTR_CONNECT_VOLTDB) {
                     int n = std::stoi(v.second.data());
 
@@ -155,10 +174,12 @@ Setting::ptr SettingLoader::load(const std::string& filename)
     setting->master_node = is_master_node;
     setting->addr_v6 = is_ipv6;
     setting->port = port;
-
+    setting->protocol = protocol;
+    
     setting->worker_node = is_worker_node;
     setting->node_addr_v6 = is_ipv6_node;
     setting->node_port = node_port;
+    setting->node_protocol = node_protocol;
 
     setting->timeout_millis = timeout_millis;
     setting->retry = retry;
@@ -167,7 +188,11 @@ Setting::ptr SettingLoader::load(const std::string& filename)
         io_thread_size + scheduler_thread_size;
     setting->io_thread_size = io_thread_size;
     setting->scheduler_interval = scheduler_interval;
-
+    
+    setting->enable_udp_server = udp_setting.enable;
+    setting->udp_server_is_ipv6 = udp_setting.is_ipv6;
+    setting->udp_server_port = udp_setting.port;
+    
     setting->connect_voltdb = connect_voltdb;
     setting->voltdb_host = voltdb_host;
     setting->voltdb_port = voltdb_port;
@@ -180,6 +205,24 @@ Setting::ptr SettingLoader::load(const std::string& filename)
 }
 
 // private member function
+void SettingLoader::createUdpServer(const boost::property_tree::ptree& p,
+    UdpServerSetting& setting)
+{
+    BOOST_FOREACH (const auto& v, p) {
+        std::string key = v.first;
+        
+        if (key == ATTR_US_ENABLE) {
+            int n = std::stoi(v.second.data());
+            setting.enable = n == 1;
+        } else if (key == ATTR_US_IS_IPV6) {
+            int n = std::stoi(v.second.data());
+            setting.is_ipv6 = n == 1;
+        } else if (key == ATTR_US_PORT) {
+            setting.port = std::stoi(v.second.data());
+        }
+    }
+}
+
 void SettingLoader::createVariables(const boost::property_tree::ptree& p,
     std::map<std::string, std::string>& variables)
 {
@@ -211,6 +254,8 @@ void SettingLoader::createClusterNodes(
                     node_info->host = vv.second.data();
                 } else if (node_name == ATTR_CLUSTER_NODE_PORT) {
                     node_info->port = std::stoi(vv.second.data());
+                } else if (node_name == ATTR_CLUSTER_NODE_PROTOCOL) {
+                    node_info->protocol = vv.second.data();
                 }
             } catch (std::exception& e) {
                 // ignore

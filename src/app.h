@@ -41,6 +41,7 @@ private:
     Setting::ptr initSettings(ArgsInfo& args);
     
     void setupTcpServer(Setting::const_ptr setting);
+    void setupUdpServer(Setting::const_ptr setting);
 
     void initRandomGenerator(Setting::const_ptr setting);
     void initThreadPool(Setting::const_ptr setting);

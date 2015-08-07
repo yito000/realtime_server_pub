@@ -25,7 +25,8 @@ public:
     typedef boost::intrusive_ptr<Cluster> ptr;
 
     void addNode(long node_id, 
-        const std::string& host, unsigned short port);
+        const std::string& host, unsigned short port,
+        const std::string& protocol);
     void removeNode(long node_id);
 
     void setNodeRouter(NodeRouter::ptr router);
@@ -44,7 +45,8 @@ private:
     Cluster(BidirectionalCommunicator::ptr t_comm);
 
     void addNewNodeInfo(long node_id,
-        const std::string& host, unsigned short port);
+        const std::string& host, unsigned short port,
+        const std::string& protocol);
     void addActiveNode(long node_id,
         client::WebsocketAsync* websocket);
     void removeActiveNode(long node_id);

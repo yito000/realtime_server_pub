@@ -11,7 +11,7 @@ Server::Server() :
 
 Server::~Server()
 {
-    //
+    ios.stop();
 }
 
 void Server::start()
@@ -50,4 +50,14 @@ TcpServer::ptr Server::getTcpServer() const
 void Server::setTcpServer(TcpServer::ptr s)
 {
     tcp_server = s;
+}
+
+UdpServer::ptr Server::getUdpServer() const
+{
+    return udp_server;
+}
+
+void Server::setUdpServer(UdpServer::ptr s)
+{
+    udp_server = s;
 }

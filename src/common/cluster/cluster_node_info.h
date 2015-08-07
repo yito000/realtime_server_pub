@@ -12,6 +12,7 @@ struct ClusterNodeInfo : public SmartPtr<ClusterNodeInfo>
     long node_id;
     std::string host;
     unsigned short port;
+    std::string protocol;
 
     ClusterNodeInfo()
     {

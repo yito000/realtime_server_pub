@@ -6,8 +6,6 @@
 
 #include "smart_ptr.hpp"
 
-#include <vector>
-
 namespace server {
     class SessionDelegate;
 };
@@ -30,7 +28,6 @@ public:
     virtual ~TcpServer();
 
     void accept();
-    void start();
 
     server::SessionDelegate* getDelegate() const
     {
