@@ -100,10 +100,6 @@ int App::start(int argc, char** argv)
         g_setting.user_pb_route_map = user_pb_route_map.get();
         g_setting.system_pb_route_map = system_pb_route_map.get();
 
-        //
-        Global global;
-        global.onStart(g_setting);
-        
 #if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
         SetupSignalAction();
 #endif
@@ -114,6 +110,12 @@ int App::start(int argc, char** argv)
             setupUdpServer(setting);
             
             g_server_cache = server.get();
+        }
+        
+        Global global;
+        global.onStart(g_setting, this);
+        
+        if (setting->master_node) {
             server->start();
         } else {
             auto sleep_time = boost::chrono::milliseconds(100);
@@ -133,7 +135,6 @@ int App::start(int argc, char** argv)
 
 void App::setupTcpServer(Setting::const_ptr setting)
 {
-    // TODO: setting file
     std::string cert = setting->cert_path;
     std::string pkey = setting->pkey_path;
     std::string tmp_dh = setting->dh_path;
@@ -175,7 +176,6 @@ void App::setupUdpServer(Setting::const_ptr setting)
     }
     auto udp_server = new UdpServer(server->getIOService(),
         addr_type, setting->udp_server_port);
-    
     server->setUdpServer(udp_server);
     
     Logger::log("start udp server port=%d", setting->udp_server_port);

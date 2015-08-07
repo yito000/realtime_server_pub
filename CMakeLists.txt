@@ -44,6 +44,7 @@ add_executable(
   src/app/record/user.cc
   src/app/record/user_record_voltdb.cc
   src/app/redis/user_record_redis.cc
+  src/app/test_udp.cc
   src/app.cc
   src/app_session_delegate.cc
   src/cluster_builder.cc
@@ -140,6 +141,7 @@ add_executable(
   src/app/record/user_record_voltdb.h
   src/app/record/voltdb_record.h
   src/app/redis/user_record_redis.h
+  src/app/test_udp.h
   src/app.h
   src/app_session_delegate.h
   src/cluster_builder.h

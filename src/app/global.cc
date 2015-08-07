@@ -4,6 +4,9 @@
 #include "common_object.h"
 #include "log/logger.h"
 
+#include "app.h"
+#include "test_udp.h"
+
 //
 //#include "protobuf/event/pb_ev_uiid.h"
 //#include "protobuf/event/pb_ev_res_uiid.h"
@@ -14,16 +17,33 @@
 #include "flatbuffers/event/fb_event_res_uiid.h"
 #include "flatbuffers/event/fb_master.h"
 
-void Global::onStart(AppGlobalSetting& g_setting)
+void Global::onStart(AppGlobalSetting& g_setting, App* app)
 {
+    //
     auto kv_cache = AppDirector::getInstance()->getKeyValueCacheStorage();
+    auto flag_opt = kv_cache->get("flag");
+    
+    bool master_node = false;
+    if (flag_opt && flag_opt.get() == "1") {
+        master_node = true;
+    }
 
+    if (master_node) {
+        auto server = app->getServer();
+        auto udp_server = server->getUdpServer();
+        
+        TestUdp::ptr test_udp_callback = new TestUdp;
+        udp_server->setSendCallback(boost::bind(&TestUdp::sendCallback,
+            test_udp_callback, _1, _2, _3));
+        udp_server->setReceiveCallback(boost::bind(&TestUdp::receiveCallback,
+            test_udp_callback, _1, _2, _3, _4, _5));
+    }
+    
     //
     if (g_setting.user_pb_route_map) {
-        auto flag_opt = kv_cache->get("flag");
         auto route_map = g_setting.user_pb_route_map;
 
-        if (flag_opt && flag_opt.get() == "1") {
+        if (master_node) {
             Logger::debug("set master mode");
 
             route_map->addRoute(1, FbMaster::sendWorker);

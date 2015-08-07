@@ -17,6 +17,11 @@ UdpServer::UdpServer(boost::asio::io_service& _ios,
         
         this->receive();
     });
+    socket->setSendCallback([this](const boost::system::error_code&,
+        std::size_t, const AsyncUdpSocket* const) {
+        
+        //
+    });
 }
 
 UdpServer::~UdpServer()
@@ -49,6 +54,12 @@ void UdpServer::setReceiveCallback(UdpPacketReceiveCallback callback)
         
         this->receive();
     });
+}
+
+void UdpServer::setSendCallback(UdpPacketSendCallback callback)
+{
+    send_callback = callback;
+    socket->setSendCallback(send_callback);
 }
 
 bool UdpServer::isEnd() const

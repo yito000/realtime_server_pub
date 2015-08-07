@@ -15,10 +15,12 @@ struct AppGlobalSetting
     }
 };
 
+class App;
+
 class Global
 {
 public:
-    void onStart(AppGlobalSetting& g_setting);
+    void onStart(AppGlobalSetting& g_setting, App* app);
     void onEnd();
 };
 

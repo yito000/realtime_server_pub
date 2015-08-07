@@ -29,12 +29,15 @@ struct ArgsInfo
     }
 };
 
-class Server;
-
 class App
 {
 public:
     int start(int argc, char** argv);
+    
+    Server::ptr getServer() const
+    {
+        return server;
+    }
 
 private:
     void parseArgs(int argc, char** argv, ArgsInfo& args);

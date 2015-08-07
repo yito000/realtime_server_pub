@@ -14,6 +14,9 @@ typedef std::function<void(const boost::system::error_code&,
     std::size_t, const UdpPacketArray&, 
     const boost::asio::ip::udp::endpoint&, const AsyncUdpSocket* const)> 
     UdpPacketReceiveCallback;
+typedef std::function<void(const boost::system::error_code&,
+    std::size_t, const AsyncUdpSocket* const)> 
+    UdpPacketSendCallback;
 
 class UdpServer : public SmartPtr<UdpServer>
 {
@@ -31,6 +34,7 @@ public:
     
     void receive();
     void setReceiveCallback(UdpPacketReceiveCallback callback);
+    void setSendCallback(UdpPacketSendCallback callback);
     
     bool isEnd() const;
     void setEndFlag(bool b);
@@ -38,6 +42,7 @@ public:
 private:
     boost::asio::io_service& ios;
     UdpPacketReceiveCallback receive_callback;
+    UdpPacketSendCallback send_callback;
     
     AsyncUdpSocket* socket;
     bool end_flag;
