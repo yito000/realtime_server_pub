@@ -1,7 +1,7 @@
 #ifndef CLUSTER_NODE_DELEGATE_H
 #define CLUSTER_NODE_DELEGATE_H
 
-#include "common/network/websocket/client/websocket_async.h"
+#include "network/websocket/client/websocket_async.h"
 #include "thread/bidirectional_communicator.h"
 
 class Cluster;

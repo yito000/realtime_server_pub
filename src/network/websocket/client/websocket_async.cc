@@ -11,7 +11,7 @@
 #include <boost/thread.hpp>
 
 #include "handshake_helper.h"
-#include "common/network/websocket/websocket_exception.hpp"
+#include "network/websocket/websocket_exception.hpp"
 #include "log/logger.h"
 
 #include <boost/uuid/uuid.hpp>

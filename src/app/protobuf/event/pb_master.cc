@@ -2,7 +2,7 @@
 
 #include "app_director.h"
 #include "common_object.h"
-#include "common/network/websocket/ws_packet_data_helper.h"
+#include "network/websocket/ws_packet_data_helper.h"
 
 #include "event/send_uiid.h"
 #include "log/logger.h"

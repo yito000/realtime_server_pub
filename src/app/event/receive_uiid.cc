@@ -3,7 +3,7 @@
 #include "flatbuffers/table/uiid_generated.h"
 #include "common/common_object.h"
 
-#include "common/network/websocket/ws_packet_data_helper.h"
+#include "network/websocket/ws_packet_data_helper.h"
 #include "log/logger.h"
 
 void ReceiveUiid::exec(long actor_key,

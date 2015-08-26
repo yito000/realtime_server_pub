@@ -72,17 +72,6 @@ add_executable(
   src/common/file/platform/file_util_general.cc
   src/common/file/platform/file_util_qt.cc
   src/common/global_rand.cc
-  src/common/network/http/http_client.cc
-  src/common/network/http/http_header_parser.cc
-  src/common/network/http/https_client.cc
-  src/common/network/websocket/client/client_frame_data.cc
-  src/common/network/websocket/client/handshake_helper.cc
-  src/common/network/websocket/client/websocket_async.cc
-  src/common/network/websocket/secret/secret_key.cc
-  src/common/network/websocket/server/handshake.cc
-  src/common/network/websocket/server/server_frame_data.cc
-  src/common/network/websocket/server/websocket_session.cc
-  src/common/network/websocket/ws_packet_data_helper.cc
   src/common/router/command_dispatcher.cc
   src/common/router/internal/route_map.cc
   src/common/router/router.cc
@@ -120,6 +109,17 @@ add_executable(
   src/lib/variable/key_value_cache_storage.cc
   src/main.cc
   src/main_loop.cc
+  src/network/http/http_client.cc
+  src/network/http/http_header_parser.cc
+  src/network/http/https_client.cc
+  src/network/websocket/client/client_frame_data.cc
+  src/network/websocket/client/handshake_helper.cc
+  src/network/websocket/client/websocket_async.cc
+  src/network/websocket/secret/secret_key.cc
+  src/network/websocket/server/handshake.cc
+  src/network/websocket/server/server_frame_data.cc
+  src/network/websocket/server/websocket_session.cc
+  src/network/websocket/ws_packet_data_helper.cc
   src/node_server.cc
   src/node_session_delegate.cc
   src/server/tcp_server.cc
@@ -182,25 +182,6 @@ add_executable(
   src/common/file/platform/file_stream_general.h
   src/common/file/platform/file_stream_qt.h
   src/common/global_rand.h
-  src/common/network/http/http_client.h
-  src/common/network/http/http_header_parser.h
-  src/common/network/http/http_request_params.h
-  src/common/network/http/http_response_header.h
-  src/common/network/http/http_status_code.h
-  src/common/network/http/https_client.h
-  src/common/network/websocket/client/client_frame_data.h
-  src/common/network/websocket/client/handshake.h
-  src/common/network/websocket/client/handshake_helper.h
-  src/common/network/websocket/client/websocket_async.h
-  src/common/network/websocket/client/websocket_delegate.h
-  src/common/network/websocket/packet.h
-  src/common/network/websocket/secret/secret_key.h
-  src/common/network/websocket/server/handshake.h
-  src/common/network/websocket/server/server_frame_data.h
-  src/common/network/websocket/server/session_delegate.h
-  src/common/network/websocket/server/websocket_session.h
-  src/common/network/websocket/socket_buffer.h
-  src/common/network/websocket/ws_packet_data_helper.h
   src/common/router/command_dispatcher.h
   src/common/router/internal/route_map.h
   src/common/router/router.h
@@ -255,6 +236,25 @@ add_executable(
   src/lib/uri/uri.h
   src/lib/variable/key_value_cache_storage.h
   src/main_loop.h
+  src/network/http/http_client.h
+  src/network/http/http_header_parser.h
+  src/network/http/http_request_params.h
+  src/network/http/http_response_header.h
+  src/network/http/http_status_code.h
+  src/network/http/https_client.h
+  src/network/websocket/client/client_frame_data.h
+  src/network/websocket/client/handshake.h
+  src/network/websocket/client/handshake_helper.h
+  src/network/websocket/client/websocket_async.h
+  src/network/websocket/client/websocket_delegate.h
+  src/network/websocket/packet.h
+  src/network/websocket/secret/secret_key.h
+  src/network/websocket/server/handshake.h
+  src/network/websocket/server/server_frame_data.h
+  src/network/websocket/server/session_delegate.h
+  src/network/websocket/server/websocket_session.h
+  src/network/websocket/socket_buffer.h
+  src/network/websocket/ws_packet_data_helper.h
   src/node_server.h
   src/node_session_delegate.h
   src/server/tcp_server.h
@@ -262,13 +262,13 @@ add_executable(
   src/server.h
   src/setting.h
   src/setting_loader.h
-  src/common/network/http/http_helper.hpp
-  src/common/network/websocket/websocket_exception.hpp
   src/lib/allocator/custom_allocator.hpp
   src/lib/allocator/stl_custom_allocator.hpp
   src/lib/atomic/atomic_operator.hpp
   src/lib/atomic/spin_lock.hpp
   src/lib/smart_ptr.hpp
+  src/network/http/http_helper.hpp
+  src/network/websocket/websocket_exception.hpp
   src/common/thread/task_actor.tmpl
 )
 
