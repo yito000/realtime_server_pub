@@ -40,8 +40,8 @@ void Global::onStart(AppGlobalSetting& g_setting, App* app)
     }
     
     //
-    if (g_setting.user_pb_route_map) {
-        auto route_map = g_setting.user_pb_route_map;
+    if (g_setting.user_route_map) {
+        auto route_map = g_setting.user_route_map;
 
         if (master_node) {
             Logger::debug("set master mode");
@@ -56,7 +56,7 @@ void Global::onStart(AppGlobalSetting& g_setting, App* app)
     }
 
     //
-    if (g_setting.system_pb_route_map) {
+    if (g_setting.system_route_map) {
         // todo
     }
 }

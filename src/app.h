@@ -9,7 +9,7 @@
 #include "server.h"
 #include "thread/bidirectional_communicator.h"
 #include "scheduler/app_scheduler.h"
-#include "protobuf/protobuf_router.h"
+#include "router/router.h"
 #include "error/error_handle_router.h"
 #include "actor/actor_manager.h"
 #include "cluster/cluster.h"
@@ -17,7 +17,7 @@
 #include "db/voltdb/voltdb_processor.h"
 
 #include "error/internal/error_handle_route_map.h"
-#include "protobuf/internal/protobuf_route_map.h"
+#include "router/internal/route_map.h"
 
 struct ArgsInfo
 {
@@ -49,7 +49,7 @@ private:
     void initRandomGenerator(Setting::const_ptr setting);
     void initThreadPool(Setting::const_ptr setting);
     void initScheduler(Setting::const_ptr setting);
-    void initProtobufRouter(Setting::const_ptr setting);
+    void initRouter(Setting::const_ptr setting);
     void initErrorHandleRouter(Setting::const_ptr setting);
     void initActorManager(Setting::const_ptr setting);
     void initMainLoop(Setting::const_ptr setting);
@@ -73,12 +73,12 @@ private:
 
     MainLoop::ptr main_loop;
     VoltdbProcessor::ptr v_processor;
-    ProtobufRouter::ptr user_pb_router;
-    ProtobufRouter::ptr system_pb_router;
+    Router::ptr user_router;
+    Router::ptr system_router;
     ErrorHandleRouter::ptr err_handle_router;
 
-    ProtobufRouteMap::ptr user_pb_route_map;
-    ProtobufRouteMap::ptr system_pb_route_map;
+    RouteMap::ptr user_route_map;
+    RouteMap::ptr system_route_map;
 
     ErrorHandleRouteMap::ptr err_handle_route_map;
     std::vector<TaskDispatcher::ptr> io_threads;

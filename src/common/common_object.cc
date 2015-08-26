@@ -57,24 +57,24 @@ void CommonObject::setDelayScheduler(AppScheduler::ptr sche)
     delay_scheduler = sche;
 }
 
-ProtobufRouter::ptr CommonObject::getUserProtobufRouter()
+Router::ptr CommonObject::getUserRouter()
 {
-    return user_pb_router;
+    return user_router;
 }
 
-void CommonObject::setUserProtobufRouter(ProtobufRouter::ptr pb_r)
+void CommonObject::setUserRouter(Router::ptr r)
 {
-    user_pb_router = pb_r;
+    user_router = r;
 }
 
-ProtobufRouter::ptr CommonObject::getSystemProtobufRouter()
+Router::ptr CommonObject::getSystemRouter()
 {
-    return system_pb_router;
+    return system_router;
 }
 
-void CommonObject::setSystemProtobufRouter(ProtobufRouter::ptr pb_r)
+void CommonObject::setSystemRouter(Router::ptr r)
 {
-    system_pb_router = pb_r;
+    system_router = r;
 }
 
 ErrorHandleRouter::ptr CommonObject::getErrorHandleRouter()

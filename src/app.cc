@@ -97,8 +97,8 @@ int App::start(int argc, char** argv)
 
     try {
         AppGlobalSetting g_setting;
-        g_setting.user_pb_route_map = user_pb_route_map.get();
-        g_setting.system_pb_route_map = system_pb_route_map.get();
+        g_setting.user_route_map = user_route_map.get();
+        g_setting.system_route_map = system_route_map.get();
 
 #if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
         SetupSignalAction();
@@ -219,14 +219,14 @@ Setting::ptr App::initSettings(ArgsInfo& args)
     setting->thread_size += additional_thread;
 
     //
-    user_pb_route_map = new ProtobufRouteMap;
-    system_pb_route_map = new ProtobufRouteMap;
+    user_route_map = new RouteMap;
+    system_route_map = new RouteMap;
     err_handle_route_map = new ErrorHandleRouteMap;
 
     initRandomGenerator(setting);
     initThreadPool(setting);
     initScheduler(setting);
-    initProtobufRouter(setting);
+    initRouter(setting);
     initErrorHandleRouter(setting);
 
     initActorManager(setting);
@@ -266,14 +266,14 @@ void App::initScheduler(Setting::const_ptr setting)
     CommonObject::getInstance()->setDelayScheduler(app_scheduler);
 }
 
-void App::initProtobufRouter(Setting::const_ptr setting)
+void App::initRouter(Setting::const_ptr setting)
 {
-    user_pb_router = new ProtobufRouter(*user_pb_route_map);
-    CommonObject::getInstance()->setUserProtobufRouter(user_pb_router);
+    user_router = new Router(*user_route_map);
+    CommonObject::getInstance()->setUserRouter(user_router);
 
     //
-    system_pb_router = new ProtobufRouter(*system_pb_route_map);
-    CommonObject::getInstance()->setSystemProtobufRouter(system_pb_router);
+    system_router = new Router(*system_route_map);
+    CommonObject::getInstance()->setSystemRouter(system_router);
 }
 
 void App::initErrorHandleRouter(Setting::const_ptr setting)

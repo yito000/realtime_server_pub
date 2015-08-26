@@ -1,5 +1,5 @@
-#ifndef PROTOBUF_ROUTE_MAP_H
-#define PROTOBUF_ROUTE_MAP_H
+#ifndef ROUTE_MAP_H
+#define ROUTE_MAP_H
 
 #include "smart_ptr.hpp"
 
@@ -7,18 +7,18 @@
 #include <functional>
 
 class WsActor;
-class ProtobufRouter;
+class Router;
 
 typedef boost::intrusive_ptr<WsActor> WsActorPtr;
 
 typedef std::function<void(long, const char*, int)> RouteCallback;
 
-class ProtobufRouteMap : public SmartPtr<ProtobufRouteMap>
+class RouteMap : public SmartPtr<RouteMap>
 {
-    friend class ProtobufRouter;
+    friend class Router;
 
 public:
-    typedef boost::intrusive_ptr<ProtobufRouteMap> ptr;
+    typedef boost::intrusive_ptr<RouteMap> ptr;
 
     void addRoute(int op_code, RouteCallback callback);
 

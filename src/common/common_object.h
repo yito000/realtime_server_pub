@@ -7,7 +7,7 @@
 #include "cluster/cluster.h"
 #include "error/error_handle_router.h"
 #include "scheduler/app_scheduler.h"
-#include "protobuf/protobuf_router.h"
+#include "router/router.h"
 
 #include "db/voltdb/voltdb_io_service.h"
 #include "db/redis/redis_service.h"
@@ -32,11 +32,11 @@ public:
     AppScheduler::ptr getDelayScheduler();
     void setDelayScheduler(AppScheduler::ptr sche);
 
-    ProtobufRouter::ptr getUserProtobufRouter();
-    void setUserProtobufRouter(ProtobufRouter::ptr pb_r);
+    Router::ptr getUserRouter();
+    void setUserRouter(Router::ptr r);
 
-    ProtobufRouter::ptr getSystemProtobufRouter();
-    void setSystemProtobufRouter(ProtobufRouter::ptr pb_r);
+    Router::ptr getSystemRouter();
+    void setSystemRouter(Router::ptr r);
 
     ErrorHandleRouter::ptr getErrorHandleRouter();
     void setErrorHandleRouter(ErrorHandleRouter::ptr eh_router);
@@ -57,8 +57,8 @@ private:
     Cluster::ptr cluster;
     AppScheduler::ptr delay_scheduler;
 
-    ProtobufRouter::ptr user_pb_router;
-    ProtobufRouter::ptr system_pb_router;
+    Router::ptr user_router;
+    Router::ptr system_router;
     ErrorHandleRouter::ptr err_handle_router;
 
     VoltdbIOService::ptr volt_io_service;

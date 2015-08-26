@@ -4,7 +4,7 @@
 
 #include "common_object.h"
 #include "actor/ws_actor.h"
-#include "protobuf/pb_command_dispatcher.h"
+#include "router/command_dispatcher.h"
 
 #include "cluster/cluster.h"
 #include "cluster/cluster_actor.h"

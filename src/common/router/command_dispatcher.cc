@@ -1,4 +1,4 @@
-#include "pb_command_dispatcher.h"
+#include "command_dispatcher.h"
 
 #include "common_object.h"
 #include "actor/ws_actor.h"
@@ -21,7 +21,7 @@ int charToInt(const char* s)
     return ret;
 }
 
-void PbCommandDispatcher::bulkDispatch(long actor_key, 
+void CommandDispatcher::bulkDispatch(long actor_key, 
     const std::vector<char>& data)
 {
     if (data.size() <= HEADER_SIZE) {
@@ -58,12 +58,12 @@ void PbCommandDispatcher::bulkDispatch(long actor_key,
 }
 
 // global function
-static bool DispatchProtobufCommand(
-    ProtobufRouter::ptr pb_router, long actor_key,
+static bool DispatchCommand(
+    Router::ptr router, long actor_key,
     int op_code, int start_index, int data_size,
     const std::vector<char>& data)
 {
-    auto callback = pb_router->getRoute(op_code);
+    auto callback = router->getRoute(op_code);
 
     if (callback) {
         char* buf = new char[data_size];
@@ -85,20 +85,20 @@ static bool DispatchProtobufCommand(
 }
 
 // private member function
-void PbCommandDispatcher::dispatchData(long actor_key, 
+void CommandDispatcher::dispatchData(long actor_key, 
     int op_code, int start_index, int data_size, 
     const std::vector<char>& data)
 {
-    auto sys_pb_router = 
-        CommonObject::getInstance()->getSystemProtobufRouter();
+    auto sys_router = 
+        CommonObject::getInstance()->getSystemRouter();
 
-    if (!DispatchProtobufCommand(sys_pb_router, actor_key, 
+    if (!DispatchCommand(sys_router, actor_key, 
         op_code, start_index, data_size, data)) {
 
-        auto app_pb_router =
-            CommonObject::getInstance()->getUserProtobufRouter();
+        auto app_router =
+            CommonObject::getInstance()->getUserRouter();
 
-        DispatchProtobufCommand(app_pb_router, actor_key, 
+        DispatchCommand(app_router, actor_key, 
             op_code, start_index, data_size, data);
     }
 }

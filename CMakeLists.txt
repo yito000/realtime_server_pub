@@ -36,6 +36,9 @@ add_executable(
   src/app/flatbuffers/event/fb_event_res_uiid.cc
   src/app/flatbuffers/event/fb_event_uiid.cc
   src/app/flatbuffers/event/fb_master.cc
+  src/app/flatbuffers/glue_fb.cc
+  src/app/flatbuffers/glue_fb_glue.cc
+  src/app/flatbuffers/register_glue_fb.cc
   src/app/global.cc
   src/app/protobuf/event/pb_ev_res_uiid.cc
   src/app/protobuf/event/pb_ev_uiid.cc
@@ -80,9 +83,9 @@ add_executable(
   src/common/network/websocket/server/server_frame_data.cc
   src/common/network/websocket/server/websocket_session.cc
   src/common/network/websocket/ws_packet_data_helper.cc
-  src/common/protobuf/internal/protobuf_route_map.cc
-  src/common/protobuf/pb_command_dispatcher.cc
-  src/common/protobuf/protobuf_router.cc
+  src/common/router/command_dispatcher.cc
+  src/common/router/internal/route_map.cc
+  src/common/router/router.cc
   src/common/scheduler/app_scheduler.cc
   src/common/scheduler/delayed_task_processor.cc
   src/common/system_actor/server_node.cc
@@ -131,7 +134,11 @@ add_executable(
   src/app/flatbuffers/event/fb_event_res_uiid.h
   src/app/flatbuffers/event/fb_event_uiid.h
   src/app/flatbuffers/event/fb_master.h
+  src/app/flatbuffers/glue_fb.h
+  src/app/flatbuffers/glue_fb_glue.h
+  src/app/flatbuffers/register_glue_fb.h
   src/app/flatbuffers/table/uiid_generated.h
+  src/app/flatbuffers/test_generated.h
   src/app/global.h
   src/app/protobuf/event/pb_ev_res_uiid.h
   src/app/protobuf/event/pb_ev_uiid.h
@@ -194,9 +201,9 @@ add_executable(
   src/common/network/websocket/server/websocket_session.h
   src/common/network/websocket/socket_buffer.h
   src/common/network/websocket/ws_packet_data_helper.h
-  src/common/protobuf/internal/protobuf_route_map.h
-  src/common/protobuf/pb_command_dispatcher.h
-  src/common/protobuf/protobuf_router.h
+  src/common/router/command_dispatcher.h
+  src/common/router/internal/route_map.h
+  src/common/router/router.h
   src/common/scheduler/app_scheduler.h
   src/common/scheduler/delayed_task.h
   src/common/scheduler/delayed_task_processor.h

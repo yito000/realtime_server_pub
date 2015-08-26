@@ -1,13 +1,13 @@
-#ifndef PB_COMMAND_DISPATCHER_H
-#define PB_COMMAND_DISPATCHER_H
+#ifndef COMMAND_DISPATCHER_H
+#define COMMAND_DISPATCHER_H
 
+#include "smart_ptr.hpp"
 #include <vector>
-#include "protobuf/protobuf_router.h"
 
 class WsActor;
 typedef boost::intrusive_ptr<WsActor> WsActorPtr;
 
-class PbCommandDispatcher
+class CommandDispatcher
 {
 public:
     static void bulkDispatch(long actor_key, 

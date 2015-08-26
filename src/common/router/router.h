@@ -1,23 +1,23 @@
-#ifndef PROTOBUF_ROUTER_H
-#define PROTOBUF_ROUTER_H
+#ifndef ROUTER_H
+#define ROUTER_H
 
 #include "smart_ptr.hpp"
 
 #include <map>
 #include <functional>
 
-class ProtobufRouteMap;
+class RouteMap;
 class WsActor;
 typedef boost::intrusive_ptr<WsActor> WsActorPtr;
 
-class ProtobufRouter : public SmartPtr<ProtobufRouter>
+class Router : public SmartPtr<Router>
 {
 public:
-    typedef boost::intrusive_ptr<ProtobufRouter> ptr;
+    typedef boost::intrusive_ptr<Router> ptr;
     typedef std::function<void(long, 
         const char*, int)> Callback;
 
-    ProtobufRouter(ProtobufRouteMap& pr_map);
+    Router(RouteMap& pr_map);
 
     Callback getRoute(int op_code);
 

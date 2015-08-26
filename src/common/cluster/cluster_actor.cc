@@ -1,7 +1,7 @@
 #include "cluster_actor.h"
 
 #include "common_object.h"
-#include "protobuf/pb_command_dispatcher.h"
+#include "router/command_dispatcher.h"
 
 #include "atomic/atomic_operator.hpp"
 
@@ -71,7 +71,7 @@ void ClusterActor::onStart() const
 void ClusterActor::onReceive(PacketData::ptr r_pd) const
 {
     if (r_pd->packet_type == PACKET_TYPE_BINARY) {
-        PbCommandDispatcher::bulkDispatch(getKey(), r_pd->data);
+        CommandDispatcher::bulkDispatch(getKey(), r_pd->data);
     } else {
         Logger::debug("cluster actor: warning packet type=%d, data size=%ld\n",
             r_pd->packet_type, r_pd->data.size());

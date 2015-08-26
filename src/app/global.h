@@ -1,17 +1,17 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include "protobuf/internal/protobuf_route_map.h"
+#include "router/internal/route_map.h"
 
 struct AppGlobalSetting
 {
-    ProtobufRouteMap* user_pb_route_map;
-    ProtobufRouteMap* system_pb_route_map;
+    RouteMap* user_route_map;
+    RouteMap* system_route_map;
 
     AppGlobalSetting()
     {
-        user_pb_route_map = NULL;
-        system_pb_route_map = NULL;
+        user_route_map = NULL;
+        system_route_map = NULL;
     }
 };
 
