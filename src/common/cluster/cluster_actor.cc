@@ -5,6 +5,7 @@
 
 #include "atomic/atomic_operator.hpp"
 
+#include "network/websocket/ws_packet_data_helper.h"
 #include "network/websocket/packet.h"
 #include "log/logger.h"
 
@@ -48,8 +49,7 @@ void ClusterActor::write(PacketData::ptr pd,
         return;
     }
     
-    // TODO: helper class
-    char mask_key[4] = {0x1, 0x2, 0x3, 0x4};
+    auto mask_key = WsPacketDataHelper::buildMaskKey();
     
     AtomicOperator<size_t>::increment(&write_cnt);
     websocket->write(pd, mask_key, send_callback);

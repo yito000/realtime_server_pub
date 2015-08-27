@@ -1,5 +1,12 @@
 #include "ws_packet_data_helper.h"
 
+#include "random/random.h"
+
+namespace {
+    Random s_rand(std::chrono::system_clock::now().
+        time_since_epoch().count() / 1000 / 1000);
+};
+
 PacketData::ptr WsPacketDataHelper::buildPacket(int op_code, 
     const char* ser_data, int size)
 {
@@ -69,3 +76,12 @@ PacketData::ptr WsPacketDataHelper::buildPacket(int op_code,
     return packet;
 }
 
+std::string WsPacketDataHelper::buildMaskKey()
+{
+    char mask_key[4] = {0};
+    for (int i = 0; i < 4; i++) {
+        mask_key[i] = s_rand.getInt(0x0, 0xff);
+    }
+    
+    return mask_key;
+}

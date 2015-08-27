@@ -43,7 +43,7 @@ public:
 
     bool isOpen();
     void read();
-    void write(PacketData::ptr packet_data, const char* mask_key,
+    void write(PacketData::ptr packet_data, const std::string& mask_key,
         SendCallback send_callback);
     void close();
 

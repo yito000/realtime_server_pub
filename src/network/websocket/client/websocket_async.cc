@@ -127,16 +127,14 @@ void WebsocketAsync::read()
     readAsync();
 }
 
-void WebsocketAsync::write(PacketData::ptr packet_data, 
-    const char* mask_key, SendCallback send_callback)
+void WebsocketAsync::write(PacketData::ptr packet_data, const std::string& mask_key,
+    SendCallback send_callback)
 {
     if (!handshake_ok) {
         return;
     }
-
-    std::string mk(mask_key, 0, 4);
     
-    writeAsync(packet_data, mk, send_callback);
+    writeAsync(packet_data, mask_key, send_callback);
 }
 
 void WebsocketAsync::close()

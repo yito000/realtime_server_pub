@@ -9,7 +9,8 @@ class WsPacketDataHelper
 public:
     static PacketData::ptr buildPacket(int op_code, const char* data, int size);
     static PacketData::ptr buildPacket(int op_code, std::vector<char>& v);
+    
+    static std::string buildMaskKey();
 };
 
 #endif
-
