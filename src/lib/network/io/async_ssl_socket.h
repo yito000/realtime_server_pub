@@ -56,9 +56,9 @@ private:
         boost::posix_time::time_duration timeout,
         SocketConnectCallback callback);
     
-    void checkConnectDeadline();
-    void checkReadDeadline();
-    void checkWriteDeadline();
+    void checkConnectDeadline(boost::system::error_code ec);
+    void checkReadDeadline(boost::system::error_code ec);
+    void checkWriteDeadline(boost::system::error_code ec);
     
     std::string host;
     std::string protocol;

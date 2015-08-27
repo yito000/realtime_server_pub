@@ -83,5 +83,6 @@ std::string WsPacketDataHelper::buildMaskKey()
         mask_key[i] = s_rand.getInt(0x0, 0xff);
     }
     
-    return mask_key;
+    std::string ret(mask_key, 4);
+    return ret;
 }

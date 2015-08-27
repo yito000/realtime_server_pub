@@ -160,13 +160,13 @@ void AsyncSocket::initTimer()
     write_timer.expires_at(boost::posix_time::pos_infin);
     
     connect_timer.async_wait(
-        ios_st.wrap(std::bind(&AsyncSocket::checkConnectDeadline, this)));
+        ios_st.wrap(boost::bind(&AsyncSocket::checkConnectDeadline, this, _1)));
     
     read_timer.async_wait(
-        ios_st.wrap(std::bind(&AsyncSocket::checkReadDeadline, this)));
+        ios_st.wrap(boost::bind(&AsyncSocket::checkReadDeadline, this, _1)));
 
     write_timer.async_wait(
-        ios_st.wrap(std::bind(&AsyncSocket::checkWriteDeadline, this)));
+        ios_st.wrap(boost::bind(&AsyncSocket::checkWriteDeadline, this, _1)));
 }
 
 void AsyncSocket::connectInternal(boost::system::error_code err,
@@ -188,10 +188,12 @@ void AsyncSocket::connectInternal(boost::system::error_code err,
             }));
     } else {
         callback(boost::asio::error::host_not_found);
+        
+        connect_timer.expires_at(boost::posix_time::pos_infin);
     }
 }
 
-void AsyncSocket::checkConnectDeadline()
+void AsyncSocket::checkConnectDeadline(boost::system::error_code ec)
 {
     if (connect_timer.expires_at() <=
         boost::asio::deadline_timer::traits_type::now()) {
@@ -207,11 +209,11 @@ void AsyncSocket::checkConnectDeadline()
     
     if (socket.is_open()) {
         connect_timer.async_wait(
-            ios_st.wrap(std::bind(&AsyncSocket::checkConnectDeadline, this)));
+            ios_st.wrap(boost::bind(&AsyncSocket::checkConnectDeadline, this, _1)));
     }
 }
 
-void AsyncSocket::checkReadDeadline()
+void AsyncSocket::checkReadDeadline(boost::system::error_code ec)
 {
     if (read_timer.expires_at() <=
         boost::asio::deadline_timer::traits_type::now()) {
@@ -227,11 +229,11 @@ void AsyncSocket::checkReadDeadline()
     
     if (socket.is_open()) {
         read_timer.async_wait(
-            ios_st.wrap(std::bind(&AsyncSocket::checkReadDeadline, this)));
+            ios_st.wrap(boost::bind(&AsyncSocket::checkReadDeadline, this, _1)));
     }
 }
 
-void AsyncSocket::checkWriteDeadline()
+void AsyncSocket::checkWriteDeadline(boost::system::error_code ec)
 {
     if (write_timer.expires_at() <=
         boost::asio::deadline_timer::traits_type::now()) {
@@ -247,6 +249,6 @@ void AsyncSocket::checkWriteDeadline()
     
     if (socket.is_open()) {
         write_timer.async_wait(
-            ios_st.wrap(std::bind(&AsyncSocket::checkWriteDeadline, this)));
+            ios_st.wrap(boost::bind(&AsyncSocket::checkWriteDeadline, this, _1)));
     }
 }

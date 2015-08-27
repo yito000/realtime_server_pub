@@ -19,7 +19,6 @@ namespace {
     const int WRITE_RETRY = 1;
     const int READ_RETRY = 3;
 
-    const char* SECRET_KEY = "dGhlIHNhbXBsZSBub25jZQ==";
     const char* PROTOCOL_NAME = "realtime_battle";
 
     bool end_flag = false;
@@ -225,6 +224,7 @@ int main(int argc, char** argv)
             boost::asio::buffer(verify_file));
 
         std::vector<client::WebsocketAsync*> v;
+        std::vector<WebsocketDelegateImpl*> dv;
 
         for (int i = 0; i < 1000; i++) {
             auto del = new WebsocketDelegateImpl;
@@ -241,6 +241,7 @@ int main(int argc, char** argv)
 
             ws->connect(h_req);
             v.push_back(ws);
+            dv.push_back(del);
         }
 
         while (!end_flag) {
@@ -253,6 +254,10 @@ int main(int argc, char** argv)
 //        sleep(1);
 
         for (auto& vv: v) {
+            delete vv;
+        }
+
+        for (auto& vv: dv) {
             delete vv;
         }
     } catch (std::exception& e) {

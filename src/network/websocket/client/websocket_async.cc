@@ -85,6 +85,10 @@ void WebsocketAsync::connect(HandShakeRequest::ptr handshake_req)
                 wsHandShake(handshake_req);
             }
         } else {
+            // TODO: custom error defined
+            ws_delegate->onError(this, 
+                client::WebsocketDelegate::Operation::CONNECT, ec);
+            
             destroyAsync();
         }
     });
@@ -108,6 +112,10 @@ void WebsocketAsync::receiveSSLHandshake(HandShakeRequest::ptr handshake_req)
             wsHandShake(handshake_req);
         } else {
             Logger::debug("ssl handshake error: %s", ec.message().c_str());
+            // TODO: custom error defined
+            ws_delegate->onError(this, 
+                client::WebsocketDelegate::Operation::CONNECT, ec);
+            
             destroyAsync();
         }
     });
@@ -291,6 +299,10 @@ void WebsocketAsync::wsHandShake(HandShakeRequest::ptr handshake_req)
 
                 receiveWsHandShake(tmp_buf, handshake_req);
             } else {
+                // TODO: custom error defined
+                ws_delegate->onError(this, 
+                    client::WebsocketDelegate::Operation::CONNECT, ec);
+                
                 Logger::debug("WebsocketAsync: ws handshake error, %s", ec.message().c_str());
                 destroyAsync();
             }
@@ -322,10 +334,17 @@ void WebsocketAsync::receiveWsHandShake(ByteBuffer* buf,
 
                     ws_delegate->onStart(this);
                 } else {
+                    // TODO: custom error defined
+                    ws_delegate->onError(this, 
+                        client::WebsocketDelegate::Operation::CONNECT, ec);
+                    
                     destroyAsync();
                 }
             } else {
                 Logger::debug("WebsocketAsync: receive handshake error, %s", ec.message().c_str());
+                
+                ws_delegate->onError(this, 
+                    client::WebsocketDelegate::Operation::CONNECT, ec);
                 
                 delete buf;
                 destroyAsync();

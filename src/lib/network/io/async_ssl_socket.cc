@@ -201,13 +201,13 @@ void AsyncSSLSocket::initTimer()
     write_timer.expires_at(boost::posix_time::pos_infin);
     
     connect_timer.async_wait(
-        ios_st.wrap(std::bind(&AsyncSSLSocket::checkConnectDeadline, this)));
+        ios_st.wrap(boost::bind(&AsyncSSLSocket::checkConnectDeadline, this, _1)));
     
     read_timer.async_wait(
-        ios_st.wrap(std::bind(&AsyncSSLSocket::checkReadDeadline, this)));
+        ios_st.wrap(boost::bind(&AsyncSSLSocket::checkReadDeadline, this, _1)));
 
     write_timer.async_wait(
-        ios_st.wrap(std::bind(&AsyncSSLSocket::checkWriteDeadline, this)));
+        ios_st.wrap(boost::bind(&AsyncSSLSocket::checkWriteDeadline, this, _1)));
 }
 
 void AsyncSSLSocket::connectInternal(boost::system::error_code err,
@@ -230,11 +230,17 @@ void AsyncSSLSocket::connectInternal(boost::system::error_code err,
             }));
     } else {
         callback(boost::asio::error::host_not_found);
+        
+        connect_timer.expires_at(boost::posix_time::pos_infin);
     }
 }
 
-void AsyncSSLSocket::checkConnectDeadline()
+void AsyncSSLSocket::checkConnectDeadline(boost::system::error_code ec)
 {
+    if (ec == boost::asio::error::operation_aborted) {
+        return;
+    }
+    
     if (connect_timer.expires_at() <=
         boost::asio::deadline_timer::traits_type::now()) {
         
@@ -249,12 +255,16 @@ void AsyncSSLSocket::checkConnectDeadline()
     
     if (socket.lowest_layer().is_open()) {
         connect_timer.async_wait(
-            ios_st.wrap(std::bind(&AsyncSSLSocket::checkConnectDeadline, this)));
+            ios_st.wrap(boost::bind(&AsyncSSLSocket::checkConnectDeadline, this, _1)));
     }
 }
 
-void AsyncSSLSocket::checkReadDeadline()
+void AsyncSSLSocket::checkReadDeadline(boost::system::error_code ec)
 {
+    if (ec == boost::asio::error::operation_aborted) {
+        return;
+    }
+    
     if (read_timer.expires_at() <=
         boost::asio::deadline_timer::traits_type::now()) {
         
@@ -269,12 +279,16 @@ void AsyncSSLSocket::checkReadDeadline()
     
     if (socket.lowest_layer().is_open()) {
         read_timer.async_wait(
-            ios_st.wrap(std::bind(&AsyncSSLSocket::checkReadDeadline, this)));
+            ios_st.wrap(boost::bind(&AsyncSSLSocket::checkReadDeadline, this, _1)));
     }
 }
 
-void AsyncSSLSocket::checkWriteDeadline()
+void AsyncSSLSocket::checkWriteDeadline(boost::system::error_code ec)
 {
+    if (ec == boost::asio::error::operation_aborted) {
+        return;
+    }
+    
     if (write_timer.expires_at() <=
         boost::asio::deadline_timer::traits_type::now()) {
         
@@ -289,6 +303,6 @@ void AsyncSSLSocket::checkWriteDeadline()
     
     if (socket.lowest_layer().is_open()) {
         write_timer.async_wait(
-            ios_st.wrap(std::bind(&AsyncSSLSocket::checkWriteDeadline, this)));
+            ios_st.wrap(boost::bind(&AsyncSSLSocket::checkWriteDeadline, this, _1)));
     }
 }

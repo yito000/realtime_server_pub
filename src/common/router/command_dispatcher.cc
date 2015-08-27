@@ -10,9 +10,9 @@ namespace {
     const int HEADER_SIZE = OP_CODE_SIZE + SIZE_DATA_SIZE;
 };
 
-int charToInt(const char* s)
+unsigned int charToUInt(const unsigned char* s)
 {
-    int ret = 0;
+    unsigned int ret = 0;
     ret = s[0] << 24;
     ret |= s[1] << 16;
     ret |= s[2] << 8;
@@ -40,8 +40,8 @@ void CommandDispatcher::bulkDispatch(long actor_key,
             data[cur_pos + 6], data[cur_pos + 7]
         };
 
-        int op_code = charToInt(s_op_code);
-        int data_size = charToInt(s_data_size);
+        auto op_code = charToUInt((unsigned char*)s_op_code);
+        auto data_size = charToUInt((unsigned char*)s_data_size);
 
         cur_pos += HEADER_SIZE;
 

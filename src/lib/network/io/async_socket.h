@@ -48,9 +48,9 @@ private:
         boost::asio::ip::tcp::resolver::iterator endpoint_it,
         SocketConnectCallback callback);
     
-    void checkConnectDeadline();
-    void checkReadDeadline();
-    void checkWriteDeadline();
+    void checkConnectDeadline(boost::system::error_code ec);
+    void checkReadDeadline(boost::system::error_code ec);
+    void checkWriteDeadline(boost::system::error_code ec);
     
     std::string host;
     std::string protocol;

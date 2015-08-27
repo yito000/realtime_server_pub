@@ -3,13 +3,15 @@
 
 #include "test_generated.h"
 
+#include "log/logger.h"
+
 void glue_test(long actor_key, const char* data, int size)
 {
     flatbuffers::Verifier verifier((const uint8_t*)data, size);
     if (!VerifyTestDataBuffer(verifier)) {
         return;
     }
-
+    
     auto test_data = GetTestData(data);
     test(test_data->n(), test_data->str()->c_str(), actor_key);
 }

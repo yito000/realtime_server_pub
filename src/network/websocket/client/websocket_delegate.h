@@ -14,6 +14,7 @@ class WebsocketDelegate
 {
 public:
     enum class Operation {
+        CONNECT,
         WRITE,
         READ
     };

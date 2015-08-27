@@ -1,5 +1,7 @@
 #include "ws_client_controller.h"
 
+#include "common/file/file_util.h"
+
 #include "atomic/atomic_operator.hpp"
 #include <boost/thread.hpp>
 
@@ -46,6 +48,61 @@ void WsClientController::stopWebsocket(client::WebsocketAsync* socket)
                     break;
                 }
             }
+        });
+}
+
+void WsClientController::setVerifyMode(VerifyMode verify_mode)
+{
+    ios.post([this, verify_mode]() {
+            switch (verify_mode) {
+                case VerifyMode::VERIFY_PEER:
+                    ssl_context.set_verify_mode(
+                        boost::asio::ssl::context::verify_peer);
+                    break;
+                
+                default:
+                    break;
+            }
+        });
+}
+
+void WsClientController::setCertificate(const std::string& filename)
+{
+    std::string a_filename = filename;
+    ios.post([this, a_filename]() {
+            auto data = FileUtil::getInstance()->getFileStream(a_filename)->readAll();
+            
+            std::vector<char> verify_file;
+            verify_file.reserve(data->getSize());
+            
+            for (int i = 0; i < data->getSize(); i++) {
+                verify_file.push_back(data->getBuffer()[i]);
+            }
+            
+            ssl_context.add_certificate_authority(
+                boost::asio::buffer(verify_file));
+        });
+}
+
+void WsClientController::setCertificate(DataBuffer::ptr data)
+{
+    ios.post([this, data]() {
+            std::vector<char> verify_file;
+            verify_file.reserve(data->getSize());
+            
+            for (int i = 0; i < data->getSize(); i++) {
+                verify_file.push_back(data->getBuffer()[i]);
+            }
+            
+            ssl_context.add_certificate_authority(
+                boost::asio::buffer(verify_file));
+        });
+}
+
+void WsClientController::setVerifyCallback(VerifyCallback callback)
+{
+    ios.post([this, callback]() {
+            ssl_context.set_verify_callback(callback);
         });
 }
 
