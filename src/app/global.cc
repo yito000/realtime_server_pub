@@ -17,6 +17,8 @@
 #include "flatbuffers/event/fb_event_res_uiid.h"
 #include "flatbuffers/event/fb_master.h"
 
+#include "app/flatbuffers/register_glue_fb.h"
+
 void Global::onStart(AppGlobalSetting& g_setting, App* app)
 {
     //
@@ -53,6 +55,9 @@ void Global::onStart(AppGlobalSetting& g_setting, App* app)
 
             route_map->addRoute(1, FbEvUiid::addUser);
         }
+        
+        // NOTE: glue code test
+        register_glue_fb(*route_map);
     }
 
     //

@@ -3,6 +3,6 @@
 
 class RouteMap;
 
-void register_glue_fb(RouteMap& user_route_map);
+void register_glue_fb(RouteMap& route_map);
 
 #endif
