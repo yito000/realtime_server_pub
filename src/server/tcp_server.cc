@@ -29,8 +29,12 @@ TcpServer::TcpServer(boost::asio::io_service& _ios,
     ssl_context.set_options(
         boost::asio::ssl::context::default_workarounds | 
         boost::asio::ssl::context::no_sslv2 |
+        boost::asio::ssl::context::tlsv1_client |
         boost::asio::ssl::context::single_dh_use);
     ssl_context.set_password_callback(boost::bind(&TcpServer::passwordCallback, this));
+    ssl_context.set_verify_mode(boost::asio::ssl::context::verify_peer);
+//    ssl_context.set_verify_mode(boost::asio::ssl::context::verify_peer |
+//        boost::asio::ssl::context::verify_fail_if_no_peer_cert);
     
     protocol = "default";
     

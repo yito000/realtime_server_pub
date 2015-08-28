@@ -1,6 +1,6 @@
 {
   "is_master_node":1,
-  "is_ipv6":1,
+  "is_ipv6":0,
   "port":9000,
   "protocol":"realtime_battle",
   "is_worker_node":0,
@@ -18,7 +18,7 @@
   "connect_redis":0,
   "udp_server":{
     "enable":1,
-    "is_ipv6":1,
+    "is_ipv6":0,
     "port":23456
   },
   "variables":{

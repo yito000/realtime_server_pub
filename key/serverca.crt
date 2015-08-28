@@ -1,0 +1,72 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            89:1f:a0:1f:a8:d2:42:9c
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=AU, ST=Some-State, O=Internet Widgits Pty Ltd, CN=a
+        Validity
+            Not Before: Aug 28 12:56:36 2015 GMT
+            Not After : Aug 27 12:56:36 2016 GMT
+        Subject: C=AU, ST=Some-State, O=Internet Widgits Pty Ltd, CN=a
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (2048 bit)
+                Modulus (2048 bit):
+                    00:c6:1d:8e:1e:1a:21:2e:68:5c:71:ce:e8:31:63:
+                    b4:d2:1e:d1:41:11:6a:7d:01:d7:e8:cc:1f:72:1e:
+                    91:bf:16:9a:87:3f:d1:86:af:c5:5d:6a:9c:d3:e0:
+                    cc:16:b6:05:24:3a:f2:76:93:70:9a:af:e4:e3:2f:
+                    4d:a1:92:e0:e0:4c:69:64:ff:a6:7b:43:ee:92:23:
+                    8f:1e:79:7c:b8:88:20:53:03:0b:9f:15:6b:87:10:
+                    b3:7c:81:3b:55:de:8a:8a:80:d1:7e:56:3e:a0:28:
+                    5c:e7:b3:d4:29:f3:7e:ce:51:bb:6d:4f:06:85:0f:
+                    b2:48:39:29:07:69:af:aa:73:44:8f:ce:03:f1:6c:
+                    c2:51:18:fe:38:9c:90:c6:e9:51:3c:78:6c:60:91:
+                    88:42:cb:b1:0d:35:1a:d6:a3:af:13:e5:9b:3b:5f:
+                    39:61:a3:e9:f2:2f:58:af:9b:ea:98:25:ab:47:09:
+                    a7:62:a9:dd:f4:16:2b:c6:b6:7c:49:27:80:68:f5:
+                    42:e4:13:e1:ea:0b:88:85:ba:9b:1e:92:88:6b:ea:
+                    ba:72:2b:c1:02:93:2f:12:2f:b2:fb:87:41:fb:69:
+                    8c:58:3e:bd:1c:6f:07:aa:18:96:a3:5e:26:d2:d9:
+                    2f:04:6c:fb:49:a6:20:ee:51:ee:8e:ff:99:3e:52:
+                    31:8f
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                OpenSSL Generated Certificate
+            X509v3 Subject Key Identifier: 
+                1A:75:4B:40:69:91:41:95:91:22:69:90:63:23:8F:9A:69:27:FF:B6
+            X509v3 Authority Key Identifier: 
+                keyid:22:5B:CB:75:40:1C:8B:50:DD:60:EB:75:47:3D:0D:F9:30:D7:01:91
+
+    Signature Algorithm: sha1WithRSAEncryption
+        d7:92:ce:3f:ee:05:6d:83:73:2a:3e:7c:66:fc:e8:86:6e:ff:
+        93:cb:5d:35:89:54:c0:92:87:9c:3f:c3:0f:58:0f:05:cc:6e:
+        31:fa:a9:e6:79:4a:eb:01:95:26:28:18:33:62:f9:0f:29:b7:
+        22:94:fd:81:9f:ea:12:90:f9:26:f6:c7:57:bc:0d:6d:08:14:
+        0b:e1:14:dc:70:04:d6:6d:6c:c9:a2:7e:1d:57:90:8e:00:2a:
+        1d:c7:06:ed:46:fb:fe:d9:a3:db:07:30:84:de:b4:f4:4b:e5:
+        7f:e7:0b:6d:e4:f0:a1:7e:60:13:93:5d:75:74:48:39:94:64:
+        3e:30
+-----BEGIN CERTIFICATE-----
+MIIDHzCCAoigAwIBAgIJAIkfoB+o0kKcMA0GCSqGSIb3DQEBBQUAMFExCzAJBgNV
+BAYTAkFVMRMwEQYDVQQIEwpTb21lLVN0YXRlMSEwHwYDVQQKExhJbnRlcm5ldCBX
+aWRnaXRzIFB0eSBMdGQxCjAIBgNVBAMTAWEwHhcNMTUwODI4MTI1NjM2WhcNMTYw
+ODI3MTI1NjM2WjBRMQswCQYDVQQGEwJBVTETMBEGA1UECBMKU29tZS1TdGF0ZTEh
+MB8GA1UEChMYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMQowCAYDVQQDEwFhMIIB
+IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxh2OHhohLmhccc7oMWO00h7R
+QRFqfQHX6Mwfch6Rvxaahz/Rhq/FXWqc0+DMFrYFJDrydpNwmq/k4y9NoZLg4Exp
+ZP+me0PukiOPHnl8uIggUwMLnxVrhxCzfIE7Vd6KioDRflY+oChc57PUKfN+zlG7
+bU8GhQ+ySDkpB2mvqnNEj84D8WzCURj+OJyQxulRPHhsYJGIQsuxDTUa1qOvE+Wb
+O185YaPp8i9Yr5vqmCWrRwmnYqnd9BYrxrZ8SSeAaPVC5BPh6guIhbqbHpKIa+q6
+civBApMvEi+y+4dB+2mMWD69HG8HqhiWo14m0tkvBGz7SaYg7lHujv+ZPlIxjwID
+AQABo3sweTAJBgNVHRMEAjAAMCwGCWCGSAGG+EIBDQQfFh1PcGVuU1NMIEdlbmVy
+YXRlZCBDZXJ0aWZpY2F0ZTAdBgNVHQ4EFgQUGnVLQGmRQZWRImmQYyOPmmkn/7Yw
+HwYDVR0jBBgwFoAUIlvLdUAci1DdYOt1Rz0N+TDXAZEwDQYJKoZIhvcNAQEFBQAD
+gYEA15LOP+4FbYNzKj58Zvzohm7/k8tdNYlUwJKHnD/DD1gPBcxuMfqp5nlK6wGV
+JigYM2L5Dym3IpT9gZ/qEpD5JvbHV7wNbQgUC+EU3HAE1m1syaJ+HVeQjgAqHccG
+7Ub7/tmj2wcwhN609Evlf+cLbeTwoX5gE5NddXRIOZRkPjA=
+-----END CERTIFICATE-----
