@@ -115,6 +115,8 @@ add_executable(
   src/network/websocket/client/client_frame_data.cc
   src/network/websocket/client/handshake_helper.cc
   src/network/websocket/client/websocket_async.cc
+  src/network/websocket/client/ws_client_controller.cc
+  src/network/websocket/client/ws_client_factory.cc
   src/network/websocket/secret/secret_key.cc
   src/network/websocket/server/handshake.cc
   src/network/websocket/server/server_frame_data.cc
@@ -136,6 +138,7 @@ add_executable(
   src/app/flatbuffers/event/fb_master.h
   src/app/flatbuffers/glue_fb.h
   src/app/flatbuffers/glue_fb_glue.h
+  src/app/flatbuffers/monster_generated.h
   src/app/flatbuffers/register_glue_fb.h
   src/app/flatbuffers/table/uiid_generated.h
   src/app/flatbuffers/test_generated.h
@@ -247,6 +250,8 @@ add_executable(
   src/network/websocket/client/handshake_helper.h
   src/network/websocket/client/websocket_async.h
   src/network/websocket/client/websocket_delegate.h
+  src/network/websocket/client/ws_client_controller.h
+  src/network/websocket/client/ws_client_factory.h
   src/network/websocket/packet.h
   src/network/websocket/secret/secret_key.h
   src/network/websocket/server/handshake.h
