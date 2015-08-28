@@ -193,11 +193,14 @@ void WebsocketSession::receiveSSLHandshake()
                     receiveWsHandshake(tmp_buf);
                 } else {
                     Logger::debug("ssl handshake error: %s", ec.message().c_str());
-                    destroyAsync();
+                    session_delegate->onError(this, 
+                        server::SessionDelegate::Operation::CONNECT, ec);
                 }
             });
     } else {
-        destroyAsync();
+        session_delegate->onError(this, 
+            server::SessionDelegate::Operation::CONNECT, 
+            boost::asio::error::host_not_found);
     }
 }
 
@@ -218,12 +221,15 @@ void WebsocketSession::receiveWsHandshake(ByteBuffer* buf)
                     e.printAll();
 
                     delete buf;
-                    destroyAsync();
+                    session_delegate->onError(this, 
+                        server::SessionDelegate::Operation::CONNECT, ec);
                 }
             } else {
                 Logger::debug("ws handshake error: %s", ec.message().c_str());
                 delete buf;
-                destroyAsync();
+                
+                session_delegate->onError(this, 
+                    server::SessionDelegate::Operation::CONNECT, ec);
             }
         });
 }
@@ -272,11 +278,13 @@ void WebsocketSession::sendWsHandshakeOK(HandShakeResponse::ptr h_res)
                 if (session_delegate) {
                     session_delegate->onStart(this);
                 } else {
-                    destroyAsync();
+                    session_delegate->onError(this, 
+                        server::SessionDelegate::Operation::CONNECT, ec);
                 }
             } else {
                 Logger::debug("sendWsHandshakeOK error: %s", ec.message().c_str());
-                destroyAsync();
+                session_delegate->onError(this, 
+                    server::SessionDelegate::Operation::CONNECT, ec);
             }
 
             delete res;

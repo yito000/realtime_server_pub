@@ -67,6 +67,11 @@ void ClusterNodeDelegate::onSendFinish(client::WebsocketAsync* ws,
 void ClusterNodeDelegate::onError(client::WebsocketAsync* ws, 
     Operation operation, boost::system::error_code ec)
 {
+    if (operation == Operation::CONNECT) {
+        ws->destroyAsync();
+        return;
+    }
+    
     auto am = CommonObject::getInstance()->getDownActorManager();
     auto key = node_id;
 

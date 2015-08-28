@@ -224,10 +224,10 @@ int main(int argc, char** argv)
             boost::asio::buffer(verify_file));
 
         std::vector<client::WebsocketAsync*> v;
-        std::vector<WebsocketDelegateImpl*> dv;
 
-        for (int i = 0; i < 1000; i++) {
-            auto del = new WebsocketDelegateImpl;
+        auto del = new WebsocketDelegateImpl;
+
+        for (int i = 0; i < 100; i++) {
             auto ws = client::WebsocketAsync::createSSL(ios, 
                 ssl_context, "::1", 9000, 600 * 1000);
             ws->setDelegate(del);
@@ -241,7 +241,6 @@ int main(int argc, char** argv)
 
             ws->connect(h_req);
             v.push_back(ws);
-            dv.push_back(del);
         }
 
         while (!end_flag) {
@@ -257,9 +256,7 @@ int main(int argc, char** argv)
             delete vv;
         }
 
-        for (auto& vv: dv) {
-            delete vv;
-        }
+        delete del;
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;
     }

@@ -62,6 +62,11 @@ void AppSessionDelegate::onSendFinish(server::WebsocketSession* session,
 void AppSessionDelegate::onError(server::WebsocketSession* session, 
     Operation operation, boost::system::error_code ec)
 {
+    if (operation == Operation::CONNECT) {
+        session->destroyAsync();
+        return;
+    }
+    
     auto am = CommonObject::getInstance()->getUserActorManager();
     auto key = session->getKey();
 

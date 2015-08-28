@@ -79,15 +79,13 @@ void AsyncSSLSocket::connect(boost::posix_time::time_duration timeout,
 
 void AsyncSSLSocket::close()
 {
-    ios.dispatch([this]() {
-        if (socket.lowest_layer().is_open()) {
-            connect_timer.cancel();
-            read_timer.cancel();
-            write_timer.cancel();
-            
-            socket.lowest_layer().close();
-        }
-    });
+    if (socket.lowest_layer().is_open()) {
+        connect_timer.cancel();
+        read_timer.cancel();
+        write_timer.cancel();
+        
+        socket.lowest_layer().close();
+    }
 }
 
 bool AsyncSSLSocket::isOpen()
@@ -229,7 +227,7 @@ void AsyncSSLSocket::connectInternal(boost::system::error_code err,
                 }
             }));
     } else {
-        callback(boost::asio::error::host_not_found);
+        callback(err);
         
         connect_timer.expires_at(boost::posix_time::pos_infin);
     }

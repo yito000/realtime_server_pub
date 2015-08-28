@@ -88,8 +88,6 @@ void WebsocketAsync::connect(HandShakeRequest::ptr handshake_req)
             // TODO: custom error defined
             ws_delegate->onError(this, 
                 client::WebsocketDelegate::Operation::CONNECT, ec);
-            
-            destroyAsync();
         }
     });
 }
@@ -98,8 +96,8 @@ void WebsocketAsync::receiveSSLHandshake(HandShakeRequest::ptr handshake_req)
 {
     auto s = boost::dynamic_pointer_cast<AsyncSSLSocket>(socket);
     if (!s) {
+        // TODO: assert
         Logger::debug("WebsocketAsync: invalid status");
-        destroyAsync();
         return;
     }
     
@@ -115,8 +113,6 @@ void WebsocketAsync::receiveSSLHandshake(HandShakeRequest::ptr handshake_req)
             // TODO: custom error defined
             ws_delegate->onError(this, 
                 client::WebsocketDelegate::Operation::CONNECT, ec);
-            
-            destroyAsync();
         }
     });
 }
@@ -304,7 +300,6 @@ void WebsocketAsync::wsHandShake(HandShakeRequest::ptr handshake_req)
                     client::WebsocketDelegate::Operation::CONNECT, ec);
                 
                 Logger::debug("WebsocketAsync: ws handshake error, %s", ec.message().c_str());
-                destroyAsync();
             }
 
             delete req;
@@ -337,17 +332,13 @@ void WebsocketAsync::receiveWsHandShake(ByteBuffer* buf,
                     // TODO: custom error defined
                     ws_delegate->onError(this, 
                         client::WebsocketDelegate::Operation::CONNECT, ec);
-                    
-                    destroyAsync();
                 }
             } else {
                 Logger::debug("WebsocketAsync: receive handshake error, %s", ec.message().c_str());
+                delete buf;
                 
                 ws_delegate->onError(this, 
                     client::WebsocketDelegate::Operation::CONNECT, ec);
-                
-                delete buf;
-                destroyAsync();
             }
         });
 }

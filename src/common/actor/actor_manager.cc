@@ -119,7 +119,7 @@ void ActorManager::removeActor(long key)
             if (h_it != hazard_actor_list.end()) {
                 auto ag_it = h_it->second.find(actor_pointer);
                 if (ag_it != h_it->second.end()) {
-                    Logger::log("mark hazard pointer");
+                    Logger::debug("mark hazard pointer");
                     
                     ag_it->second->deleted = true;
                     ag_it->second->tp = AppTime::now();
@@ -191,7 +191,7 @@ void ActorManager::update()
                     
                     // TODO: second parameter
                     if (sec > 5) {
-                        Logger::log("remove hazard actor");
+                        Logger::debug("remove hazard actor");
                         ag_map.erase(ag_it++);
                     } else {
                         ++ag_it;

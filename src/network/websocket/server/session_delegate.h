@@ -14,6 +14,7 @@ class SessionDelegate
 {
 public:
     enum class Operation {
+        CONNECT,
         WRITE,
         READ
     };
