@@ -1,6 +1,6 @@
 {
   "is_master_node":1,
-  "is_ipv6":0,
+  "is_ipv6":1,
   "port":9000,
   "protocol":"realtime_battle",
   "is_worker_node":0,

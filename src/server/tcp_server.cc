@@ -33,8 +33,6 @@ TcpServer::TcpServer(boost::asio::io_service& _ios,
         boost::asio::ssl::context::single_dh_use);
     ssl_context.set_password_callback(boost::bind(&TcpServer::passwordCallback, this));
     ssl_context.set_verify_mode(boost::asio::ssl::context::verify_peer);
-//    ssl_context.set_verify_mode(boost::asio::ssl::context::verify_peer |
-//        boost::asio::ssl::context::verify_fail_if_no_peer_cert);
     
     protocol = "default";
     
