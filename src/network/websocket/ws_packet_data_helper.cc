@@ -27,6 +27,7 @@ PacketData::ptr WsPacketDataHelper::buildPacket(int op_code,
 
     //
     auto& p_buf = packet->data;
+    p_buf.reserve(4 + 4 + size);
     for (int i = 0; i < 4; i++) {
         p_buf.push_back(s_op_code[i]);
     }
@@ -63,6 +64,7 @@ PacketData::ptr WsPacketDataHelper::buildPacket(int op_code,
 
     //
     auto& p_buf = packet->data;
+    p_buf.reserve(4 + 4 + size);
     for (int i = 0; i < 4; i++) {
         p_buf.push_back(s_op_code[i]);
     }

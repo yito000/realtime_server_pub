@@ -21,14 +21,15 @@ unsigned int charToUInt(const unsigned char* s)
     return ret;
 }
 
-void CommandDispatcher::bulkDispatch(long actor_key, 
+bool CommandDispatcher::bulkDispatch(long actor_key, 
     const std::vector<char>& data)
 {
     if (data.size() <= HEADER_SIZE) {
-        return;
+        return false;
     }
 
     int cur_pos = 0;
+    bool result = false;
 
     while (cur_pos < data.size()) {
         char s_op_code[4] = {
@@ -47,14 +48,19 @@ void CommandDispatcher::bulkDispatch(long actor_key,
 
         if (data_size <= data.size() - cur_pos) {
             int start_index = cur_pos;
-            dispatchData(actor_key, op_code, 
-                start_index, data_size, data);
+            if (dispatchData(actor_key, op_code, 
+                start_index, data_size, data)) {
+                
+                result = true;
+            }
 
             cur_pos += data_size;
         } else {
             break;
         }
     }
+    
+    return result;
 }
 
 // global function
@@ -85,20 +91,27 @@ static bool DispatchCommand(
 }
 
 // private member function
-void CommandDispatcher::dispatchData(long actor_key, 
+bool CommandDispatcher::dispatchData(long actor_key, 
     int op_code, int start_index, int data_size, 
     const std::vector<char>& data)
 {
     auto sys_router = 
         CommonObject::getInstance()->getSystemRouter();
 
-    if (!DispatchCommand(sys_router, actor_key, 
+    if (DispatchCommand(sys_router, actor_key, 
         op_code, start_index, data_size, data)) {
-
+        
+        return true;
+    } else {
         auto app_router =
             CommonObject::getInstance()->getUserRouter();
 
-        DispatchCommand(app_router, actor_key, 
-            op_code, start_index, data_size, data);
+        if (DispatchCommand(app_router, actor_key, 
+            op_code, start_index, data_size, data)) {
+            
+            return true;
+        } else {
+            return false;
+        }
     }
 }

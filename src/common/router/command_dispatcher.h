@@ -10,11 +10,11 @@ typedef boost::intrusive_ptr<WsActor> WsActorPtr;
 class CommandDispatcher
 {
 public:
-    static void bulkDispatch(long actor_key, 
+    static bool bulkDispatch(long actor_key, 
         const std::vector<char>& data);
 
 private:
-    static void dispatchData(long actor_key, 
+    static bool dispatchData(long actor_key, 
         int op_code, int start_index, int data_size, 
         const std::vector<char>& data);
 };
