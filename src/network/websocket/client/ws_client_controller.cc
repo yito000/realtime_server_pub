@@ -55,9 +55,19 @@ void WsClientController::setVerifyMode(VerifyMode verify_mode)
 {
     ios.post([this, verify_mode]() {
             switch (verify_mode) {
+                case VerifyMode::VERIFY_NONE:
+                    ssl_context.set_verify_mode(
+                        boost::asio::ssl::context::verify_none);
+                    break;
+                
                 case VerifyMode::VERIFY_PEER:
                     ssl_context.set_verify_mode(
                         boost::asio::ssl::context::verify_peer);
+                    break;
+                
+                case VerifyMode::VERIFY_FAIL_IF_NO_PEER_CERT:
+                    ssl_context.set_verify_mode(boost::asio::ssl::context::verify_peer |
+                        boost::asio::ssl::context::verify_fail_if_no_peer_cert);
                     break;
                 
                 default:

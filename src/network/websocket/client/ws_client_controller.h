@@ -16,7 +16,9 @@ class WsClientController : public SmartPtr<WsClientController>
     
 public:
     enum class VerifyMode {
-        VERIFY_PEER
+        VERIFY_NONE,
+        VERIFY_PEER,
+        VERIFY_FAIL_IF_NO_PEER_CERT
     };
     
     typedef boost::intrusive_ptr<WsClientController> ptr;
@@ -31,6 +33,7 @@ public:
     void setVerifyMode(VerifyMode verify_mode);
     void setCertificate(const std::string& filename);
     void setCertificate(DataBuffer::ptr data);
+    
     void setVerifyCallback(VerifyCallback callback);
     
 private:
