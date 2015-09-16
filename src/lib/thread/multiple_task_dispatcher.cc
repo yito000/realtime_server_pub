@@ -13,6 +13,7 @@ MultipleTaskDispatcher::~MultipleTaskDispatcher()
 {
     if (init) {
         io_service.stop();
+        group.join_all();
     }
 }
 
@@ -28,7 +29,6 @@ void MultipleTaskDispatcher::initialize()
         for (; i < init_threads; i++) {
             boost::thread* t = group.create_thread(
                 boost::bind(&boost::asio::io_service::run, &io_service));
-            t->detach();
             
             thread_id_list[i] = t->get_id();
             thread_list[t->get_id()] = t;
