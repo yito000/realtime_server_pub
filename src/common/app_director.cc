@@ -9,6 +9,11 @@ AppDirector::ptr AppDirector::getInstance()
     return inst;
 }
 
+void AppDirector::finalize()
+{
+    thread_conn.reset();
+}
+
 boost::thread::id AppDirector::getMainThreadId()
 {
     return render_thread_id;

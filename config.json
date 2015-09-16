@@ -13,7 +13,7 @@
   "scheduler_interval":20,
   "certificate_path":"/Users/ito/qtproj/realtime_server/key/server.crt",
   "private_key_path":"/Users/ito/qtproj/realtime_server/key/server.key",
-  "temp_dh_path":"/Users/ito/qtproj/realtime_server/key/dh512.pem",
+  "temp_dh_path":"/Users/ito/qtproj/realtime_server/key/dh4096.pem",
   "connect_voltdb":0,
   "connect_redis":0,
   "udp_server":{

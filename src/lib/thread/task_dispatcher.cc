@@ -9,7 +9,6 @@ TaskDispatcher::TaskDispatcher() : work(io_service),
 TaskDispatcher::~TaskDispatcher()
 {
     if (init) {
-        io_service.poll();
         io_service.stop();
     }
 }

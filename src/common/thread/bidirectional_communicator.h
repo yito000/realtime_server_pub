@@ -13,6 +13,7 @@ public:
 
     static BidirectionalCommunicator::ptr create(int worker_threads);
     void update();
+    void stop();
 
     template <typename F>
     void postMaster(F f)

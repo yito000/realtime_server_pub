@@ -9,6 +9,7 @@ elseif (LINUX)
 endif ()
 
 add_definitions("-DUSE_JEMALLOC")
+add_definitions("-DSSL_TXT_TLSV1_2")
 
 include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/libs/include 

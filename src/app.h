@@ -43,6 +43,8 @@ private:
     void parseArgs(int argc, char** argv, ArgsInfo& args);
     Setting::ptr initSettings(ArgsInfo& args);
     
+    void stopApp();
+    
     void setupTcpServer(Setting::const_ptr setting);
     void setupUdpServer(Setting::const_ptr setting);
 

@@ -18,6 +18,7 @@ public:
     typedef boost::intrusive_ptr<AppDirector> ptr;
     
     static AppDirector::ptr getInstance();
+    void finalize();
     
     boost::thread::id getMainThreadId();
     void setMainThreadId(const boost::thread::id& tid);

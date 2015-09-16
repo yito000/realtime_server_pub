@@ -126,6 +126,10 @@ int App::start(int argc, char** argv)
         }
 
         global.onEnd();
+        
+        stopApp();
+        
+        AppDirector::getInstance()->finalize();
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;
     }
@@ -133,6 +137,7 @@ int App::start(int argc, char** argv)
     return 0;
 }
 
+// private member function
 void App::setupTcpServer(Setting::const_ptr setting)
 {
     std::string cert = setting->cert_path;
@@ -241,6 +246,11 @@ Setting::ptr App::initSettings(ArgsInfo& args)
     initRedisClient(setting);
 
     return setting;
+}
+
+void App::stopApp()
+{
+    task_comm.reset();
 }
 
 void App::initRandomGenerator(Setting::const_ptr setting)

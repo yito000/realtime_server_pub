@@ -16,6 +16,12 @@ void BidirectionalCommunicator::update()
     master_thread->update();
 }
 
+void BidirectionalCommunicator::stop()
+{
+    master_thread.reset();
+    worker_thread.reset();
+}
+
 // private member function
 BidirectionalCommunicator::BidirectionalCommunicator() : init_flag(false)
 {
