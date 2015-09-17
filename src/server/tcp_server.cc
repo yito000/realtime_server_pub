@@ -1,7 +1,6 @@
 #include "tcp_server.h"
 #include "network/websocket/server/websocket_session.h"
 
-#include <boost/asio/buffer.hpp>
 #include <boost/thread.hpp>
 #include "log/logger.h"
 
@@ -9,27 +8,28 @@
 
 using boost::asio::ip::tcp;
 
-struct bio_cleanup
-{
-  BIO* p;
-  ~bio_cleanup() { if (p) ::BIO_free(p); }
-};
-
-struct dh_cleanup
-{
-  DH* p;
-  ~dh_cleanup() { if (p) ::DH_free(p); }
-};
-
-TcpServer::TcpServer(boost::asio::io_service& _ios,
-    const AddrType addr_type, short port,
-    const std::string& cert_filepath, const std::string& pkey_filepath,
-    const std::string& tmp_dh_filepath) : 
+TcpServer::TcpServer(boost::asio::io_service& _ios) : 
     ios(_ios),
     ssl_context(ios, boost::asio::ssl::context::tlsv12),
     session_delegate(NULL), 
     timeout_millis(30 * 1000), 
-    end_flag(false)
+    end_flag(false),
+    protocol("default"),
+    acceptor(nullptr)
+{
+    //
+}
+
+TcpServer::~TcpServer()
+{
+    delete acceptor;
+    if (session_delegate) {
+        delete session_delegate;
+    }
+}
+
+void TcpServer::initialize(const AddrType addr_type, short port,
+    const std::string& cert_filepath, const std::string& pkey_filepath)
 {
     tcp addr = tcp::v4();
     if (addr_type == ADDR_V6) {
@@ -48,8 +48,6 @@ TcpServer::TcpServer(boost::asio::io_service& _ios,
     
     ssl_context.set_password_callback(boost::bind(&TcpServer::passwordCallback, this));
     ssl_context.set_verify_mode(boost::asio::ssl::context::verify_peer);
-    
-    protocol = "default";
     
     //
     auto file_util = FileUtil::getInstance();
@@ -89,43 +87,15 @@ TcpServer::TcpServer(boost::asio::io_service& _ios,
             boost::asio::ssl::context::pem);
     }
     
-    // temp dh
+    // use ecdh
     {
-        /*
-        FileStream::ptr st = file_util->getFileStream(tmp_dh_filepath);
-        auto data = st->readAll();
-        
-        std::vector<char> tmp_dh;
-        
-        tmp_dh.reserve(data->getSize());
-        auto p = data->getBuffer();
-        
-        for (int i = 0; i < data->getSize(); i++) {
-            tmp_dh.push_back(p[i]);
-        }
-        
-        ssl_context.use_tmp_dh(boost::asio::buffer(tmp_dh));
-        */
-        
-        // use ecdh
-        {
-            EC_KEY *ecdh = NULL;
-            ecdh = EC_KEY_new_by_curve_name(NID_secp521r1);
-            SSL_CTX_set_tmp_ecdh(ssl_context.native_handle(), ecdh);
-            EC_KEY_free(ecdh);
-        }
+        EC_KEY* ecdh = EC_KEY_new_by_curve_name(NID_secp521r1);
+        SSL_CTX_set_tmp_ecdh(ssl_context.native_handle(), ecdh);
+        EC_KEY_free(ecdh);
     }
     
     const char* cipher = "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256";
     SSL_CTX_set_cipher_list(ssl_context.native_handle(), cipher);
-}
-
-TcpServer::~TcpServer()
-{
-    delete acceptor;
-    if (session_delegate) {
-        delete session_delegate;
-    }
 }
 
 void TcpServer::accept()

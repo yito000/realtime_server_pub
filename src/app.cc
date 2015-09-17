@@ -19,6 +19,7 @@
 #include "node_session_delegate.h"
 
 #include "db/redis/redis_service.h"
+#include "network/ssl_mt.h"
 
 #if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
 #include <signal.h>
@@ -94,11 +95,13 @@ int App::start(int argc, char** argv)
 
     parseArgs(argc, argv, args_info);
     Setting::ptr setting = initSettings(args_info);
-
+    
     try {
         AppGlobalSetting g_setting;
         g_setting.user_route_map = user_route_map.get();
         g_setting.system_route_map = system_route_map.get();
+        
+        ssl_thread_setup();
 
 #if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
         SetupSignalAction();
@@ -128,6 +131,7 @@ int App::start(int argc, char** argv)
         global.onEnd();
         
         stopApp();
+        ssl_thread_cleanup();
         
         AppDirector::getInstance()->finalize();
     } catch (std::exception& e) {
@@ -142,7 +146,6 @@ void App::setupTcpServer(Setting::const_ptr setting)
 {
     std::string cert = setting->cert_path;
     std::string pkey = setting->pkey_path;
-    std::string tmp_dh = setting->dh_path;
     
     AppSessionDelegate* inst = new AppSessionDelegate(task_comm);
     
@@ -150,17 +153,19 @@ void App::setupTcpServer(Setting::const_ptr setting)
     if (setting->addr_v6) {
         addr_type = TcpServer::ADDR_V6;
     }
-    auto tcp_server = new TcpServer(server->getIOService(),
-        addr_type, setting->port,
-        cert, pkey, tmp_dh);
+    auto tcp_server = new TcpServer(server->getIOService());
     
     std::string protocol = setting->protocol != "" ?
         setting->protocol : DEFAULT_PROTOCOL;
     
+    tcp_server->setPassword("test"); // TODO
+    
+    tcp_server->initialize(addr_type, setting->port,
+        cert, pkey);
+    
     tcp_server->setDelegate(inst);
     tcp_server->setTimeoutMillis(setting->timeout_millis);
     tcp_server->setValidProtocol(protocol);
-//    tcp_server->setPassword("password"); // TODO
     
     server->setTcpServer(tcp_server);
     

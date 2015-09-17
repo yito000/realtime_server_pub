@@ -10,6 +10,7 @@ endif ()
 
 add_definitions("-DUSE_JEMALLOC")
 add_definitions("-DSSL_TXT_TLSV1_2")
+add_definitions("-D_REENTRANT")
 
 include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/libs/include 
@@ -110,6 +111,7 @@ add_executable(
   src/lib/variable/key_value_cache_storage.cc
   src/main.cc
   src/main_loop.cc
+  src/network/ssl_mt.cc
   src/network/http/http_client.cc
   src/network/http/http_header_parser.cc
   src/network/http/https_client.cc
@@ -240,6 +242,7 @@ add_executable(
   src/lib/uri/uri.h
   src/lib/variable/key_value_cache_storage.h
   src/main_loop.h
+  src/network/ssl_mt.h
   src/network/http/http_client.h
   src/network/http/http_header_parser.h
   src/network/http/http_request_params.h

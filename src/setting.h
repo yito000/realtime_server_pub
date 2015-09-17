@@ -48,7 +48,6 @@ struct Setting : public SmartPtr<Setting>
     
     std::string cert_path;
     std::string pkey_path;
-    std::string dh_path;
     
     // udp server
     bool enable_udp_server;

@@ -20,13 +20,12 @@ public:
         ADDR_V6
     };
 
-    TcpServer(boost::asio::io_service& _ios,
-        const AddrType addr_type, short port,
-        const std::string& cert_filepath, 
-        const std::string& pkey_filepath,
-        const std::string& tmp_dh_filepath);
+    TcpServer(boost::asio::io_service& _ios);
     virtual ~TcpServer();
-
+    
+    void initialize(const AddrType addr_type, short port,
+        const std::string& cert_filepath, 
+        const std::string& pkey_filepath);
     void accept();
 
     server::SessionDelegate* getDelegate() const
