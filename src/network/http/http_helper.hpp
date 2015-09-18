@@ -160,10 +160,6 @@ private:
             }
             
             buffer.swap(tmp_buffer);
-            
-            if (!response_callback.empty()) {
-                response_callback(*header, buffer);
-            }
         } else {
             buffer.clear();
         }
@@ -567,7 +563,7 @@ private:
             }
             
 #ifndef NDEBUG
-            std::cout << "buffer string: " << std::endl << buffer_str;
+            std::cout << "buffer string: " << std::endl << buffer_str << std::endl;
 #endif
             
             header_end_pos = strstr(buffer_str.c_str(), "\r\n\r\n");

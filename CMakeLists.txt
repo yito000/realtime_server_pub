@@ -291,12 +291,12 @@ target_link_libraries(
   jemalloc 
   event 
   event_pthreads 
-  boost_date_time-mt 
-  boost_filesystem-mt 
-  boost_iostreams-mt 
-  boost_system-mt 
-  boost_regex-mt 
-  boost_thread-mt 
+  boost_date_time 
+  boost_filesystem 
+  boost_iostreams 
+  boost_system 
+  boost_regex 
+  boost_thread 
   pthread
 )
 
