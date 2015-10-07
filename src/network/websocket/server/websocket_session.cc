@@ -5,8 +5,11 @@
 #include "network/io/async_socket.h"
 #include "network/io/async_ssl_socket.h"
 
+#include "atomic/atomic_operator.hpp"
+
 #include <boost/lexical_cast.hpp>
 #include <boost/thread.hpp>
+
 #include "network/websocket/websocket_exception.hpp"
 #include "log/logger.h"
 
@@ -126,7 +129,8 @@ long WebsocketSession::getKey() const
 WebsocketSession::WebsocketSession(boost::asio::io_service& _ios,
     int _timeout_millis) : 
     ios(_ios),
-    ssl_mode(false)
+    ssl_mode(false),
+    process_write(false)
 {
     start_flag = false;
     handshake_ok = false;
@@ -377,6 +381,24 @@ void WebsocketSession::readAsync()
 void WebsocketSession::writeAsync(PacketData::ptr packet_data,
     SendCallback send_callback)
 {
+    ios.dispatch([this, packet_data, send_callback]() {
+        if (process_write) {
+            PacketInfo p_info;
+            p_info.packet = packet_data;
+            p_info.callback = send_callback;
+            
+            packet_queue.push_back(p_info);
+        } else {
+            writeAsyncInternal(packet_data, send_callback);
+        }
+    });
+}
+
+void WebsocketSession::writeAsyncInternal(PacketData::ptr packet_data,
+    SendCallback send_callback)
+{
+    AtomicOperator<bool>::lock_test_and_set(&process_write, true);
+    
     auto du = boost::posix_time::milliseconds(timeout_millis);
     
     ByteBuffer* ser_packet_data = new ByteBuffer;
@@ -409,6 +431,15 @@ void WebsocketSession::writeAsync(PacketData::ptr packet_data,
             }
 
             delete ser_packet_data;
+            
+            if (isOpen() && !packet_queue.empty()) {
+                auto p_info = packet_queue.front();
+                packet_queue.pop_front();
+                
+                writeAsyncInternal(p_info.packet, p_info.callback);
+            }
+            
+            AtomicOperator<bool>::lock_test_and_set(&process_write, false);
         });
 }
 
@@ -511,15 +542,15 @@ void WebsocketSession::createWebsocketData(ByteBuffer* buf,
 }
 
 void WebsocketSession::serializeFramingData(bool end, PacketType packet_type,
-    const std::vector<char>& body, std::vector<char>& out_data)
+    const std::vector<unsigned char>& body, std::vector<unsigned char>& out_data)
 {
     FrameData::serialize(end, packet_type, body, out_data);
 }
 
-bool WebsocketSession::deserializeFramingData(std::vector<char>& data,
+bool WebsocketSession::deserializeFramingData(std::vector<unsigned char>& data,
     SocketFrame& socket_frame, int start_index)
 {
-    std::vector<char> tmp_data;
+    std::vector<unsigned char> tmp_data;
     for (int i = start_index; i < data.size(); i++) {
         tmp_data.push_back(data[i]);
     }

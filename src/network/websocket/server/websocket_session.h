@@ -3,11 +3,13 @@
 
 #include "allocator/custom_allocator.hpp"
 
-#include <functional>
-#include <boost/asio.hpp>
-
+#include <string>
 #include <vector>
 #include <list>
+#include <deque>
+
+#include <functional>
+#include <boost/asio.hpp>
 
 #include "handshake.h"
 #include "server_frame_data.h"
@@ -84,6 +86,17 @@ public:
     virtual long getKey() const override;
 
 private:
+    struct PacketInfo
+    {
+        PacketData::ptr packet;
+        SendCallback callback;
+        
+        PacketInfo()
+        {
+            //
+        }
+    };
+    
     WebsocketSession(boost::asio::io_service& _ios, 
         int _timeout_millis);
     bool init(boost::asio::io_service& _ios);
@@ -99,6 +112,8 @@ private:
     void readAsync();
     void writeAsync(PacketData::ptr packet_data,
         SendCallback send_callback);
+    void writeAsyncInternal(PacketData::ptr packet_data,
+        SendCallback send_callback);
 
     void receivePacket();
     void createWebsocketData(ByteBuffer* buf, 
@@ -106,8 +121,8 @@ private:
 
     //
     void serializeFramingData(bool end, PacketType packet_type,
-        const std::vector<char>& body, std::vector<char>& out_data);
-    bool deserializeFramingData(std::vector<char>& data,
+        const std::vector<unsigned char>& body, std::vector<unsigned char>& out_data);
+    bool deserializeFramingData(std::vector<unsigned char>& data,
         SocketFrame& socket_frame, int start_index);
 
     boost::asio::io_service& ios;
@@ -115,6 +130,8 @@ private:
     
     SessionDelegate* session_delegate;
     std::string valid_protocol;
+    std::deque<PacketInfo> packet_queue;
+    bool process_write;
 
     bool start_flag;
     bool handshake_ok;

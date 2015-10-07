@@ -10,7 +10,7 @@
 #include "log/logger.h"
 
 void FbMaster::sendWorker(long actor_key,
-    const char* data, int size)
+    const unsigned char* data, int size)
 {
     flatbuffers::Verifier verifier((const uint8_t*)data, size);
     if (!VerifyUiidDataBuffer(verifier)) {

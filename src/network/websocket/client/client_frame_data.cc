@@ -3,25 +3,25 @@
 namespace client {
 
 void FrameData::serialize(bool end, PacketType packet_type,
-    const std::string& mask, const std::vector<char>& body, 
-    std::vector<char>& out_data)
+    const std::string& mask, const std::vector<unsigned char>& body, 
+    std::vector<unsigned char>& out_data)
 {
-    char* pa = NULL;
+    unsigned char* pa = NULL;
     int len_type = 3;
     int header_size = -1;
 
     if (body.size() > 125) {
         if (body.size() > 65535) {
-            pa = new char[14];
+            pa = new unsigned char[14];
             len_type = 1;
             header_size = 14;
         } else {
-            pa = new char[8];
+            pa = new unsigned char[8];
             len_type = 2;
             header_size = 8;
         }
     } else {
-        pa = new char[6];
+        pa = new unsigned char[6];
         header_size = 6;
     }
 
@@ -110,15 +110,15 @@ void FrameData::serialize(bool end, PacketType packet_type,
     delete[] pa;
 }
 
-bool FrameData::deserialize(std::vector<char>& data,
+bool FrameData::deserialize(std::vector<unsigned char>& data,
     SocketFrame& socket_frame)
 {
     if (data.size() < 2) {
         return false;
     }
 
-    char c1 = data[0];
-    char c2 = data[1];
+    auto c1 = data[0];
+    auto c2 = data[1];
 
     socket_frame.fin = c1 & (1 << 7);
     socket_frame.opcode = c1 & 0x0f;
@@ -126,7 +126,7 @@ bool FrameData::deserialize(std::vector<char>& data,
 
     int raw_data_byte_index = 0;
 
-    char p_len = c2;
+    auto p_len = c2;
     if (p_len & 0x80) {
         p_len = c2 ^ 0x80;
     }
@@ -199,7 +199,7 @@ bool FrameData::deserialize(std::vector<char>& data,
     if (socket_frame.mask) {
         int cnt = 0;
         for (int i = start_body_index; i < end_body_index; i++) {
-            char mask_key = socket_frame.mask_key[cnt % 4];
+            auto mask_key = socket_frame.mask_key[cnt % 4];
             socket_frame.body.push_back(data[i] ^ mask_key);
 
             cnt++;

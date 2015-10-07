@@ -22,7 +22,7 @@ unsigned int charToUInt(const unsigned char* s)
 }
 
 bool CommandDispatcher::bulkDispatch(long actor_key, 
-    const std::vector<char>& data)
+    const std::vector<unsigned char>& data)
 {
     if (data.size() <= HEADER_SIZE) {
         return false;
@@ -32,11 +32,11 @@ bool CommandDispatcher::bulkDispatch(long actor_key,
     bool result = false;
 
     while (cur_pos < data.size()) {
-        char s_op_code[4] = {
+        unsigned char s_op_code[4] = {
             data[cur_pos], data[cur_pos + 1], 
             data[cur_pos + 2], data[cur_pos + 3]
         };
-        char s_data_size[4] = {
+        unsigned char s_data_size[4] = {
             data[cur_pos + 4], data[cur_pos + 5], 
             data[cur_pos + 6], data[cur_pos + 7]
         };
@@ -67,12 +67,12 @@ bool CommandDispatcher::bulkDispatch(long actor_key,
 static bool DispatchCommand(
     Router::ptr router, long actor_key,
     int op_code, int start_index, int data_size,
-    const std::vector<char>& data)
+    const std::vector<unsigned char>& data)
 {
     auto callback = router->getRoute(op_code);
 
     if (callback) {
-        char* buf = new char[data_size];
+        auto buf = new unsigned char[data_size];
         int pos = 0;
         int end_index = start_index + data_size;
         for (int i = start_index; i < end_index; i++) {
@@ -93,7 +93,7 @@ static bool DispatchCommand(
 // private member function
 bool CommandDispatcher::dispatchData(long actor_key, 
     int op_code, int start_index, int data_size, 
-    const std::vector<char>& data)
+    const std::vector<unsigned char>& data)
 {
     auto sys_router = 
         CommonObject::getInstance()->getSystemRouter();

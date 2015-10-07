@@ -16,7 +16,7 @@ void ReceiveUiid::exec(long actor_key,
     fbb.Finish(data);
     
     auto a_size = fbb.GetSize();
-    const char* buf = (const char*)fbb.GetBufferPointer();
+    const unsigned char* buf = fbb.GetBufferPointer();
 
     //
     using namespace boost::system;

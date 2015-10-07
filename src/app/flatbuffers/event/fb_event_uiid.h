@@ -7,7 +7,7 @@ class FbEvUiid
 {
 public:
     static void addUser(long actor_key, 
-        const char* data, int size);
+        const unsigned char* data, int size);
 };
 
 #endif

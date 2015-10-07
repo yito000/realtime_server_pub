@@ -7,7 +7,7 @@ class PbEvResponseUiid
 {
 public:
     static void response(long actor_key,
-        const char* data, int size);
+        const unsigned char* data, int size);
 };
 
 #endif

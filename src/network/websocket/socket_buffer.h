@@ -3,6 +3,6 @@
 
 #include <vector>
 
-typedef std::vector<char> ByteBuffer;
+typedef std::vector<unsigned char> ByteBuffer;
 
 #endif

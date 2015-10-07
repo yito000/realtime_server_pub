@@ -12,7 +12,7 @@ void TestUdp::receiveCallback(const boost::system::error_code& ec,
 {
     Logger::log("receive udp packet size=%d", size);
     
-    std::vector<char> p;
+    std::vector<unsigned char> p;
     p.reserve(size);
     
     for (int i = 0; i < size; i++) {

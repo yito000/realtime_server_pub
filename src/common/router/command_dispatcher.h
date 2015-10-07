@@ -11,12 +11,12 @@ class CommandDispatcher
 {
 public:
     static bool bulkDispatch(long actor_key, 
-        const std::vector<char>& data);
+        const std::vector<unsigned char>& data);
 
 private:
     static bool dispatchData(long actor_key, 
         int op_code, int start_index, int data_size, 
-        const std::vector<char>& data);
+        const std::vector<unsigned char>& data);
 };
 
 #endif

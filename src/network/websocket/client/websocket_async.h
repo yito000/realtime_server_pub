@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <deque>
 
 #include <functional>
 #include <boost/asio.hpp>
@@ -62,6 +63,18 @@ public:
     long getKey() const;
 
 private:
+    struct PacketInfo
+    {
+        PacketData::ptr packet;
+        std::string mask_key;
+        SendCallback callback;
+        
+        PacketInfo()
+        {
+            //
+        }
+    };
+    
     WebsocketAsync(boost::asio::io_service& _ios, int _timeout_millis);
     bool init(boost::asio::io_service& _ios, 
         const std::string& _host, unsigned short _port);
@@ -81,15 +94,17 @@ private:
     void readAsync();
     void writeAsync(PacketData::ptr packet_data,
         const std::string mask_key, SendCallback send_callback);
-
+    void writeAsyncInternal(PacketData::ptr packet_data,
+        const std::string mask_key, SendCallback send_callback);
+    
     void receivePacket();
     void createWebsocketData(ByteBuffer* buf, std::list<PacketData::ptr>& pd_list);
 
     //
     void serializeFramingData(bool end, PacketType packet_type,
-        const std::string& mask, const std::vector<char>& body, 
-        std::vector<char>& out_data);
-    bool deserializeFramingData(std::vector<char>& data,
+        const std::string& mask, const std::vector<unsigned char>& body, 
+        std::vector<unsigned char>& out_data);
+    bool deserializeFramingData(std::vector<unsigned char>& data,
         SocketFrame& socket_frame, int start_index);
 
     AsyncSocketInf::ptr socket;
@@ -97,6 +112,8 @@ private:
     
     int timeout_millis;
     WebsocketDelegate* ws_delegate;
+    std::deque<PacketInfo> packet_queue;
+    bool process_write;
 
     // todo enum state flag
     bool first_process;

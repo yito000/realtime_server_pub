@@ -8,7 +8,7 @@
 #include "log/logger.h"
 
 void PbMaster::sendWorker(long actor_key,
-    const char* data, int size)
+    const unsigned char* data, int size)
 {
     const int OP_CODE = 1;
 

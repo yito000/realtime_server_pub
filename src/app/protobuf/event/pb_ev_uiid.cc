@@ -13,7 +13,7 @@
 #include "log/logger.h"
 
 void PbEvUiid::addUser(long actor_key,
-    const char* data, int size)
+    const unsigned char* data, int size)
 {
     UiidPData uiid_data;
     uiid_data.ParseFromArray(data, size);

@@ -11,7 +11,7 @@ class Router;
 
 typedef boost::intrusive_ptr<WsActor> WsActorPtr;
 
-typedef std::function<void(long, const char*, int)> RouteCallback;
+typedef std::function<void(long, const unsigned char*, int)> RouteCallback;
 
 class RouteMap : public SmartPtr<RouteMap>
 {

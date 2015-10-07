@@ -43,9 +43,9 @@ class FrameData
 {
 public:
     static void serialize(bool end, PacketType packet_type,
-        const std::vector<char>& body, std::vector<char>& out_data);
+        const std::vector<unsigned char>& body, std::vector<unsigned char>& out_data);
 
-    static bool deserialize(std::vector<char>& data,
+    static bool deserialize(std::vector<unsigned char>& data,
         SocketFrame& socket_frame);
 };
 

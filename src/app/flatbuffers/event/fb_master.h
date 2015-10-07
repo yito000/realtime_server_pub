@@ -7,7 +7,7 @@ class FbMaster
 {
 public:
     static void sendWorker(long actor_key,
-        const char* data, int size);
+        const unsigned char* data, int size);
 };
 
 #endif

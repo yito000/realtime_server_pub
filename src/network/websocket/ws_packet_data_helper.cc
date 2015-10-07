@@ -8,7 +8,7 @@ namespace {
 };
 
 PacketData::ptr WsPacketDataHelper::buildPacket(int op_code, 
-    const char* ser_data, int size)
+    const unsigned char* ser_data, int size)
 {
     auto packet = new PacketData;
 
@@ -44,7 +44,7 @@ PacketData::ptr WsPacketDataHelper::buildPacket(int op_code,
 }
 
 PacketData::ptr WsPacketDataHelper::buildPacket(int op_code, 
-    std::vector<char>& v)
+    std::vector<unsigned char>& v)
 {
     auto packet = new PacketData;
     auto size = v.size();

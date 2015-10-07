@@ -21,7 +21,7 @@ struct PacketData : public SmartPtr<PacketData>
     bool fin;
     bool cont_frame;
 
-    std::vector<char> data;
+    std::vector<unsigned char> data;
     PacketType packet_type;
 
     PacketData()

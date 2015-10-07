@@ -15,7 +15,7 @@ class Router : public SmartPtr<Router>
 public:
     typedef boost::intrusive_ptr<Router> ptr;
     typedef std::function<void(long, 
-        const char*, int)> Callback;
+        const unsigned char*, int)> Callback;
 
     Router(RouteMap& pr_map);
 
