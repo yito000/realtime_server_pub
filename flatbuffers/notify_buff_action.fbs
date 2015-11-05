@@ -1,0 +1,14 @@
+namespace DemoBattle;
+
+struct BuffDetail {
+    character_id: int;
+    action_id: int;
+    buff_id: int;
+}
+
+table NotifyBuffAction {
+    seq_id: int;
+    actions: [BuffDetail];
+}
+
+root_type NotifyBuffAction;

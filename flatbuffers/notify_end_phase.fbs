@@ -1,0 +1,8 @@
+namespace DemoBattle;
+
+table NotifyEndPhase {
+    seq_id: int;
+    reason_code: int;
+}
+
+root_type NotifyEndPhase;

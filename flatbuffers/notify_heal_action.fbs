@@ -1,0 +1,14 @@
+namespace DemoBattle;
+
+struct HealDetail {
+    character_id: int;
+    action_id: int;
+    value: int;
+}
+
+table NotifyHealAction {
+    seq_id: int;
+    actions: [HealDetail];
+}
+
+root_type NotifyHealAction;

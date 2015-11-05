@@ -1,0 +1,6 @@
+table TestData {
+    n: int (id: 0);
+    str: string (id: 1);
+}
+
+root_type TestData;

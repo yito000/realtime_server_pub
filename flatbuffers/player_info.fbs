@@ -1,0 +1,21 @@
+namespace DemoBattle;
+
+table PlayerCharacterInfo {
+    character_id: int;
+    name: string;
+    base_hp: short = 100;
+    base_mana: short = 100;
+    physical_attack: short = 10;
+    magical_attack: short = 10;
+    physical_defense: short = 10;
+    magical_defense: short = 10;
+    speed: short = 10;
+}
+
+table PlayerInfo {
+    player_id: int;
+    name: string;
+    characters: [PlayerCharacterInfo];
+}
+
+root_type PlayerInfo;

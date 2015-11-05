@@ -1,0 +1,14 @@
+namespace DemoBattle;
+
+struct DebuffDetail {
+    character_id: int;
+    action_id: int;
+    debuff_id: int;
+}
+
+table NotifyDebuffAction {
+    seq_id: int;
+    actions: [DebuffDetail];
+}
+
+root_type NotifyDebuffAction;

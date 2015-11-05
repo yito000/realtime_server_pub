@@ -1,0 +1,13 @@
+namespace DemoBattle;
+
+struct CommandDetail {
+    characeter_id: int;
+    command_id: int;
+}
+
+table InputCommand {
+    player_id: int;
+    list: [CommandDetail];
+}
+
+root_type InputCommand;

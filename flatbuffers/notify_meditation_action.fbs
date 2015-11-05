@@ -1,0 +1,14 @@
+namespace DemoBattle;
+
+struct MeditationDetail {
+    character_id: int;
+    action_id: int;
+    value: int;
+}
+
+table NotifyMeditationAction {
+    seq_id: int;
+    actions: [MeditationDetail];
+}
+
+root_type NotifyMeditationAction;

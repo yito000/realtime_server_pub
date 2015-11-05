@@ -1,0 +1,7 @@
+namespace DemoBattle;
+
+table NotifyStartPhase {
+    seq_id: int;
+}
+
+root_type NotifyStartPhase;

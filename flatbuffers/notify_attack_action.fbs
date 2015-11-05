@@ -1,0 +1,14 @@
+namespace DemoBattle;
+
+struct AttackDetail {
+    character_id: int;
+    action_id: int;
+    total_damage: int;
+}
+
+table NotifyAttackAction {
+    seq_id: int;
+    actions: [AttackDetail];
+}
+
+root_type NotifyAttackAction;
