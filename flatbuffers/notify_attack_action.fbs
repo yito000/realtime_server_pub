@@ -2,6 +2,7 @@ namespace DemoBattle;
 
 struct AttackDetail {
     character_id: int;
+    enemy_id: int;
     action_id: int;
     total_damage: int;
 }
