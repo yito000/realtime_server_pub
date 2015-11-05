@@ -2,6 +2,7 @@ namespace DemoBattle;
 
 struct MeditationDetail {
     character_id: int;
+    target_id: int;
     action_id: int;
     value: int;
 }

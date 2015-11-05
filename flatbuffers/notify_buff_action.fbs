@@ -2,6 +2,7 @@ namespace DemoBattle;
 
 struct BuffDetail {
     character_id: int;
+    target_id: int;
     action_id: int;
     buff_id: int;
 }

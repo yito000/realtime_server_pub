@@ -2,6 +2,7 @@ namespace DemoBattle;
 
 struct DebuffDetail {
     character_id: int;
+    target_id: int;
     action_id: int;
     debuff_id: int;
 }

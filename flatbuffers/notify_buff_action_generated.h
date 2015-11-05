@@ -14,18 +14,20 @@ struct NotifyBuffAction;
 MANUALLY_ALIGNED_STRUCT(4) BuffDetail FLATBUFFERS_FINAL_CLASS {
  private:
   int32_t character_id_;
+  int32_t target_id_;
   int32_t action_id_;
   int32_t buff_id_;
 
  public:
-  BuffDetail(int32_t character_id, int32_t action_id, int32_t buff_id)
-    : character_id_(flatbuffers::EndianScalar(character_id)), action_id_(flatbuffers::EndianScalar(action_id)), buff_id_(flatbuffers::EndianScalar(buff_id)) { }
+  BuffDetail(int32_t character_id, int32_t target_id, int32_t action_id, int32_t buff_id)
+    : character_id_(flatbuffers::EndianScalar(character_id)), target_id_(flatbuffers::EndianScalar(target_id)), action_id_(flatbuffers::EndianScalar(action_id)), buff_id_(flatbuffers::EndianScalar(buff_id)) { }
 
   int32_t character_id() const { return flatbuffers::EndianScalar(character_id_); }
+  int32_t target_id() const { return flatbuffers::EndianScalar(target_id_); }
   int32_t action_id() const { return flatbuffers::EndianScalar(action_id_); }
   int32_t buff_id() const { return flatbuffers::EndianScalar(buff_id_); }
 };
-STRUCT_END(BuffDetail, 12);
+STRUCT_END(BuffDetail, 16);
 
 struct NotifyBuffAction FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t seq_id() const { return GetField<int32_t>(4, 0); }

@@ -14,18 +14,20 @@ struct NotifyHealAction;
 MANUALLY_ALIGNED_STRUCT(4) HealDetail FLATBUFFERS_FINAL_CLASS {
  private:
   int32_t character_id_;
+  int32_t target_id_;
   int32_t action_id_;
   int32_t value_;
 
  public:
-  HealDetail(int32_t character_id, int32_t action_id, int32_t value)
-    : character_id_(flatbuffers::EndianScalar(character_id)), action_id_(flatbuffers::EndianScalar(action_id)), value_(flatbuffers::EndianScalar(value)) { }
+  HealDetail(int32_t character_id, int32_t target_id, int32_t action_id, int32_t value)
+    : character_id_(flatbuffers::EndianScalar(character_id)), target_id_(flatbuffers::EndianScalar(target_id)), action_id_(flatbuffers::EndianScalar(action_id)), value_(flatbuffers::EndianScalar(value)) { }
 
   int32_t character_id() const { return flatbuffers::EndianScalar(character_id_); }
+  int32_t target_id() const { return flatbuffers::EndianScalar(target_id_); }
   int32_t action_id() const { return flatbuffers::EndianScalar(action_id_); }
   int32_t value() const { return flatbuffers::EndianScalar(value_); }
 };
-STRUCT_END(HealDetail, 12);
+STRUCT_END(HealDetail, 16);
 
 struct NotifyHealAction FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t seq_id() const { return GetField<int32_t>(4, 0); }

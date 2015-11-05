@@ -14,16 +14,16 @@ struct NotifyAttackAction;
 MANUALLY_ALIGNED_STRUCT(4) AttackDetail FLATBUFFERS_FINAL_CLASS {
  private:
   int32_t character_id_;
-  int32_t enemy_id_;
+  int32_t target_id_;
   int32_t action_id_;
   int32_t total_damage_;
 
  public:
-  AttackDetail(int32_t character_id, int32_t enemy_id, int32_t action_id, int32_t total_damage)
-    : character_id_(flatbuffers::EndianScalar(character_id)), enemy_id_(flatbuffers::EndianScalar(enemy_id)), action_id_(flatbuffers::EndianScalar(action_id)), total_damage_(flatbuffers::EndianScalar(total_damage)) { }
+  AttackDetail(int32_t character_id, int32_t target_id, int32_t action_id, int32_t total_damage)
+    : character_id_(flatbuffers::EndianScalar(character_id)), target_id_(flatbuffers::EndianScalar(target_id)), action_id_(flatbuffers::EndianScalar(action_id)), total_damage_(flatbuffers::EndianScalar(total_damage)) { }
 
   int32_t character_id() const { return flatbuffers::EndianScalar(character_id_); }
-  int32_t enemy_id() const { return flatbuffers::EndianScalar(enemy_id_); }
+  int32_t target_id() const { return flatbuffers::EndianScalar(target_id_); }
   int32_t action_id() const { return flatbuffers::EndianScalar(action_id_); }
   int32_t total_damage() const { return flatbuffers::EndianScalar(total_damage_); }
 };
