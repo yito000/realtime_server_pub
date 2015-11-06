@@ -190,7 +190,7 @@ void App::setupUdpServer(Setting::const_ptr setting)
     
     Logger::log("start udp server port=%d", setting->udp_server_port);
     
-    udp_server->receive();
+    udp_server->start();
 }
 
 void App::parseArgs(int argc, char** argv, ArgsInfo& args)

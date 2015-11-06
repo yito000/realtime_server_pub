@@ -1,7 +1,7 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include "router/internal/route_map.h"
+#include "router/detail/route_map.h"
 
 struct AppGlobalSetting
 {

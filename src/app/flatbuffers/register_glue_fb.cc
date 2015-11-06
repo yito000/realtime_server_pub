@@ -1,5 +1,5 @@
 #include "register_glue_fb.h"
-#include "router/internal/route_map.h"
+#include "router/detail/route_map.h"
 
 #include "glue_fb_glue.h"
 

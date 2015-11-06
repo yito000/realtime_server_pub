@@ -6,9 +6,7 @@
 #include <map>
 #include <functional>
 
-class RouteMap;
-class WsActor;
-typedef boost::intrusive_ptr<WsActor> WsActorPtr;
+#include "route_map_base.h"
 
 class Router : public SmartPtr<Router>
 {
@@ -17,12 +15,12 @@ public:
     typedef std::function<void(long, 
         const unsigned char*, int)> Callback;
 
-    Router(RouteMap& pr_map);
+    Router(RouteMapBase& pr_map);
 
     Callback getRoute(int op_code);
 
 private:
-    std::map<int, Callback>& route_map;
+    RouteMapBase& route_map;
 };
 
 #endif

@@ -6,6 +6,7 @@
 
 #include "smart_ptr.hpp"
 
+class UdpSocketProxy;
 class AsyncUdpSocket;
 
 typedef boost::array<char, 65507> UdpPacketArray;
@@ -32,20 +33,16 @@ public:
         const AddrType addr_type, short port);
     ~UdpServer();
     
-    void receive();
+    void start();
     void setReceiveCallback(UdpPacketReceiveCallback callback);
     void setSendCallback(UdpPacketSendCallback callback);
-    
-    bool isEnd() const;
-    void setEndFlag(bool b);
     
 private:
     boost::asio::io_service& ios;
     UdpPacketReceiveCallback receive_callback;
     UdpPacketSendCallback send_callback;
     
-    AsyncUdpSocket* socket;
-    bool end_flag;
+    UdpSocketProxy* socket;
 };
 
 #endif

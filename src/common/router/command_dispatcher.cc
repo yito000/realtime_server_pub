@@ -1,7 +1,7 @@
 #include "command_dispatcher.h"
 
 #include "common_object.h"
-#include "actor/ws_actor.h"
+#include "router/router.h"
 
 namespace {
     const int OP_CODE_SIZE = 4;

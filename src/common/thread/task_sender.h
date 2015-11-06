@@ -1,5 +1,5 @@
-#ifndef TASK_ACTOR_H
-#define TASK_ACTOR_H
+#ifndef TASK_SENDER_H
+#define TASK_SENDER_H
 
 #include "smart_ptr.hpp"
 
@@ -12,14 +12,14 @@ enum class ActThreadType {
 };
 
 template<typename T>
-class TaskActor : public SmartPtr< TaskActor<T> >
+class TaskSender : public SmartPtr< TaskSender<T> >
 {
 public:
-    static boost::intrusive_ptr< TaskActor<T> > create();
+    static boost::intrusive_ptr< TaskSender<T> > create();
     
     void send(ActThreadType t_type, std::function<void()> func);
-    std::future<T> ask(ActThreadType t_type, std::function<T()> func);
-    std::future<T> askIOS(boost::asio::io_service& ios, std::function<T()> func);
+    std::future<T> sendAsync(ActThreadType t_type, std::function<T()> func);
+    std::future<T> sendAsyncIOS(boost::asio::io_service& ios, std::function<T()> func);
     void reset();
     
 private:
@@ -29,6 +29,6 @@ private:
     std::packaged_task< T() > p_task;
 };
 
-#include "task_actor.tmpl"
+#include "task_sender.ipp"
 
 #endif

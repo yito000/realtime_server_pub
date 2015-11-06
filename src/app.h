@@ -17,7 +17,7 @@
 #include "db/voltdb/voltdb_processor.h"
 
 #include "error/internal/error_handle_route_map.h"
-#include "router/internal/route_map.h"
+#include "router/detail/route_map.h"
 
 struct ArgsInfo
 {

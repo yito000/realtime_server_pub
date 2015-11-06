@@ -11,6 +11,7 @@ endif ()
 add_definitions("-DUSE_JEMALLOC")
 add_definitions("-DSSL_TXT_TLSV1_2")
 add_definitions("-D_REENTRANT")
+add_definitions("-DMODE_SERVER")
 
 include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/libs/include 
@@ -25,6 +26,7 @@ include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/src/common 
   ${CMAKE_CURRENT_LIST_DIR}/src/lib 
   ${CMAKE_CURRENT_LIST_DIR}/src/app 
+  ${CMAKE_CURRENT_LIST_DIR}/src/app/flatbuffers 
 )
 
 link_directories(
@@ -35,9 +37,12 @@ add_executable(
   realtime_server 
   src/app/event/receive_uiid.cc
   src/app/event/send_uiid.cc
+  src/app/flatbuffers/demo_battle_client.cc
+  src/app/flatbuffers/demo_battle_udp_client.cc
   src/app/flatbuffers/event/fb_event_res_uiid.cc
   src/app/flatbuffers/event/fb_event_uiid.cc
   src/app/flatbuffers/event/fb_master.cc
+  src/app/flatbuffers/flatbuffers_socket_manager.cc
   src/app/flatbuffers/glue_fb.cc
   src/app/flatbuffers/glue_fb_glue.cc
   src/app/flatbuffers/register_glue_fb.cc
@@ -75,7 +80,7 @@ add_executable(
   src/common/file/platform/file_util_qt.cc
   src/common/global_rand.cc
   src/common/router/command_dispatcher.cc
-  src/common/router/internal/route_map.cc
+  src/common/router/detail/route_map.cc
   src/common/router/router.cc
   src/common/scheduler/app_scheduler.cc
   src/common/scheduler/delayed_task_processor.cc
@@ -111,10 +116,11 @@ add_executable(
   src/lib/variable/key_value_cache_storage.cc
   src/main.cc
   src/main_loop.cc
-  src/network/ssl_mt.cc
   src/network/http/http_client.cc
   src/network/http/http_header_parser.cc
   src/network/http/https_client.cc
+  src/network/ssl_mt.cc
+  src/network/udp_socket_proxy.cc
   src/network/websocket/client/client_frame_data.cc
   src/network/websocket/client/handshake_helper.cc
   src/network/websocket/client/websocket_async.cc
@@ -136,12 +142,22 @@ add_executable(
   src/external_src/flatbuffers/reflection.cpp
   src/app/event/receive_uiid.h
   src/app/event/send_uiid.h
+  src/app/flatbuffers/demo_battle.h
+  src/app/flatbuffers/demo_battle_udp.h
   src/app/flatbuffers/event/fb_event_res_uiid.h
   src/app/flatbuffers/event/fb_event_uiid.h
   src/app/flatbuffers/event/fb_master.h
+  src/app/flatbuffers/flatbuffers_socket_manager.h
   src/app/flatbuffers/glue_fb.h
   src/app/flatbuffers/glue_fb_glue.h
   src/app/flatbuffers/monster_generated.h
+  src/app/flatbuffers/notify_attack_action_generated.h
+  src/app/flatbuffers/notify_buff_action_generated.h
+  src/app/flatbuffers/notify_debuff_action_generated.h
+  src/app/flatbuffers/notify_end_phase_generated.h
+  src/app/flatbuffers/notify_heal_action_generated.h
+  src/app/flatbuffers/notify_meditation_action_generated.h
+  src/app/flatbuffers/notify_start_phase_generated.h
   src/app/flatbuffers/register_glue_fb.h
   src/app/flatbuffers/table/uiid_generated.h
   src/app/flatbuffers/test_generated.h
@@ -188,15 +204,17 @@ add_executable(
   src/common/file/platform/file_stream_general.h
   src/common/file/platform/file_stream_qt.h
   src/common/global_rand.h
+  src/common/macros.h
   src/common/router/command_dispatcher.h
-  src/common/router/internal/route_map.h
+  src/common/router/detail/route_map.h
+  src/common/router/route_map_base.h
   src/common/router/router.h
   src/common/scheduler/app_scheduler.h
   src/common/scheduler/delayed_task.h
   src/common/scheduler/delayed_task_processor.h
   src/common/system_actor/server_node.h
   src/common/thread/bidirectional_communicator.h
-  src/common/thread/task_actor.h
+  src/common/thread/task_sender.h
   src/common/user_actor/user_client.h
   src/external_src/flatbuffers/flatbuffers/flatbuffers.h
   src/external_src/flatbuffers/flatbuffers/hash.h
@@ -242,13 +260,14 @@ add_executable(
   src/lib/uri/uri.h
   src/lib/variable/key_value_cache_storage.h
   src/main_loop.h
-  src/network/ssl_mt.h
   src/network/http/http_client.h
   src/network/http/http_header_parser.h
   src/network/http/http_request_params.h
   src/network/http/http_response_header.h
   src/network/http/http_status_code.h
   src/network/http/https_client.h
+  src/network/ssl_mt.h
+  src/network/udp_socket_proxy.h
   src/network/websocket/client/client_frame_data.h
   src/network/websocket/client/handshake.h
   src/network/websocket/client/handshake_helper.h
@@ -278,7 +297,7 @@ add_executable(
   src/lib/smart_ptr.hpp
   src/network/http/http_helper.hpp
   src/network/websocket/websocket_exception.hpp
-  src/common/thread/task_actor.tmpl
+  src/common/thread/task_sender.ipp
 )
 
 target_link_libraries(

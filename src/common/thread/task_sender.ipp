@@ -1,23 +1,23 @@
-#ifndef TASK_ACTOR_TMPL
-#define TASK_ACTOR_TMPL
+#ifndef TASK_SENDER_IPP
+#define TASK_SENDER_IPP
 
 #include "common/app_director.h"
 
 template <typename T>
-boost::intrusive_ptr< TaskActor<T> > TaskActor<T>::create()
+boost::intrusive_ptr< TaskSender<T> > TaskSender<T>::create()
 {
-    auto inst = new TaskActor<T>;
+    auto inst = new TaskSender<T>;
     return inst;
 }
 
 template <typename T>
-void TaskActor<T>::send(ActThreadType t_type, std::function<void()> func)
+void TaskSender<T>::send(ActThreadType t_type, std::function<void()> func)
 {
     postVoidTask(t_type, func);
 }
 
 template <typename T>
-std::future<T> TaskActor<T>::askIOS(boost::asio::io_service& ios, std::function<T()> func)
+std::future<T> TaskSender<T>::sendAsyncIOS(boost::asio::io_service& ios, std::function<T()> func)
 {
     p_task = std::packaged_task< T() >(func);
     
@@ -32,7 +32,7 @@ std::future<T> TaskActor<T>::askIOS(boost::asio::io_service& ios, std::function<
 }
 
 template <typename T>
-std::future<T> TaskActor<T>::ask(ActThreadType t_type, std::function<T()> func)
+std::future<T> TaskSender<T>::sendAsync(ActThreadType t_type, std::function<T()> func)
 {
     postPackagedTask(t_type, func);
     
@@ -43,20 +43,20 @@ std::future<T> TaskActor<T>::ask(ActThreadType t_type, std::function<T()> func)
 }
 
 template <typename T>
-void TaskActor<T>::reset()
+void TaskSender<T>::reset()
 {
     p_task.reset();
 }
 
 // private member function
 template <typename T>
-void TaskActor<T>::postVoidTask(ActThreadType t_type, std::function<void()> func)
+void TaskSender<T>::postVoidTask(ActThreadType t_type, std::function<void()> func)
 {
     auto app_dir = AppDirector::getInstance();
     
     switch (t_type) {
         case ActThreadType::MAIN_THREAD: {
-                if (app_dir->compareRenderThreadIdWithCurrent()) {
+                if (app_dir->isMainThread()) {
                     func();
                 } else {
                    app_dir->postMaster([func]() {
@@ -76,17 +76,17 @@ void TaskActor<T>::postVoidTask(ActThreadType t_type, std::function<void()> func
 }
 
 template <typename T>
-void TaskActor<T>::postPackagedTask(ActThreadType t_type, std::function<T()> func)
+void TaskSender<T>::postPackagedTask(ActThreadType t_type, std::function<T()> func)
 {
     auto app_dir = AppDirector::getInstance();
     
     switch (t_type) {
         case ActThreadType::MAIN_THREAD: {
                 p_task = std::packaged_task< T() >(func);
-                if (app_dir->compareRenderThreadIdWithCurrent()) {
+                if (app_dir->isMainThread()) {
                     p_task();
                 } else {
-                   app_dir->postMaster([this]() {
+                    app_dir->postMaster([this]() {
                         p_task();
                     });
                 }
