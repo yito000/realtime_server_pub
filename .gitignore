@@ -17,12 +17,7 @@ install_manifest.txt
 *.slo
 *.lo
 *.o
-*.a
-*.la
-*.lai
-*.so
-*.dll
-*.dylib
+*.obj
 
 # Qt-es
 
