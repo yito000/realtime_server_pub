@@ -12,16 +12,17 @@ FlatbuffersSocketManager::ptr FlatbuffersSocketManager::getInstance()
     return inst;
 }
 
-void FlatbuffersSocketManager::writeTCPSocket(PacketData::ptr packet)
+void FlatbuffersSocketManager::writeTCPSocket(PacketData::ptr packet, long actor_key)
 {
-    auto cluster = CommonObject::getInstance()->getCluster();
-    cluster->sendRouter(packet, [](long node_id, boost::system::error_code ec) {
-        // TODO: error callback
-        if (!ec) {
-            Logger::debug("node%d send ok!", node_id);
-        } else {
-            Logger::debug("node%d send ng...", node_id);
-        }
+    auto am = CommonObject::getInstance()->getDownActorManager();
+    am->getActorFromKey(actor_key, [packet](WsActor::const_ptr actor) {
+        actor->write(packet, [](boost::system::error_code ec) {
+            if (!ec) {
+                Logger::debug("send ok!");
+            } else {
+                Logger::debug("send ng...");
+            }
+        });
     });
 }
 

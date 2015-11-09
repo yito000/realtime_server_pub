@@ -17,7 +17,7 @@ public:
     
     static FlatbuffersSocketManager::ptr getInstance();
     
-    void writeTCPSocket(PacketData::ptr packet);
+    void writeTCPSocket(PacketData::ptr packet, long actor_key);
     
     UdpSocketProxy* getUdpSocket() const;
     void setUdpSocket(UdpSocketProxy* socket);

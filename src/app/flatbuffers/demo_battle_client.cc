@@ -30,7 +30,7 @@ void notify_attack_action(int seq_id, const flatbuffers::Vector<const DemoBattle
     auto packet = WsPacketDataHelper::buildPacket(1, buf, buf_size);
     packet->packet_type = PACKET_TYPE_BINARY;
 
-    socket_manager->writeTCPSocket(packet);
+    socket_manager->writeTCPSocket(packet, actor_key);
 }
 };
 
@@ -53,7 +53,7 @@ void notify_buff_action(int seq_id, const flatbuffers::Vector<const DemoBattle::
     auto packet = WsPacketDataHelper::buildPacket(2, buf, buf_size);
     packet->packet_type = PACKET_TYPE_BINARY;
 
-    socket_manager->writeTCPSocket(packet);
+    socket_manager->writeTCPSocket(packet, actor_key);
 }
 };
 
@@ -76,7 +76,7 @@ void notify_debuff_action(int seq_id, const flatbuffers::Vector<const DemoBattle
     auto packet = WsPacketDataHelper::buildPacket(3, buf, buf_size);
     packet->packet_type = PACKET_TYPE_BINARY;
 
-    socket_manager->writeTCPSocket(packet);
+    socket_manager->writeTCPSocket(packet, actor_key);
 }
 };
 
@@ -99,7 +99,7 @@ void notify_heal_action(int seq_id, const flatbuffers::Vector<const DemoBattle::
     auto packet = WsPacketDataHelper::buildPacket(4, buf, buf_size);
     packet->packet_type = PACKET_TYPE_BINARY;
 
-    socket_manager->writeTCPSocket(packet);
+    socket_manager->writeTCPSocket(packet, actor_key);
 }
 };
 
@@ -122,7 +122,7 @@ void notify_meditation_action(int seq_id, const flatbuffers::Vector<const DemoBa
     auto packet = WsPacketDataHelper::buildPacket(5, buf, buf_size);
     packet->packet_type = PACKET_TYPE_BINARY;
 
-    socket_manager->writeTCPSocket(packet);
+    socket_manager->writeTCPSocket(packet, actor_key);
 }
 };
 
@@ -144,7 +144,7 @@ void notify_start_phase(int seq_id, long actor_key)
     auto packet = WsPacketDataHelper::buildPacket(100, buf, buf_size);
     packet->packet_type = PACKET_TYPE_BINARY;
 
-    socket_manager->writeTCPSocket(packet);
+    socket_manager->writeTCPSocket(packet, actor_key);
 }
 };
 
@@ -166,6 +166,6 @@ void notify_end_phase(int seq_id, long actor_key)
     auto packet = WsPacketDataHelper::buildPacket(101, buf, buf_size);
     packet->packet_type = PACKET_TYPE_BINARY;
 
-    socket_manager->writeTCPSocket(packet);
+    socket_manager->writeTCPSocket(packet, actor_key);
 }
 };
