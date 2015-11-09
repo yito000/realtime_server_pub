@@ -11,6 +11,7 @@
 
 #include "common/common.h"
 #include "common/global_rand.h"
+#include "common/file/file_util.h"
 #include "lib/lib.h"
 
 #include "common_object.h"
@@ -90,9 +91,13 @@ namespace {
 
 int App::start(int argc, char** argv)
 {
+    auto file_util = FileUtil::getInstance();
+    file_util->addSearchPathPrefix(file_util->getCurrentPath());
+    
+    //
     ArgsInfo args_info;
     args_info.config_file = DEFAULT_CONFIG_FILE;
-
+    
     parseArgs(argc, argv, args_info);
     Setting::ptr setting = initSettings(args_info);
     
