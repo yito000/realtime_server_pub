@@ -1,0 +1,16 @@
+#ifndef DEMO_BATTLE_CLI_H
+#define DEMO_BATTLE_CLI_H
+
+#include <string>
+
+#include "input_command_generated.h"
+
+namespace DemoBattle {
+
+void input_command(int player_id, 
+    const flatbuffers::Vector<const CommandDetail *>* list,
+    long actor_key = -1);
+
+};
+
+#endif

@@ -18,6 +18,7 @@
 #include "flatbuffers/event/fb_master.h"
 
 #include "app/flatbuffers/register_glue_fb.h"
+#include "app/flatbuffers/register_demo_battle_cli.h"
 
 void Global::onStart(AppGlobalSetting& g_setting, App* app)
 {
@@ -58,6 +59,7 @@ void Global::onStart(AppGlobalSetting& g_setting, App* app)
         
         // NOTE: glue code test
         register_glue_fb(*route_map);
+        register_demo_battle_cli(*route_map);
     }
 
     //

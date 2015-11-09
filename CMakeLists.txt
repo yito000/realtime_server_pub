@@ -37,6 +37,8 @@ add_executable(
   realtime_server 
   src/app/event/receive_uiid.cc
   src/app/event/send_uiid.cc
+  src/app/flatbuffers/demo_battle_cli.cc
+  src/app/flatbuffers/demo_battle_cli_glue.cc
   src/app/flatbuffers/demo_battle_client.cc
   src/app/flatbuffers/demo_battle_udp_client.cc
   src/app/flatbuffers/event/fb_event_res_uiid.cc
@@ -45,6 +47,7 @@ add_executable(
   src/app/flatbuffers/flatbuffers_socket_manager.cc
   src/app/flatbuffers/glue_fb.cc
   src/app/flatbuffers/glue_fb_glue.cc
+  src/app/flatbuffers/register_demo_battle_cli.cc
   src/app/flatbuffers/register_glue_fb.cc
   src/app/global.cc
   src/app/protobuf/event/pb_ev_res_uiid.cc
@@ -143,6 +146,8 @@ add_executable(
   src/app/event/receive_uiid.h
   src/app/event/send_uiid.h
   src/app/flatbuffers/demo_battle.h
+  src/app/flatbuffers/demo_battle_cli.h
+  src/app/flatbuffers/demo_battle_cli_glue.h
   src/app/flatbuffers/demo_battle_udp.h
   src/app/flatbuffers/event/fb_event_res_uiid.h
   src/app/flatbuffers/event/fb_event_uiid.h
@@ -150,6 +155,7 @@ add_executable(
   src/app/flatbuffers/flatbuffers_socket_manager.h
   src/app/flatbuffers/glue_fb.h
   src/app/flatbuffers/glue_fb_glue.h
+  src/app/flatbuffers/input_command_generated.h
   src/app/flatbuffers/monster_generated.h
   src/app/flatbuffers/notify_attack_action_generated.h
   src/app/flatbuffers/notify_buff_action_generated.h
@@ -158,6 +164,7 @@ add_executable(
   src/app/flatbuffers/notify_heal_action_generated.h
   src/app/flatbuffers/notify_meditation_action_generated.h
   src/app/flatbuffers/notify_start_phase_generated.h
+  src/app/flatbuffers/register_demo_battle_cli.h
   src/app/flatbuffers/register_glue_fb.h
   src/app/flatbuffers/table/uiid_generated.h
   src/app/flatbuffers/test_generated.h
