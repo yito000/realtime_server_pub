@@ -1,0 +1,27 @@
+namespace DemoBattle;
+
+table TargetCharacterInfo {
+    character_id: int;
+    name: string;
+    base_hp: short = 100;
+    base_mana: short = 100;
+    physical_attack: short = 10;
+    magical_attack: short = 10;
+    physical_defense: short = 10;
+    magical_defense: short = 10;
+    speed: short = 10;
+}
+
+table MatchingInfo {
+    host: string;
+    ws_path: string;
+    ws_port: ushort;
+    udp_host: string;
+    udp_ports: [ushort];
+    player_id: int;
+    target_id: int;
+    target_name: string;
+    target_characters: [TargetCharacterInfo];
+}
+
+root_type MatchingInfo;
