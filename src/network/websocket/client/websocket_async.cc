@@ -276,6 +276,7 @@ void WebsocketAsync::wsHandShake(HandShakeRequest::ptr handshake_req)
     req_str += "Host: " + socket->getHost() + "\r\n";
     req_str += "Upgrade: websocket\r\n";
     req_str += "Connection: Upgrade\r\n";
+    req_str += "Origin: game://\r\n";
     req_str += "Sec-WebSocket-Key: " + key + "\r\n";
     req_str += "Sec-WebSocket-Protocol: " + protocol + "\r\n";
     req_str += "Sec-WebSocket-Version: " + version + "\r\n";
@@ -326,7 +327,7 @@ void WebsocketAsync::receiveWsHandShake(ByteBuffer* buf,
                 bool response_ok = validateWsHandshakeResponse(
                     buf, handshake_req);
                 delete buf;
-
+                
                 if (response_ok && ws_delegate) {
                     handshake_ok = true;
 
