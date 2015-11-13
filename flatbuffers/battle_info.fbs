@@ -1,6 +1,6 @@
 namespace DemoBattle;
 
-table TargetCharacterInfo {
+table BattlePlayerCharacter {
     character_id: int;
     name: string;
     base_hp: short = 100;
@@ -12,17 +12,14 @@ table TargetCharacterInfo {
     speed: short = 10;
 }
 
-table MatchingInfo {
-    battle_key: string;
+table BattleInfo {
     host: string;
-    ws_path: string;
-    ws_port: ushort;
-    udp_host: string;
-    udp_ports: [ushort];
-    player_id: int;
-    target_id: int;
-    target_name: string;
-    target_characters: [TargetCharacterInfo];
+    player1_id: int;
+    player1_name: string;
+    player1_characters: [BattlePlayerCharacter];
+    player2_id: int;
+    player2_name: string;
+    player2_characters: [BattlePlayerCharacter];
 }
 
-root_type MatchingInfo;
+root_type BattleInfo;

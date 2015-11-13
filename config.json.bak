@@ -14,9 +14,7 @@
   "certificate_path":"key/server.crt",
   "private_key_path":"key/server.key",
   "connect_voltdb":0,
-  "connect_redis":1,
-  "redis_host":"0.0.0.0",
-  "redis_port":6379,
+  "connect_redis":0,
   "udp_server":{
     "enable":1,
     "is_ipv6":0,
@@ -24,5 +22,19 @@
   },
   "variables":{
     "flag":1
-  }
+  },
+  "cluster_nodes":[
+    {
+      "id":1,
+      "host":"::1",
+      "port":12000,
+      "protocol":"cluster"
+    },
+    {
+      "id":2,
+      "host":"::1",
+      "port":12001,
+      "protocol":"cluster"
+    }
+  ]
 }

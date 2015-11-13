@@ -1,0 +1,8 @@
+namespace DemoBattle;
+
+table BattleEntry {
+    battle_key: string;
+    player_id: int;
+}
+
+root_type BattleEntry;

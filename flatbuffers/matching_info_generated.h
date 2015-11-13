@@ -81,31 +81,34 @@ inline flatbuffers::Offset<TargetCharacterInfo> CreateTargetCharacterInfo(flatbu
 }
 
 struct MatchingInfo FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  const flatbuffers::String *host() const { return GetPointer<const flatbuffers::String *>(4); }
-  const flatbuffers::String *ws_path() const { return GetPointer<const flatbuffers::String *>(6); }
-  uint16_t ws_port() const { return GetField<uint16_t>(8, 0); }
-  const flatbuffers::String *udp_host() const { return GetPointer<const flatbuffers::String *>(10); }
-  const flatbuffers::Vector<uint16_t> *udp_ports() const { return GetPointer<const flatbuffers::Vector<uint16_t> *>(12); }
-  int32_t player_id() const { return GetField<int32_t>(14, 0); }
-  int32_t target_id() const { return GetField<int32_t>(16, 0); }
-  const flatbuffers::String *target_name() const { return GetPointer<const flatbuffers::String *>(18); }
-  const flatbuffers::Vector<flatbuffers::Offset<TargetCharacterInfo>> *target_characters() const { return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<TargetCharacterInfo>> *>(20); }
+  const flatbuffers::String *battle_key() const { return GetPointer<const flatbuffers::String *>(4); }
+  const flatbuffers::String *host() const { return GetPointer<const flatbuffers::String *>(6); }
+  const flatbuffers::String *ws_path() const { return GetPointer<const flatbuffers::String *>(8); }
+  uint16_t ws_port() const { return GetField<uint16_t>(10, 0); }
+  const flatbuffers::String *udp_host() const { return GetPointer<const flatbuffers::String *>(12); }
+  const flatbuffers::Vector<uint16_t> *udp_ports() const { return GetPointer<const flatbuffers::Vector<uint16_t> *>(14); }
+  int32_t player_id() const { return GetField<int32_t>(16, 0); }
+  int32_t target_id() const { return GetField<int32_t>(18, 0); }
+  const flatbuffers::String *target_name() const { return GetPointer<const flatbuffers::String *>(20); }
+  const flatbuffers::Vector<flatbuffers::Offset<TargetCharacterInfo>> *target_characters() const { return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<TargetCharacterInfo>> *>(22); }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyField<flatbuffers::uoffset_t>(verifier, 4 /* host */) &&
+           VerifyField<flatbuffers::uoffset_t>(verifier, 4 /* battle_key */) &&
+           verifier.Verify(battle_key()) &&
+           VerifyField<flatbuffers::uoffset_t>(verifier, 6 /* host */) &&
            verifier.Verify(host()) &&
-           VerifyField<flatbuffers::uoffset_t>(verifier, 6 /* ws_path */) &&
+           VerifyField<flatbuffers::uoffset_t>(verifier, 8 /* ws_path */) &&
            verifier.Verify(ws_path()) &&
-           VerifyField<uint16_t>(verifier, 8 /* ws_port */) &&
-           VerifyField<flatbuffers::uoffset_t>(verifier, 10 /* udp_host */) &&
+           VerifyField<uint16_t>(verifier, 10 /* ws_port */) &&
+           VerifyField<flatbuffers::uoffset_t>(verifier, 12 /* udp_host */) &&
            verifier.Verify(udp_host()) &&
-           VerifyField<flatbuffers::uoffset_t>(verifier, 12 /* udp_ports */) &&
+           VerifyField<flatbuffers::uoffset_t>(verifier, 14 /* udp_ports */) &&
            verifier.Verify(udp_ports()) &&
-           VerifyField<int32_t>(verifier, 14 /* player_id */) &&
-           VerifyField<int32_t>(verifier, 16 /* target_id */) &&
-           VerifyField<flatbuffers::uoffset_t>(verifier, 18 /* target_name */) &&
+           VerifyField<int32_t>(verifier, 16 /* player_id */) &&
+           VerifyField<int32_t>(verifier, 18 /* target_id */) &&
+           VerifyField<flatbuffers::uoffset_t>(verifier, 20 /* target_name */) &&
            verifier.Verify(target_name()) &&
-           VerifyField<flatbuffers::uoffset_t>(verifier, 20 /* target_characters */) &&
+           VerifyField<flatbuffers::uoffset_t>(verifier, 22 /* target_characters */) &&
            verifier.Verify(target_characters()) &&
            verifier.VerifyVectorOfTables(target_characters()) &&
            verifier.EndTable();
@@ -115,24 +118,26 @@ struct MatchingInfo FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct MatchingInfoBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_host(flatbuffers::Offset<flatbuffers::String> host) { fbb_.AddOffset(4, host); }
-  void add_ws_path(flatbuffers::Offset<flatbuffers::String> ws_path) { fbb_.AddOffset(6, ws_path); }
-  void add_ws_port(uint16_t ws_port) { fbb_.AddElement<uint16_t>(8, ws_port, 0); }
-  void add_udp_host(flatbuffers::Offset<flatbuffers::String> udp_host) { fbb_.AddOffset(10, udp_host); }
-  void add_udp_ports(flatbuffers::Offset<flatbuffers::Vector<uint16_t>> udp_ports) { fbb_.AddOffset(12, udp_ports); }
-  void add_player_id(int32_t player_id) { fbb_.AddElement<int32_t>(14, player_id, 0); }
-  void add_target_id(int32_t target_id) { fbb_.AddElement<int32_t>(16, target_id, 0); }
-  void add_target_name(flatbuffers::Offset<flatbuffers::String> target_name) { fbb_.AddOffset(18, target_name); }
-  void add_target_characters(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<TargetCharacterInfo>>> target_characters) { fbb_.AddOffset(20, target_characters); }
+  void add_battle_key(flatbuffers::Offset<flatbuffers::String> battle_key) { fbb_.AddOffset(4, battle_key); }
+  void add_host(flatbuffers::Offset<flatbuffers::String> host) { fbb_.AddOffset(6, host); }
+  void add_ws_path(flatbuffers::Offset<flatbuffers::String> ws_path) { fbb_.AddOffset(8, ws_path); }
+  void add_ws_port(uint16_t ws_port) { fbb_.AddElement<uint16_t>(10, ws_port, 0); }
+  void add_udp_host(flatbuffers::Offset<flatbuffers::String> udp_host) { fbb_.AddOffset(12, udp_host); }
+  void add_udp_ports(flatbuffers::Offset<flatbuffers::Vector<uint16_t>> udp_ports) { fbb_.AddOffset(14, udp_ports); }
+  void add_player_id(int32_t player_id) { fbb_.AddElement<int32_t>(16, player_id, 0); }
+  void add_target_id(int32_t target_id) { fbb_.AddElement<int32_t>(18, target_id, 0); }
+  void add_target_name(flatbuffers::Offset<flatbuffers::String> target_name) { fbb_.AddOffset(20, target_name); }
+  void add_target_characters(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<TargetCharacterInfo>>> target_characters) { fbb_.AddOffset(22, target_characters); }
   MatchingInfoBuilder(flatbuffers::FlatBufferBuilder &_fbb) : fbb_(_fbb) { start_ = fbb_.StartTable(); }
   MatchingInfoBuilder &operator=(const MatchingInfoBuilder &);
   flatbuffers::Offset<MatchingInfo> Finish() {
-    auto o = flatbuffers::Offset<MatchingInfo>(fbb_.EndTable(start_, 9));
+    auto o = flatbuffers::Offset<MatchingInfo>(fbb_.EndTable(start_, 10));
     return o;
   }
 };
 
 inline flatbuffers::Offset<MatchingInfo> CreateMatchingInfo(flatbuffers::FlatBufferBuilder &_fbb,
+   flatbuffers::Offset<flatbuffers::String> battle_key = 0,
    flatbuffers::Offset<flatbuffers::String> host = 0,
    flatbuffers::Offset<flatbuffers::String> ws_path = 0,
    uint16_t ws_port = 0,
@@ -151,6 +156,7 @@ inline flatbuffers::Offset<MatchingInfo> CreateMatchingInfo(flatbuffers::FlatBuf
   builder_.add_udp_host(udp_host);
   builder_.add_ws_path(ws_path);
   builder_.add_host(host);
+  builder_.add_battle_key(battle_key);
   builder_.add_ws_port(ws_port);
   return builder_.Finish();
 }

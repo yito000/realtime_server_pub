@@ -11,6 +11,9 @@ void input_command(int player_id,
     const flatbuffers::Vector<const CommandDetail *>* list,
     long actor_key = -1);
 
+void battle_entry(const std::string& battle_key, int player_id, 
+    long actor_key = -1);
+
 };
 
 #endif

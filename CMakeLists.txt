@@ -145,6 +145,8 @@ add_executable(
   src/external_src/flatbuffers/reflection.cpp
   src/app/event/receive_uiid.h
   src/app/event/send_uiid.h
+  src/app/flatbuffers/battle_entry_generated.h
+  src/app/flatbuffers/battle_info_generated.h
   src/app/flatbuffers/demo_battle.h
   src/app/flatbuffers/demo_battle_cli.h
   src/app/flatbuffers/demo_battle_cli_glue.h

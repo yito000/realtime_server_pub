@@ -20,8 +20,8 @@ std::string SecretKey::generate()
 
     auto enc_str = Base64::encode(rand_str);
 
-    Logger::debug("random str=%s", rand_str.c_str());
-    Logger::debug("encoded str=%s", enc_str.c_str());
+    Logger::debug("random generated string=%s", rand_str.c_str());
+    Logger::debug("base64 encoded string=%s", enc_str.c_str());
 
     return enc_str;
 }
@@ -41,7 +41,7 @@ std::string SecretKey::calcResponse(const std::string& sec_key)
     auto enc_str = Base64::encode(sha1_str);
 
     Logger::debug("sha1 string=%s", sha1_str.c_str());
-    Logger::debug("calc encoded str=%s", enc_str.c_str());
+    Logger::debug("calc base64 encoded string=%s", enc_str.c_str());
 
     return enc_str;
 }

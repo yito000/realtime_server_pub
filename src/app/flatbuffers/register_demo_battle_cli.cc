@@ -6,4 +6,5 @@
 void register_demo_battle_cli(RouteMap& route_map)
 {
     route_map.addRoute(10000, glue_input_command__);
+    route_map.addRoute(20000, glue_battle_entry__);
 }
