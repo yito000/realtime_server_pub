@@ -7,6 +7,8 @@
 #include "app.h"
 #include "test_udp.h"
 
+#include "battle/battle_manager.h"
+
 //
 //#include "protobuf/event/pb_ev_uiid.h"
 //#include "protobuf/event/pb_ev_res_uiid.h"
@@ -65,6 +67,11 @@ void Global::onStart(AppGlobalSetting& g_setting, App* app)
     //
     if (g_setting.system_route_map) {
         // todo
+    }
+    
+    {
+        auto bd = BattleManager::getInstance();
+        bd->initialize(4);
     }
 }
 

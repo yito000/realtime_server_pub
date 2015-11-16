@@ -8,7 +8,7 @@
   "node_port":0,
   "timeout":30000,
   "retry":3,
-  "worker_thread_size":4,
+  "worker_thread_size":8,
   "io_thread_size":4,
   "scheduler_interval":20,
   "certificate_path":"key/server.crt",

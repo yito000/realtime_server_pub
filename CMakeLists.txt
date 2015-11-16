@@ -35,6 +35,8 @@ link_directories(
 
 add_executable(
   realtime_server 
+  src/app/battle/battle_manager.cc
+  src/app/battle/battle_processor.cc
   src/app/event/receive_uiid.cc
   src/app/event/send_uiid.cc
   src/app/flatbuffers/demo_battle_cli.cc
@@ -143,6 +145,13 @@ add_executable(
   src/external_src/flatbuffers/idl_gen_text.cpp
   src/external_src/flatbuffers/idl_parser.cpp
   src/external_src/flatbuffers/reflection.cpp
+  src/app/battle/battle_manager.h
+  src/app/battle/battle_processor.h
+  src/app/battle/packet/battle_packet.h
+  src/app/battle/packet/error_packet.h
+  src/app/battle/packet/join_packet.h
+  src/app/battle/packet/leave_packet.h
+  src/app/battle/packet/player_input_packet.h
   src/app/event/receive_uiid.h
   src/app/event/send_uiid.h
   src/app/flatbuffers/battle_entry_generated.h

@@ -335,7 +335,7 @@ void App::initMainLoop(Setting::const_ptr setting)
 
 void App::initIOThread(Setting::const_ptr setting)
 {
-    const int SCHEDULER_INTERVAL = 5;
+    const int SCHEDULER_INTERVAL = 30;
     const int IO_SCHEDULER_INTERVAL = 60;
 
     for (int i = 0; i < setting->io_thread_size; i++) {
@@ -372,7 +372,7 @@ void App::initNodeServer(Setting::const_ptr setting)
         addr_type = NodeServer::ADDR_V6;
     }
 
-    const int SCHEDULER_INTERVAL = 3;
+    const int SCHEDULER_INTERVAL = 10;
     const int SERVER_SCHEDULER_INTERVAL = 20;
 
     auto node_server = new NodeServer(addr_type, setting->node_port);
@@ -425,7 +425,7 @@ void App::initVoltdbThread(Setting::const_ptr setting)
         return;
     }
 
-    const int SCHEDULER_INTERVAL = 5;
+    const int SCHEDULER_INTERVAL = 10;
     const int IO_SCHEDULER_INTERVAL = 20;
 
     //
@@ -459,7 +459,7 @@ void App::initRedisClient(Setting::const_ptr setting)
         return;
     }
 
-    const int SCHEDULER_INTERVAL = 5;
+    const int SCHEDULER_INTERVAL = 10;
     const int IO_SCHEDULER_INTERVAL = 20;
 
     //
@@ -490,7 +490,7 @@ void App::setupCluster(Setting::const_ptr setting)
         return;
     }
     
-    const int SCHEDULER_INTERVAL = 5;
+    const int SCHEDULER_INTERVAL = 100;
     const int CLUSTER_SCHEDULER_INTERVAL = 5000;
 
     cluster = ClusterBuilder::build(setting, task_comm);
