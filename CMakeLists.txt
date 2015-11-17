@@ -37,6 +37,8 @@ add_executable(
   realtime_server 
   src/app/battle/battle_manager.cc
   src/app/battle/battle_processor.cc
+  src/app/battle/player/battle_player.cc
+  src/app/battle/player/character/battle_character.cc
   src/app/event/receive_uiid.cc
   src/app/event/send_uiid.cc
   src/app/flatbuffers/demo_battle_cli.cc
@@ -150,11 +152,15 @@ add_executable(
   src/app/battle/packet/battle_packet.h
   src/app/battle/packet/error_packet.h
   src/app/battle/packet/join_packet.h
+  src/app/battle/packet/join2_packet.h
   src/app/battle/packet/leave_packet.h
   src/app/battle/packet/player_input_packet.h
+  src/app/battle/player/battle_player.h
+  src/app/battle/player/character/battle_character.h
   src/app/event/receive_uiid.h
   src/app/event/send_uiid.h
   src/app/flatbuffers/battle_entry_generated.h
+  src/app/flatbuffers/battle_exit_generated.h
   src/app/flatbuffers/battle_info_generated.h
   src/app/flatbuffers/demo_battle.h
   src/app/flatbuffers/demo_battle_cli.h
@@ -173,6 +179,7 @@ add_executable(
   src/app/flatbuffers/notify_debuff_action_generated.h
   src/app/flatbuffers/notify_end_phase_generated.h
   src/app/flatbuffers/notify_heal_action_generated.h
+  src/app/flatbuffers/notify_leave_player_generated.h
   src/app/flatbuffers/notify_meditation_action_generated.h
   src/app/flatbuffers/notify_start_phase_generated.h
   src/app/flatbuffers/register_demo_battle_cli.h

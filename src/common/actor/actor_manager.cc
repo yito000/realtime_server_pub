@@ -20,6 +20,8 @@ void ActorManager::getActorFromKey(long key, GetCallback callback)
 
         if (ret) {
             callback(ret);
+        } else {
+            Logger::log("actor not found: %ld", key);
         }
     };
     

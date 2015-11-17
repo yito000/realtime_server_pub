@@ -4,6 +4,7 @@
 enum class BattlePacketType {
     ERROR,
     JOIN,
+    JOIN2,
     LEAVE,
     PLAYER_INPUT,
     UNKNOWN = -1

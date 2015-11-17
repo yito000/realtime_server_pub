@@ -15,7 +15,8 @@ public:
     static BattleManager::ptr getInstance();
     void initialize(int worker_thread);
     
-    void joinPlayer(const std::string& battle_key, int player_id, long actor_key);
+    void joinPlayer(const std::string& battle_key, int player_id, 
+        const std::string& access_token, long actor_key);
     void leavePlayer(const std::string& battle_key, int player_id, long actor_key);
     void endBattle(const std::string& battle_key);
     

@@ -12,7 +12,7 @@
 #include "log/logger.h"
 
 namespace {
-    const int QUEUE_SIZE = 10240;
+    const int QUEUE_SIZE = 20480;
 };
 
 BattleManager::ptr BattleManager::getInstance()
@@ -50,7 +50,8 @@ static int CalcThreadIndex(const std::string& battle_key, int thread_size)
     return total % thread_size;
 }
 
-void BattleManager::joinPlayer(const std::string& battle_key, int player_id, long actor_key)
+void BattleManager::joinPlayer(const std::string& battle_key, int player_id, 
+    const std::string& access_token, long actor_key)
 {
     Logger::debug("battle entry: player id=%d, battle key=%s", player_id, battle_key.c_str());
     
@@ -58,8 +59,11 @@ void BattleManager::joinPlayer(const std::string& battle_key, int player_id, lon
     join_packet->battle_key = battle_key;
     join_packet->player_id = player_id;
     join_packet->actor_key = actor_key;
+    join_packet->access_token = access_token;
     
     auto thread_index = CalcThreadIndex(battle_key, battle_processor_list.size());
+    Logger::log("thread index: %d", thread_index);
+    
     battle_processor_list[thread_index]->pushPacket(join_packet);
 }
 

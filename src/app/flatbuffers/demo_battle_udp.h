@@ -8,6 +8,7 @@
 #include "notify_meditation_action_generated.h"
 #include "notify_start_phase_generated.h"
 #include "notify_end_phase_generated.h"
+#include "notify_leave_player_generated.h"
 
 namespace DemoBattle {
 void notify_attack_action_udp(int seq_id, const flatbuffers::Vector<const DemoBattle::AttackDetail *>* actions, long actor_key = -1);
@@ -35,6 +36,10 @@ void notify_start_phase_udp(int seq_id, long actor_key = -1);
 
 namespace DemoBattle {
 void notify_end_phase_udp(int seq_id, long actor_key = -1);
+};
+
+namespace DemoBattle {
+void notify_leave_player_udp(int player_id, long actor_key = -1);
 };
 
 #endif

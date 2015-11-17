@@ -13,11 +13,15 @@ void input_command(int player_id,
 }
 
 void battle_entry(const std::string& battle_key, int player_id, 
-    long actor_key)
+    const std::string& access_token, long actor_key)
 {
-    BattleManager::getInstance()->joinPlayer(battle_key, player_id, actor_key);
+    BattleManager::getInstance()->joinPlayer(battle_key, player_id, access_token, actor_key);
 }
 
-// TODO: leave battle
+void battle_exit(const std::string& battle_key, int player_id, 
+    long actor_key)
+{
+    BattleManager::getInstance()->leavePlayer(battle_key, player_id, actor_key);
+}
 
 };

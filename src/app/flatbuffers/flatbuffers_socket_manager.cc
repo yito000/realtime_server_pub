@@ -14,7 +14,7 @@ FlatbuffersSocketManager::ptr FlatbuffersSocketManager::getInstance()
 
 void FlatbuffersSocketManager::writeTCPSocket(PacketData::ptr packet, long actor_key)
 {
-    auto am = CommonObject::getInstance()->getDownActorManager();
+    auto am = CommonObject::getInstance()->getUserActorManager();
     am->getActorFromKey(actor_key, [packet](WsActor::const_ptr actor) {
         actor->write(packet, [](boost::system::error_code ec) {
             if (!ec) {

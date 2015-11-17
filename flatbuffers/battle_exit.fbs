@@ -1,9 +1,8 @@
 namespace DemoBattle;
 
-table BattleEntry {
+table BattleExit {
     battle_key: string;
     player_id: int;
-    access_token: string;
 }
 
-root_type BattleEntry;
+root_type BattleExit;

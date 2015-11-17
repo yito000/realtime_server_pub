@@ -371,3 +371,55 @@ void notify_end_phase_udp(int seq_id, long actor_key)
     }
 }
 };
+
+namespace DemoBattle {
+void notify_leave_player_udp(int player_id, long actor_key)
+{
+    flatbuffers::FlatBufferBuilder fbb;
+    auto p1 = player_id;
+
+    auto data = DemoBattle::CreateNotifyLeavePlayer(fbb, p1);
+    fbb.Finish(data);
+
+    auto buf_size = fbb.GetSize();
+    auto buf = (const unsigned char*)fbb.GetBufferPointer();
+
+    //
+    auto socket_manager = FlatbuffersSocketManager::getInstance();
+    auto udp_client = socket_manager->getUdpSocket();
+
+    if (udp_client) {
+        int op_code = 102;
+
+        unsigned char s_op_code[4] = {0};
+        unsigned char size_buf[4] = {0};
+
+        s_op_code[0] = (op_code >> 24) & 255;
+        s_op_code[1] = (op_code >> 16) & 255;
+        s_op_code[2] = (op_code >> 8) & 255;
+        s_op_code[3] = op_code & 255;
+
+        size_buf[0] = (buf_size >> 24) & 255;
+        size_buf[1] = (buf_size >> 16) & 255;
+        size_buf[2] = (buf_size >> 8) & 255;
+        size_buf[3] = buf_size & 255;
+
+        //
+        ByteBuffer packet;
+        packet.reserve(4 + 4 + buf_size);
+        for (int i = 0; i < 4; i++) {
+            packet.push_back(s_op_code[i]);
+        }
+
+        for (int i = 0; i < 4; i++) {
+            packet.push_back(size_buf[i]);
+        }
+
+        for (int i = 0; i < buf_size; i++) {
+            packet.push_back(buf[i]);
+        }
+
+        udp_client->send(packet);
+    }
+}
+};

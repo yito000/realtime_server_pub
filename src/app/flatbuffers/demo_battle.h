@@ -32,6 +32,7 @@ void notify_meditation_action(int seq_id,
 
 void notify_start_phase(int seq_id, long actor_key = -1);
 void notify_end_phase(int seq_id, long actor_key = -1);
+void notify_leave_player(int player_id, long actor_key = -1);
 
 };
 

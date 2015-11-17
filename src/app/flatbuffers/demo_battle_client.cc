@@ -7,6 +7,7 @@
 #include "notify_meditation_action_generated.h"
 #include "notify_start_phase_generated.h"
 #include "notify_end_phase_generated.h"
+#include "notify_leave_player_generated.h"
 
 #include "flatbuffers_socket_manager.h"
 #include "network/websocket/ws_packet_data_helper.h"
@@ -164,6 +165,28 @@ void notify_end_phase(int seq_id, long actor_key)
     auto socket_manager = FlatbuffersSocketManager::getInstance();
 
     auto packet = WsPacketDataHelper::buildPacket(101, buf, buf_size);
+    packet->packet_type = PACKET_TYPE_BINARY;
+
+    socket_manager->writeTCPSocket(packet, actor_key);
+}
+};
+
+namespace DemoBattle {
+void notify_leave_player(int player_id, long actor_key)
+{
+    flatbuffers::FlatBufferBuilder fbb;
+    auto p1 = player_id;
+
+    auto data = DemoBattle::CreateNotifyLeavePlayer(fbb, p1);
+    fbb.Finish(data);
+
+    auto buf_size = fbb.GetSize();
+    auto buf = (const unsigned char*)fbb.GetBufferPointer();
+
+    //
+    auto socket_manager = FlatbuffersSocketManager::getInstance();
+
+    auto packet = WsPacketDataHelper::buildPacket(102, buf, buf_size);
     packet->packet_type = PACKET_TYPE_BINARY;
 
     socket_manager->writeTCPSocket(packet, actor_key);

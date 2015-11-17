@@ -5,6 +5,7 @@
 
 #include "input_command_generated.h"
 #include "battle_entry_generated.h"
+#include "battle_exit_generated.h"
 
 void glue_input_command__(long actor_key, const unsigned char* data, int size)
 {
@@ -24,5 +25,15 @@ void glue_battle_entry__(long actor_key, const unsigned char* data, int size)
     }
 
     auto battle_entry_data = DemoBattle::GetBattleEntry(data);
-    DemoBattle::battle_entry(battle_entry_data->battle_key()->c_str(), battle_entry_data->player_id(), actor_key);
+    DemoBattle::battle_entry(battle_entry_data->battle_key()->c_str(), battle_entry_data->player_id(), battle_entry_data->access_token()->c_str(), actor_key);
+}
+void glue_battle_exit__(long actor_key, const unsigned char* data, int size)
+{
+    flatbuffers::Verifier verifier((const uint8_t*)data, size);
+    if (!DemoBattle::VerifyBattleExitBuffer(verifier)) {
+        return;
+    }
+
+    auto battle_exit_data = DemoBattle::GetBattleExit(data);
+    DemoBattle::battle_exit(battle_exit_data->battle_key()->c_str(), battle_exit_data->player_id(), actor_key);
 }

@@ -1,0 +1,7 @@
+namespace DemoBattle;
+
+table NotifyLeavePlayer {
+    player_id: int;
+}
+
+root_type NotifyLeavePlayer;
