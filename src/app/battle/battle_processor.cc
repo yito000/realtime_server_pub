@@ -3,7 +3,9 @@
 #include <boost/thread.hpp>
 
 #include "common_object.h"
+#include "lib/atomic/atomic_operator.hpp"
 
+#include "battle/packet/end_battle_packet.h"
 #include "battle/packet/error_packet.h"
 #include "battle/packet/join_packet.h"
 #include "battle/packet/join2_packet.h"
@@ -19,9 +21,10 @@ namespace {
     const int LOOP_COUNT = 1024;
 };
 
-BattleProcessor::ptr BattleProcessor::create(int queue_size)
+BattleProcessor::ptr BattleProcessor::create(BattleManager& _battle_manager, 
+    int queue_size)
 {
-    BattleProcessor::ptr inst = new BattleProcessor(queue_size);
+    BattleProcessor::ptr inst = new BattleProcessor(_battle_manager, queue_size);
     if (!inst->init()) {
         return nullptr;
     }
@@ -31,7 +34,7 @@ BattleProcessor::ptr BattleProcessor::create(int queue_size)
 
 void BattleProcessor::runLoop()
 {
-    while (1) {
+    while (!end_flag) {
         BattlePacket* packet;
         
         for (int i = 0; i < LOOP_COUNT; i++) {
@@ -55,9 +58,16 @@ void BattleProcessor::pushPacket(BattlePacket* packet)
     packet_queue.push(packet);
 }
 
+void BattleProcessor::endLoop()
+{
+    AtomicOperator<bool>::lock_test_and_set(&end_flag, true);
+}
+
 // private member function
-BattleProcessor::BattleProcessor(int queue_size) :
-    packet_queue(queue_size)
+BattleProcessor::BattleProcessor(BattleManager& _battle_manager, int queue_size) :
+    battle_manager(_battle_manager),
+    packet_queue(queue_size),
+    end_flag(false)
 {
     //
 }
@@ -74,6 +84,12 @@ void BattleProcessor::dispatchPacket(BattlePacket* packet)
     }
     
     switch ((BattlePacketType)packet->packet_type) {
+        case BattlePacketType::END_BATTLE: {
+            execEndBattle(dynamic_cast<EndBattlePacket*>(packet));
+            
+            break;
+        }
+        
         case BattlePacketType::ERROR: {
             execError(dynamic_cast<ErrorPacket*>(packet));
             
@@ -109,13 +125,49 @@ void BattleProcessor::dispatchPacket(BattlePacket* packet)
     }
 }
 
+void BattleProcessor::execEndBattle(EndBattlePacket* packet)
+{
+    if (!packet) {
+        return;
+    }
+    
+    auto it = battle_list.find(packet->battle_key);
+    if (it != battle_list.end()) {
+        BattleInfo::ptr battle_info = it->second;
+        
+        auto p1_actor_key = battle_info->player1->getActorKey();
+        auto p2_actor_key = battle_info->player2->getActorKey();
+        
+        auto sche = CommonObject::getInstance()->getDelayScheduler();
+        DelayedTask::ptr task = new DelayedTask;
+        task->interval = 2000;
+        task->max_loop = 1;
+        task->func = [p1_actor_key, p2_actor_key]() {
+            auto am = CommonObject::getInstance()->getUserActorManager();
+            
+            am->removeActor(p1_actor_key);
+            am->removeActor(p2_actor_key);
+        };
+        
+        sche->addTask(battle_info->battle_key + "_end", task);
+        
+        battle_list.erase(it);
+    }
+}
+
 void BattleProcessor::execError(ErrorPacket* packet)
 {
     if (!packet) {
         return;
     }
     
-    //
+    // TODO: switch error handling
+    auto b_it = battle_list.find(packet->battle_key);
+    if (b_it != battle_list.end()) {
+        BattleInfo::ptr battle_info = b_it->second;
+        
+        endBattle(battle_info);
+    }
 }
 
 void BattleProcessor::execJoin(JoinPacket* packet)
@@ -250,6 +302,7 @@ void BattleProcessor::execJoin2(Join2Packet* packet)
             player2->setJoinFlag(true);
         }
         
+        new_battle->battle_key = packet->battle_key;
         new_battle->player1 = player1;
         new_battle->player2 = player2;
         
@@ -269,12 +322,7 @@ void BattleProcessor::execLeave(LeavePacket* packet)
         
         // TODO: validation packet
         
-        DemoBattle::notify_end_phase(-1, battle_info->player1->getActorKey());
-        DemoBattle::notify_end_phase(-1, battle_info->player2->getActorKey());
-        
-        // TODO: remove actor
-        
-        battle_list.erase(it);
+        endBattle(battle_info);
     }
 }
 
@@ -296,10 +344,24 @@ void BattleProcessor::startBattle(BattleInfo::ptr battle_info)
     DemoBattle::notify_start_phase(0, battle_info->player1->getActorKey());
     DemoBattle::notify_start_phase(0, battle_info->player2->getActorKey());
     
-    // TODO
+    // TODO: battle process
+    
+    endBattle(battle_info);
+}
+
+void BattleProcessor::endBattle(BattleInfo::ptr battle_info)
+{
+    Logger::log("end battle");
+    Logger::log("player1 actor key: %ld", battle_info->player1->getActorKey());
+    Logger::log("player2 actor key: %ld", battle_info->player2->getActorKey());
     
     DemoBattle::notify_end_phase(-1, battle_info->player1->getActorKey());
     DemoBattle::notify_end_phase(-1, battle_info->player2->getActorKey());
     
-    // TODO: remove actor
+    // TODO: save battle result
+    
+    EndBattlePacket* packet = new EndBattlePacket;
+    packet->battle_key = battle_info->battle_key;
+    
+    pushPacket(packet);
 }

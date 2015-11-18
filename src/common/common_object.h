@@ -38,8 +38,14 @@ public:
     Router::ptr getSystemRouter();
     void setSystemRouter(Router::ptr r);
 
-    ErrorHandleRouter::ptr getErrorHandleRouter();
-    void setErrorHandleRouter(ErrorHandleRouter::ptr eh_router);
+    ErrorHandleRouter::ptr getUserErrorHandleRouter();
+    void setUserErrorHandleRouter(ErrorHandleRouter::ptr eh_router);
+    
+    ErrorHandleRouter::ptr getClusterErrorHandleRouter();
+    void setClusterErrorHandleRouter(ErrorHandleRouter::ptr eh_router);
+    
+    ErrorHandleRouter::ptr getServerErrorHandleRouter();
+    void setServerErrorHandleRouter(ErrorHandleRouter::ptr eh_router);
 
     VoltdbIOService::ptr getVoltdbIOService();
     void setVoltdbIOService(VoltdbIOService::ptr v_ios);
@@ -59,7 +65,10 @@ private:
 
     Router::ptr user_router;
     Router::ptr system_router;
-    ErrorHandleRouter::ptr err_handle_router;
+    
+    ErrorHandleRouter::ptr user_err_handle_router;
+    ErrorHandleRouter::ptr cluster_err_handle_router;
+    ErrorHandleRouter::ptr server_err_handle_router;
 
     VoltdbIOService::ptr volt_io_service;
     RedisService::ptr redis_service;

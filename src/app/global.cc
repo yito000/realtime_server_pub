@@ -4,10 +4,14 @@
 #include "common_object.h"
 #include "log/logger.h"
 
+#include "router/detail/route_map.h"
+
 #include "app.h"
 #include "test_udp.h"
 
 #include "battle/battle_manager.h"
+
+#include <boost/bind.hpp>
 
 //
 //#include "protobuf/event/pb_ev_uiid.h"
@@ -72,10 +76,16 @@ void Global::onStart(AppGlobalSetting& g_setting, App* app)
     {
         auto bd = BattleManager::getInstance();
         bd->initialize(4);
+        
+        auto route_map = g_setting.user_err_route_map;
+        route_map->addCallback(-1, boost::bind(&BattleManager::receiveError, bd, _1));
     }
 }
 
 void Global::onEnd()
 {
-    //
+    Logger::debug("end application");
+    
+    auto bd = BattleManager::getInstance();
+    bd->endAllBattle();
 }

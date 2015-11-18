@@ -150,6 +150,7 @@ add_executable(
   src/app/battle/battle_manager.h
   src/app/battle/battle_processor.h
   src/app/battle/packet/battle_packet.h
+  src/app/battle/packet/end_battle_packet.h
   src/app/battle/packet/error_packet.h
   src/app/battle/packet/join_packet.h
   src/app/battle/packet/join2_packet.h

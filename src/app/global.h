@@ -1,17 +1,26 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include "router/detail/route_map.h"
+class RouteMap;
+class ErrorHandleRouteMap;
 
 struct AppGlobalSetting
 {
     RouteMap* user_route_map;
     RouteMap* system_route_map;
+    
+    ErrorHandleRouteMap* user_err_route_map;
+    ErrorHandleRouteMap* cluster_err_route_map;
+    ErrorHandleRouteMap* server_err_route_map;
 
     AppGlobalSetting()
     {
-        user_route_map = NULL;
-        system_route_map = NULL;
+        user_route_map = nullptr;
+        system_route_map = nullptr;
+        
+        user_err_route_map = nullptr;
+        cluster_err_route_map = nullptr;
+        server_err_route_map = nullptr;
     }
 };
 

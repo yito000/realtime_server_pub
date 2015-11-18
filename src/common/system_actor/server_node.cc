@@ -80,14 +80,19 @@ void ServerNode::onSendFinish(boost::system::error_code ec) const
 void ServerNode::onError(Operation operation, 
     boost::system::error_code ec) const
 {
-    auto router = CommonObject::getInstance()->getErrorHandleRouter();
+    auto router = CommonObject::getInstance()->getServerErrorHandleRouter();
     auto callback = router->getCallback(ec.value());
 
     if (callback) {
         callback(this);
     } else {
-        if (session->isOpen()) {
-            session->close();
+        callback = router->getCallback(-1);
+        if (callback) {
+            callback(this);
+        } else {
+            if (session->isOpen()) {
+                session->close();
+            }
         }
     }
 }

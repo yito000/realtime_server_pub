@@ -2,6 +2,7 @@
 #define BATTLE_PACKET_H
 
 enum class BattlePacketType {
+    END_BATTLE,
     ERROR,
     JOIN,
     JOIN2,

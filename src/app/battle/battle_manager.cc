@@ -1,6 +1,7 @@
 #include "battle_manager.h"
 
-#include "app_director.h"
+#include "common/app_director.h"
+#include "common/actor/ws_actor.h"
 
 #include <boost/bind.hpp>
 
@@ -31,13 +32,20 @@ void BattleManager::initialize(int worker_thread)
     auto app_dir = AppDirector::getInstance();
     
     for (int i = 0; i < worker_thread; i++) {
-        BattleProcessor::ptr bp = BattleProcessor::create(QUEUE_SIZE);
+        BattleProcessor::ptr bp = BattleProcessor::create(*this, QUEUE_SIZE);
         battle_processor_list.push_back(bp);
         
         app_dir->postWorker(boost::bind(&BattleProcessor::runLoop, bp));
     }
     
     init_flag = true;
+}
+
+void BattleManager::endAllBattle()
+{
+    for (auto b: battle_processor_list) {
+        b->endLoop();
+    }
 }
 
 static int CalcThreadIndex(const std::string& battle_key, int thread_size)
@@ -62,8 +70,6 @@ void BattleManager::joinPlayer(const std::string& battle_key, int player_id,
     join_packet->access_token = access_token;
     
     auto thread_index = CalcThreadIndex(battle_key, battle_processor_list.size());
-    Logger::log("thread index: %d", thread_index);
-    
     battle_processor_list[thread_index]->pushPacket(join_packet);
 }
 
@@ -83,8 +89,44 @@ void BattleManager::endBattle(const std::string& battle_key)
     // TODO
 }
 
+void BattleManager::addActorInfo(long actor_key, 
+    const std::string& battle_key, int thread_index)
+{
+    ActorInfo::ptr actor_info = new ActorInfo;
+    actor_info->actor_key = actor_key;
+    actor_info->battle_key = battle_key;
+    actor_info->thread_index = thread_index;
+    
+    auto app_dir = AppDirector::getInstance();
+    app_dir->postMaster([this, actor_key, actor_info]() {
+            actor_map[actor_key] = actor_info;
+        });
+}
+
+void BattleManager::receiveError(const WsActor* actor)
+{
+    auto actor_key = actor->getKey();
+    
+    auto app_dir = AppDirector::getInstance();
+    app_dir->postMaster([this, actor_key]() {
+            auto it = actor_map.find(actor_key);
+            if (it != actor_map.end()) {
+                ActorInfo::ptr actor_info = it->second;
+                
+                ErrorPacket* err_packet = new ErrorPacket;
+                err_packet->actor_key = actor_info->actor_key;
+                err_packet->battle_key = actor_info->battle_key;
+                err_packet->player_id = -1;
+                err_packet->error_code = 0;
+                
+                battle_processor_list[actor_info->thread_index]->pushPacket(err_packet);
+            }
+        });
+}
+
 // private member function
 BattleManager::BattleManager() :
     init_flag(false)
 {
+    //
 }

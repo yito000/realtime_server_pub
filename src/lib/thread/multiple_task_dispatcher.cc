@@ -4,17 +4,17 @@
 #include <boost/bind.hpp>
 
 MultipleTaskDispatcher::MultipleTaskDispatcher(int threads) : 
-    work(io_service), init_threads(threads), init(false)
+    work(io_service), 
+    init_threads(threads), 
+    init(false),
+    end_flag(false)
 {
     //
 }
 
 MultipleTaskDispatcher::~MultipleTaskDispatcher()
 {
-    if (init) {
-        io_service.stop();
-        group.join_all();
-    }
+    stop();
 }
 
 void MultipleTaskDispatcher::initialize()
@@ -47,6 +47,20 @@ void MultipleTaskDispatcher::poll()
     io_service.poll();
 }
 
+void MultipleTaskDispatcher::stop()
+{
+    if (end_flag) {
+        return;
+    }
+    
+    if (init) {
+        io_service.stop();
+        group.join_all();
+        
+        end_flag = true;
+    }
+}
+
 void MultipleTaskDispatcher::addWorker()
 {
     boost::thread* t = group.create_thread(
@@ -62,4 +76,3 @@ int MultipleTaskDispatcher::size()
 {
     return group.size();
 }
-

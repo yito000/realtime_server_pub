@@ -68,6 +68,8 @@ private:
     BidirectionalCommunicator::ptr task_comm;
 
     AppScheduler::ptr app_scheduler;
+    std::vector<AppScheduler::ptr> scheduler_list;
+    
     ActorManager::ptr user_actor_manager;
     ActorManager::ptr up_actor_manager;
     ActorManager::ptr down_actor_manager;
@@ -77,12 +79,17 @@ private:
     VoltdbProcessor::ptr v_processor;
     Router::ptr user_router;
     Router::ptr system_router;
-    ErrorHandleRouter::ptr err_handle_router;
+    
+    ErrorHandleRouter::ptr user_err_handle_router;
+    ErrorHandleRouter::ptr cluster_err_handle_router;
+    ErrorHandleRouter::ptr server_err_handle_router;
 
     RouteMap::ptr user_route_map;
     RouteMap::ptr system_route_map;
 
-    ErrorHandleRouteMap::ptr err_handle_route_map;
+    ErrorHandleRouteMap::ptr user_err_handle_route_map;
+    ErrorHandleRouteMap::ptr cluster_err_handle_route_map;
+    ErrorHandleRouteMap::ptr server_err_handle_route_map;
     std::vector<TaskDispatcher::ptr> io_threads;
 };
 

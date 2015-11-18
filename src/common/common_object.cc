@@ -77,14 +77,34 @@ void CommonObject::setSystemRouter(Router::ptr r)
     system_router = r;
 }
 
-ErrorHandleRouter::ptr CommonObject::getErrorHandleRouter()
+ErrorHandleRouter::ptr CommonObject::getUserErrorHandleRouter()
 {
-    return err_handle_router;
+    return user_err_handle_router;
 }
 
-void CommonObject::setErrorHandleRouter(ErrorHandleRouter::ptr eh_router)
+void CommonObject::setUserErrorHandleRouter(ErrorHandleRouter::ptr eh_router)
 {
-    err_handle_router = eh_router;
+    user_err_handle_router = eh_router;
+}
+
+ErrorHandleRouter::ptr CommonObject::getClusterErrorHandleRouter()
+{
+    return cluster_err_handle_router;
+}
+
+void CommonObject::setClusterErrorHandleRouter(ErrorHandleRouter::ptr eh_router)
+{
+    cluster_err_handle_router = eh_router;
+}
+
+ErrorHandleRouter::ptr CommonObject::getServerErrorHandleRouter()
+{
+    return server_err_handle_router;
+}
+
+void CommonObject::setServerErrorHandleRouter(ErrorHandleRouter::ptr eh_router)
+{
+    server_err_handle_router = eh_router;
 }
 
 VoltdbIOService::ptr CommonObject::getVoltdbIOService()

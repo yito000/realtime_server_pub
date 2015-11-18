@@ -16,6 +16,7 @@ public:
 
     void initialize();
     void update();
+    void stop();
 
     template <typename F>
     void post(F f)
@@ -33,7 +34,7 @@ private:
     boost::asio::io_service::work work;
 
     bool init;
+    bool end_flag;
 };
 
 #endif
-

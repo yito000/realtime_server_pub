@@ -1,16 +1,15 @@
 #include "task_dispatcher.h"
 
 TaskDispatcher::TaskDispatcher() : work(io_service),
-    init(false)
+    init(false),
+    end_flag(false)
 {
     //
 }
 
 TaskDispatcher::~TaskDispatcher()
 {
-    if (init) {
-        io_service.stop();
-    }
+    stop();
 }
 
 void TaskDispatcher::initialize()
@@ -29,3 +28,15 @@ void TaskDispatcher::update()
     }
 }
 
+void TaskDispatcher::stop()
+{
+    if (end_flag) {
+        return;
+    }
+    
+    if (init) {
+        io_service.stop();
+        
+        end_flag = true;
+    }
+}

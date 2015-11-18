@@ -18,8 +18,8 @@ void BidirectionalCommunicator::update()
 
 void BidirectionalCommunicator::stop()
 {
-    master_thread.reset();
-    worker_thread.reset();
+    master_thread->stop();
+    worker_thread->stop();
 }
 
 // private member function

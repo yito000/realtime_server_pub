@@ -15,7 +15,7 @@ void glue_input_command__(long actor_key, const unsigned char* data, int size)
     }
 
     auto input_command_data = DemoBattle::GetInputCommand(data);
-    DemoBattle::input_command(input_command_data->player_id(), const_cast<flatbuffers::Vector<const DemoBattle::CommandDetail *>*>(input_command_data->list()), actor_key);
+    DemoBattle::input_command(input_command_data->battle_key()->c_str(), input_command_data->player_id(), const_cast<flatbuffers::Vector<const DemoBattle::CommandDetail *>*>(input_command_data->list()), actor_key);
 }
 void glue_battle_entry__(long actor_key, const unsigned char* data, int size)
 {

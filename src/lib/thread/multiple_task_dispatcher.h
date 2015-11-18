@@ -20,6 +20,7 @@ public:
 
     void initialize();
     void poll();
+    void stop();
 
     void addWorker();
     int size();
@@ -46,8 +47,9 @@ private:
 
     int next_index;
     int init_threads;
+    
     bool init;
+    bool end_flag;
 };
 
 #endif
-

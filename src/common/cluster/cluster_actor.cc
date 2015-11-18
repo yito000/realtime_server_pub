@@ -95,14 +95,19 @@ void ClusterActor::onSendFinish(boost::system::error_code ec) const
 void ClusterActor::onError(Operation operation, 
     boost::system::error_code ec) const
 {
-    auto router = CommonObject::getInstance()->getErrorHandleRouter();
+    auto router = CommonObject::getInstance()->getClusterErrorHandleRouter();
     auto callback = router->getCallback(ec.value());
 
     if (callback) {
         callback(this);
     } else {
-        if (websocket->isOpen()) {
-            websocket->close();
+        callback = router->getCallback(-1);
+        if (callback) {
+            callback(this);
+        } else {
+            if (websocket->isOpen()) {
+                websocket->close();
+            }
         }
     }
 }

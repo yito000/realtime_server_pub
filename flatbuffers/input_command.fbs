@@ -6,6 +6,7 @@ struct CommandDetail {
 }
 
 table InputCommand {
+    battle_key: string;
     player_id: int;
     list: [CommandDetail];
 }

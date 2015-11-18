@@ -105,6 +105,9 @@ int App::start(int argc, char** argv)
         AppGlobalSetting g_setting;
         g_setting.user_route_map = user_route_map.get();
         g_setting.system_route_map = system_route_map.get();
+        g_setting.user_err_route_map = user_err_handle_route_map.get();
+        g_setting.cluster_err_route_map = cluster_err_handle_route_map.get();
+        g_setting.server_err_route_map = server_err_handle_route_map.get();
         
         ssl_thread_setup();
 
@@ -132,7 +135,7 @@ int App::start(int argc, char** argv)
                 boost::this_thread::sleep_for(sleep_time);
             }
         }
-
+        
         global.onEnd();
         
         stopApp();
@@ -236,7 +239,9 @@ Setting::ptr App::initSettings(ArgsInfo& args)
     //
     user_route_map = new RouteMap;
     system_route_map = new RouteMap;
-    err_handle_route_map = new ErrorHandleRouteMap;
+    user_err_handle_route_map = new ErrorHandleRouteMap;
+    cluster_err_handle_route_map = new ErrorHandleRouteMap;
+    server_err_handle_route_map = new ErrorHandleRouteMap;
 
     initRandomGenerator(setting);
     initThreadPool(setting);
@@ -260,7 +265,14 @@ Setting::ptr App::initSettings(ArgsInfo& args)
 
 void App::stopApp()
 {
-    task_comm.reset();
+    for (auto sche: scheduler_list) {
+        sche->endScheduler();
+    }
+    
+    auto sleep_time = boost::chrono::milliseconds(100);
+    boost::this_thread::sleep_for(sleep_time);
+    
+    task_comm->stop();
 }
 
 void App::initRandomGenerator(Setting::const_ptr setting)
@@ -279,7 +291,8 @@ void App::initScheduler(Setting::const_ptr setting)
 {
     app_scheduler = new AppScheduler;
     app_scheduler->initialize(setting->scheduler_interval);
-
+    
+    scheduler_list.push_back(app_scheduler);
     task_comm->postWorker(std::bind(&AppScheduler::run, app_scheduler));
 
     //
@@ -298,9 +311,13 @@ void App::initRouter(Setting::const_ptr setting)
 
 void App::initErrorHandleRouter(Setting::const_ptr setting)
 {
-    err_handle_router = new ErrorHandleRouter(*err_handle_route_map);
+    user_err_handle_router = new ErrorHandleRouter(*user_err_handle_route_map);
+    cluster_err_handle_router = new ErrorHandleRouter(*cluster_err_handle_route_map);
+    server_err_handle_router = new ErrorHandleRouter(*server_err_handle_route_map);
 
-    CommonObject::getInstance()->setErrorHandleRouter(err_handle_router);
+    CommonObject::getInstance()->setUserErrorHandleRouter(user_err_handle_router);
+    CommonObject::getInstance()->setClusterErrorHandleRouter(cluster_err_handle_router);
+    CommonObject::getInstance()->setServerErrorHandleRouter(server_err_handle_router);
 }
 
 void App::initActorManager(Setting::const_ptr setting)
@@ -354,6 +371,7 @@ void App::initIOThread(Setting::const_ptr setting)
         sche->addTask("_io_event_loop", task);
 
         //
+        scheduler_list.push_back(sche);
         task_comm->postWorker(std::bind(&AppScheduler::run, sche));
     }
 }
@@ -397,6 +415,7 @@ void App::initNodeServer(Setting::const_ptr setting)
     sche->addTask("_node_server_task", task);
 
     //
+    scheduler_list.push_back(sche);
     task_comm->postWorker(std::bind(&AppScheduler::run, sche));
 
     Logger::log("start node server port=%d", setting->node_port);
@@ -450,6 +469,7 @@ void App::initVoltdbThread(Setting::const_ptr setting)
     sche->addTask("_voltdb_task", task);
 
     //
+    scheduler_list.push_back(sche);
     task_comm->postWorker(std::bind(&AppScheduler::run, sche));
 }
 
@@ -481,6 +501,7 @@ void App::initRedisClient(Setting::const_ptr setting)
     sche->addTask("_redis_task", task);
 
     //
+    scheduler_list.push_back(sche);
     task_comm->postWorker(std::bind(&AppScheduler::run, sche));
 }
 
@@ -523,5 +544,6 @@ void App::setupCluster(Setting::const_ptr setting)
     }
 
     //
+    scheduler_list.push_back(sche);
     task_comm->postWorker(std::bind(&AppScheduler::run, sche));
 }
