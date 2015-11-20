@@ -9,8 +9,16 @@ void input_command(const std::string& battle_key, int player_id,
     const flatbuffers::Vector<const CommandDetail *>* list,
     long actor_key)
 {
-    Logger::log("input battle key=%s, player id=%d, command size=%d", 
-        battle_key.c_str(), player_id, list->size());
+    BattleInputInfo::ptr input = new BattleInputInfo;
+    input->battle_key = battle_key;
+    input->player_id = player_id;
+    input->actor_key = actor_key;
+    
+    for (auto p: *list) {
+        input->list.push_back(BattleInputCommandDetail(p->characeter_id(), p->command_id()));
+    }
+    
+    BattleManager::getInstance()->playerInput(input);
 }
 
 void battle_entry(const std::string& battle_key, int player_id, 

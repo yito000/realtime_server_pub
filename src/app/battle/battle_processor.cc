@@ -4,6 +4,7 @@
 
 #include "common_object.h"
 #include "lib/atomic/atomic_operator.hpp"
+#include "lib/time/app_time.h"
 
 #include "battle/packet/end_battle_packet.h"
 #include "battle/packet/error_packet.h"
@@ -19,6 +20,7 @@
 
 namespace {
     const int LOOP_COUNT = 1024;
+    const int FRAME_RATE_MILLIS = 50;
 };
 
 BattleProcessor::ptr BattleProcessor::create(BattleManager& _battle_manager, 
@@ -47,7 +49,21 @@ void BattleProcessor::runLoop()
             }
         }
         
-        // TODO
+        auto b_it = battle_list.begin();
+        for (; b_it != battle_list.end(); ++b_it) {
+            auto now = AppTime::now();
+            BattleInfo::ptr bi = b_it->second;
+            
+            int millis = bi->diffMillis(now);
+            if (millis >= FRAME_RATE_MILLIS) {
+                auto battle_result = processor_detail->update(bi, (float)millis / 1000.0);
+                if (battle_result->status_code == (int)BattleStatus::FINISH) {
+                    endBattle(bi);
+                }
+                
+                bi->updateTimer(now);
+            }
+        }
         
         boost::this_thread::sleep_for(boost::chrono::milliseconds(1));
     }
@@ -74,6 +90,8 @@ BattleProcessor::BattleProcessor(BattleManager& _battle_manager, int queue_size)
 
 bool BattleProcessor::init()
 {
+    processor_detail = BattlePrcoessorDetail::create();
+    
     return true;
 }
 
@@ -135,8 +153,8 @@ void BattleProcessor::execEndBattle(EndBattlePacket* packet)
     if (it != battle_list.end()) {
         BattleInfo::ptr battle_info = it->second;
         
-        auto p1_actor_key = battle_info->player1->getActorKey();
-        auto p2_actor_key = battle_info->player2->getActorKey();
+        auto p1_actor_key = battle_info->getPlayer1()->getActorKey();
+        auto p2_actor_key = battle_info->getPlayer2()->getActorKey();
         
         auto sche = CommonObject::getInstance()->getDelayScheduler();
         DelayedTask::ptr task = new DelayedTask;
@@ -149,7 +167,7 @@ void BattleProcessor::execEndBattle(EndBattlePacket* packet)
             am->removeActor(p2_actor_key);
         };
         
-        sche->addTask(battle_info->battle_key + "_end", task);
+        sche->addTask(battle_info->getBattleKey() + "_end", task);
         
         battle_list.erase(it);
     }
@@ -236,11 +254,15 @@ void BattleProcessor::execJoin2(Join2Packet* packet)
             BattleInfo::ptr battle_info = b_it->second;
             
             if (packet->player_id == b_info->player1_id()) {
-                battle_info->player1->resetActoryKey(packet->actor_key);
-                battle_info->player1->setJoinFlag(true);
+                auto player1 = battle_info->getPlayer1();
+                
+                player1->resetActoryKey(packet->actor_key);
+                player1->setJoinFlag(true);
             } else if (packet->player_id == b_info->player2_id()) {
-                battle_info->player2->resetActoryKey(packet->actor_key);
-                battle_info->player2->setJoinFlag(true);
+                auto player2 = battle_info->getPlayer2();
+                
+                player2->resetActoryKey(packet->actor_key);
+                player2->setJoinFlag(true);
             }
             
             startBattle(battle_info);
@@ -249,8 +271,6 @@ void BattleProcessor::execJoin2(Join2Packet* packet)
         }
         
         //
-        BattleInfo::ptr new_battle = new BattleInfo;
-        
         std::list<BattleCharacter::ptr> player1_characters;
         std::list<BattleCharacter::ptr> player2_characters;
         
@@ -302,9 +322,8 @@ void BattleProcessor::execJoin2(Join2Packet* packet)
             player2->setJoinFlag(true);
         }
         
-        new_battle->battle_key = packet->battle_key;
-        new_battle->player1 = player1;
-        new_battle->player2 = player2;
+        BattleInfo::ptr new_battle = 
+            BattleInfo::create(packet->battle_key, player1, player2);
         
         battle_list[packet->battle_key] = new_battle;
     }
@@ -320,9 +339,14 @@ void BattleProcessor::execLeave(LeavePacket* packet)
     if (it != battle_list.end()) {
         BattleInfo::ptr battle_info = it->second;
         
-        // TODO: validation packet
+        auto player1 = battle_info->getPlayer1();
+        auto player2 = battle_info->getPlayer2();
         
-        endBattle(battle_info);
+        if (player1->getActorKey() == packet->actor_key ||
+            player2->getActorKey() == packet->actor_key) {
+            
+            endBattle(battle_info);
+        }
     }
 }
 
@@ -332,36 +356,54 @@ void BattleProcessor::execPlayerInput(PlayerInputPacket* packet)
         return;
     }
     
-    //
+    auto it = battle_list.find(packet->battle_key);
+    if (it != battle_list.end()) {
+        BattleInfo::ptr battle_info = it->second;
+        
+        auto player1 = battle_info->getPlayer1();
+        auto player2 = battle_info->getPlayer2();
+        
+        if (player1->getActorKey() == packet->actor_key ||
+            player2->getActorKey() == packet->actor_key) {
+            
+            processor_detail->playerAction(battle_info, packet);
+        }
+    }
 }
 
 void BattleProcessor::startBattle(BattleInfo::ptr battle_info)
 {
     Logger::log("start battle");
-    Logger::log("player1 actor key: %ld", battle_info->player1->getActorKey());
-    Logger::log("player2 actor key: %ld", battle_info->player2->getActorKey());
     
-    DemoBattle::notify_start_phase(0, battle_info->player1->getActorKey());
-    DemoBattle::notify_start_phase(0, battle_info->player2->getActorKey());
+    auto player1 = battle_info->getPlayer1();
+    auto player2 = battle_info->getPlayer2();
     
-    // TODO: battle process
+    Logger::log("player1 actor key: %ld", player1->getActorKey());
+    Logger::log("player2 actor key: %ld", player2->getActorKey());
     
-    endBattle(battle_info);
+    DemoBattle::notify_start_phase(0, player1->getActorKey());
+    DemoBattle::notify_start_phase(0, player2->getActorKey());
+    
+//    endBattle(battle_info);
 }
 
 void BattleProcessor::endBattle(BattleInfo::ptr battle_info)
 {
     Logger::log("end battle");
-    Logger::log("player1 actor key: %ld", battle_info->player1->getActorKey());
-    Logger::log("player2 actor key: %ld", battle_info->player2->getActorKey());
     
-    DemoBattle::notify_end_phase(-1, battle_info->player1->getActorKey());
-    DemoBattle::notify_end_phase(-1, battle_info->player2->getActorKey());
+    auto player1 = battle_info->getPlayer1();
+    auto player2 = battle_info->getPlayer2();
+    
+    Logger::log("player1 actor key: %ld", player1->getActorKey());
+    Logger::log("player2 actor key: %ld", player2->getActorKey());
+    
+    DemoBattle::notify_end_phase(-1, player1->getActorKey());
+    DemoBattle::notify_end_phase(-1, player2->getActorKey());
     
     // TODO: save battle result
     
     EndBattlePacket* packet = new EndBattlePacket;
-    packet->battle_key = battle_info->battle_key;
+    packet->battle_key = battle_info->getBattleKey();
     
     pushPacket(packet);
 }

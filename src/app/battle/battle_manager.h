@@ -7,6 +7,7 @@
 #include <map>
 
 #include "battle/battle_processor.h"
+#include "battle/battle_input_info.h"
 
 class WsActor;
 
@@ -23,6 +24,7 @@ public:
         const std::string& access_token, long actor_key);
     void leavePlayer(const std::string& battle_key, int player_id, long actor_key);
     void endBattle(const std::string& battle_key);
+    void playerInput(BattleInputInfo::ptr input);
     
     void addActorInfo(long actor_key, const std::string& battle_key, int thread_index);
     void receiveError(const WsActor* actor);

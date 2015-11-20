@@ -20,6 +20,7 @@ public:
     std::string getName() const;
     
     const std::list<BattleCharacter::ptr>& getCharacters();
+    BattleCharacter::ptr getCharacterFromId(int character_id);
     
     void resetActoryKey(long _actor_key);
     

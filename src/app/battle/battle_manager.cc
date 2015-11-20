@@ -89,6 +89,22 @@ void BattleManager::endBattle(const std::string& battle_key)
     // TODO
 }
 
+void BattleManager::playerInput(BattleInputInfo::ptr input)
+{
+    auto input_packet = new PlayerInputPacket;
+    input_packet->battle_key = input->battle_key;
+    input_packet->player_id = input->player_id;
+    input_packet->actor_key = input->actor_key;
+    
+    for (auto& bi: input->list) {
+        input_packet->input_list.push_back(
+            new CharacterInputPacket(bi.character_id, bi.command_id));
+    }
+    
+    auto thread_index = CalcThreadIndex(input->battle_key, battle_processor_list.size());
+    battle_processor_list[thread_index]->pushPacket(input_packet);
+}
+
 void BattleManager::addActorInfo(long actor_key, 
     const std::string& battle_key, int thread_index)
 {

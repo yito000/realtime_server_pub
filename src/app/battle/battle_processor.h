@@ -10,7 +10,8 @@
 #include <unordered_map>
 #include <boost/lockfree/queue.hpp>
 
-#include "battle/player/battle_player.h"
+#include "battle/battle_info.h"
+#include "battle/internal/battle_processor_detail.h"
 
 class EndBattlePacket;
 class ErrorPacket;
@@ -33,21 +34,6 @@ public:
     void pushPacket(BattlePacket* packet);
     
 private:
-    // TODO: GvG
-    struct BattleInfo : public SmartPtr<BattleInfo>
-    {
-        typedef boost::intrusive_ptr<BattleInfo> ptr;
-        
-        std::string battle_key;
-        BattlePlayer::ptr player1;
-        BattlePlayer::ptr player2;
-        
-        BattleInfo()
-        {
-            //
-        }
-    };
-    
     BattleProcessor(BattleManager& _battle_manager, int queue_size);
     bool init();
     
@@ -65,6 +51,8 @@ private:
     
     boost::lockfree::queue<BattlePacket*> packet_queue;
     std::unordered_map<std::string, BattleInfo::ptr> battle_list;
+    
+    BattlePrcoessorDetail::ptr processor_detail;
     
     BattleManager& battle_manager;
     bool end_flag;

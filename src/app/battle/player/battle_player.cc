@@ -32,6 +32,18 @@ const std::list<BattleCharacter::ptr>& BattlePlayer::getCharacters()
     return characters;
 }
 
+BattleCharacter::ptr BattlePlayer::getCharacterFromId(int character_id)
+{
+    BattleCharacter::ptr ret;
+    for (auto ch: characters) {
+        if (ch->getCharacterId() == character_id) {
+            return ch;
+        }
+    }
+    
+    return ret;
+}
+
 void BattlePlayer::resetActoryKey(long _actor_key)
 {
     actor_key = _actor_key;

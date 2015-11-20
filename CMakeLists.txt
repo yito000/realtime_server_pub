@@ -35,8 +35,11 @@ link_directories(
 
 add_executable(
   realtime_server 
+  src/app/battle/action/attack_action.cc
+  src/app/battle/battle_info.cc
   src/app/battle/battle_manager.cc
   src/app/battle/battle_processor.cc
+  src/app/battle/internal/battle_processor_detail.cc
   src/app/battle/player/battle_player.cc
   src/app/battle/player/character/battle_character.cc
   src/app/event/receive_uiid.cc
@@ -147,13 +150,20 @@ add_executable(
   src/external_src/flatbuffers/idl_gen_text.cpp
   src/external_src/flatbuffers/idl_parser.cpp
   src/external_src/flatbuffers/reflection.cpp
+  src/app/battle/action/attack_action.h
+  src/app/battle/action/battle_action.h
+  src/app/battle/battle_info.h
+  src/app/battle/battle_input_info.h
   src/app/battle/battle_manager.h
   src/app/battle/battle_processor.h
+  src/app/battle/internal/battle_processor_detail.h
+  src/app/battle/internal/battle_status_code.h
+  src/app/battle/internal/battle_turn_result.h
   src/app/battle/packet/battle_packet.h
   src/app/battle/packet/end_battle_packet.h
   src/app/battle/packet/error_packet.h
-  src/app/battle/packet/join_packet.h
   src/app/battle/packet/join2_packet.h
+  src/app/battle/packet/join_packet.h
   src/app/battle/packet/leave_packet.h
   src/app/battle/packet/player_input_packet.h
   src/app/battle/player/battle_player.h

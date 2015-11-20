@@ -15,15 +15,24 @@ struct CharacterInputPacket : public SmartPtr<CharacterInputPacket>
     int character_id;
     int command_id;
     
-    CharacterInputPacket()
+    CharacterInputPacket() :
+        character_id(-1),
+        command_id(-1)
     {
-        character_id = -1;
-        command_id = -1;
+        //
+    }
+    
+    CharacterInputPacket(int _character_id, int _command_id) :
+        character_id(_character_id),
+        command_id(_command_id)
+    {
+        //
     }
 };
 
 struct PlayerInputPacket : public BattlePacket
 {
+    std::string battle_key;
     int player_id;
     long actor_key;
     std::list<CharacterInputPacket::ptr> input_list;
