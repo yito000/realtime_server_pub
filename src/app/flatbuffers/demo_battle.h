@@ -14,19 +14,19 @@
 
 namespace DemoBattle {
 
-void notify_attack_action(int seq_id, 
+void notify_attack_action(int seq_id, int player_id,
     const flatbuffers::Vector<const DemoBattle::AttackDetail*>* actions, 
     long actor_key = -1);
-void notify_buff_action(int seq_id, 
+void notify_buff_action(int seq_id, int player_id,
     const flatbuffers::Vector<const DemoBattle::BuffDetail*>* actions, 
     long actor_key = -1);
-void notify_debuff_action(int seq_id, 
+void notify_debuff_action(int seq_id, int player_id,
     const flatbuffers::Vector<const DemoBattle::DebuffDetail*>* actions, 
     long actor_key = -1);
-void notify_heal_action(int seq_id, 
+void notify_heal_action(int seq_id, int player_id,
     const flatbuffers::Vector<const DemoBattle::HealDetail*>* actions, 
     long actor_key = -1);
-void notify_meditation_action(int seq_id, 
+void notify_meditation_action(int seq_id, int player_id,
     const flatbuffers::Vector<const DemoBattle::MeditationDetail*>* actions, 
     long actor_key = -1);
 

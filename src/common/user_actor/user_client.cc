@@ -82,7 +82,7 @@ void UserClient::onError(Operation operation,
 {
     auto router = CommonObject::getInstance()->getUserErrorHandleRouter();
     auto callback = router->getCallback(ec.value());
-
+    
     if (callback) {
         callback(this);
     } else {

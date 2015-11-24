@@ -105,9 +105,10 @@ void BattleManager::playerInput(BattleInputInfo::ptr input)
     battle_processor_list[thread_index]->pushPacket(input_packet);
 }
 
-void BattleManager::addActorInfo(long actor_key, 
-    const std::string& battle_key, int thread_index)
+void BattleManager::addActorInfo(long actor_key, const std::string& battle_key)
 {
+    auto thread_index = CalcThreadIndex(battle_key, battle_processor_list.size());
+    
     ActorInfo::ptr actor_info = new ActorInfo;
     actor_info->actor_key = actor_key;
     actor_info->battle_key = battle_key;
@@ -116,6 +117,21 @@ void BattleManager::addActorInfo(long actor_key,
     auto app_dir = AppDirector::getInstance();
     app_dir->postMaster([this, actor_key, actor_info]() {
             actor_map[actor_key] = actor_info;
+        });
+}
+
+void BattleManager::removeActorInfo(long actor_key, const std::string& battle_key)
+{
+    std::string a_battle_key = battle_key;
+    
+    auto app_dir = AppDirector::getInstance();
+    app_dir->postMaster([this, actor_key, a_battle_key]() {
+            auto it = actor_map.find(actor_key);
+            if (it != actor_map.end()) {
+                if (it->second->battle_key == a_battle_key) {
+                    actor_map.erase(it);
+                }
+            }
         });
 }
 

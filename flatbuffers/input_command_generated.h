@@ -65,11 +65,11 @@ inline flatbuffers::Offset<InputCommand> CreateInputCommand(flatbuffers::FlatBuf
   return builder_.Finish();
 }
 
-inline const DemoBattle::InputCommand *GetInputCommand(const void *buf) { return flatbuffers::GetRoot<DemoBattle::InputCommand>(buf); }
+inline const InputCommand *GetInputCommand(const void *buf) { return flatbuffers::GetRoot<InputCommand>(buf); }
 
-inline bool VerifyInputCommandBuffer(flatbuffers::Verifier &verifier) { return verifier.VerifyBuffer<DemoBattle::InputCommand>(); }
+inline bool VerifyInputCommandBuffer(flatbuffers::Verifier &verifier) { return verifier.VerifyBuffer<InputCommand>(); }
 
-inline void FinishInputCommandBuffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<DemoBattle::InputCommand> root) { fbb.Finish(root); }
+inline void FinishInputCommandBuffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<InputCommand> root) { fbb.Finish(root); }
 
 }  // namespace DemoBattle
 

@@ -1,9 +1,10 @@
 #ifndef REDIS_SERVICE_H
 #define REDIS_SERVICE_H
 
+#include "smart_ptr.hpp"
 #include "redisclient.h"
 
-#include "smart_ptr.hpp"
+#include "lib/time/app_time.h"
 
 #include <string>
 #include <queue>
@@ -80,6 +81,7 @@ private:
 
     bool connected;
     int signal;
+    AppTime::Point last_watch;
 };
 
 #endif

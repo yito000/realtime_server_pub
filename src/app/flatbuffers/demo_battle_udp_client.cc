@@ -4,13 +4,14 @@
 #include "network/udp_socket_proxy.h"
 
 namespace DemoBattle {
-void notify_attack_action_udp(int seq_id, const flatbuffers::Vector<const DemoBattle::AttackDetail *>* actions, long actor_key)
+void notify_attack_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::AttackDetail *>* actions, long actor_key)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = seq_id;
-    auto p2 = fbb.CreateVectorOfStructs(actions->Get(0), actions->size());
+    auto p2 = player_id;
+    auto p3 = fbb.CreateVectorOfStructs(actions->Get(0), actions->size());
 
-    auto data = DemoBattle::CreateNotifyAttackAction(fbb, p1, p2);
+    auto data = DemoBattle::CreateNotifyAttackAction(fbb, p1, p2, p3);
     fbb.Finish(data);
 
     auto buf_size = fbb.GetSize();
@@ -57,13 +58,14 @@ void notify_attack_action_udp(int seq_id, const flatbuffers::Vector<const DemoBa
 };
 
 namespace DemoBattle {
-void notify_buff_action_udp(int seq_id, const flatbuffers::Vector<const DemoBattle::BuffDetail *>* actions, long actor_key)
+void notify_buff_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::BuffDetail *>* actions, long actor_key)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = seq_id;
-    auto p2 = fbb.CreateVectorOfStructs(actions->Get(0), actions->size());
+    auto p2 = player_id;
+    auto p3 = fbb.CreateVectorOfStructs(actions->Get(0), actions->size());
 
-    auto data = DemoBattle::CreateNotifyBuffAction(fbb, p1, p2);
+    auto data = DemoBattle::CreateNotifyBuffAction(fbb, p1, p2, p3);
     fbb.Finish(data);
 
     auto buf_size = fbb.GetSize();
@@ -110,13 +112,14 @@ void notify_buff_action_udp(int seq_id, const flatbuffers::Vector<const DemoBatt
 };
 
 namespace DemoBattle {
-void notify_debuff_action_udp(int seq_id, const flatbuffers::Vector<const DemoBattle::DebuffDetail *>* actions, long actor_key)
+void notify_debuff_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::DebuffDetail *>* actions, long actor_key)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = seq_id;
-    auto p2 = fbb.CreateVectorOfStructs(actions->Get(0), actions->size());
+    auto p2 = player_id;
+    auto p3 = fbb.CreateVectorOfStructs(actions->Get(0), actions->size());
 
-    auto data = DemoBattle::CreateNotifyDebuffAction(fbb, p1, p2);
+    auto data = DemoBattle::CreateNotifyDebuffAction(fbb, p1, p2, p3);
     fbb.Finish(data);
 
     auto buf_size = fbb.GetSize();
@@ -163,13 +166,14 @@ void notify_debuff_action_udp(int seq_id, const flatbuffers::Vector<const DemoBa
 };
 
 namespace DemoBattle {
-void notify_heal_action_udp(int seq_id, const flatbuffers::Vector<const DemoBattle::HealDetail *>* actions, long actor_key)
+void notify_heal_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::HealDetail *>* actions, long actor_key)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = seq_id;
-    auto p2 = fbb.CreateVectorOfStructs(actions->Get(0), actions->size());
+    auto p2 = player_id;
+    auto p3 = fbb.CreateVectorOfStructs(actions->Get(0), actions->size());
 
-    auto data = DemoBattle::CreateNotifyHealAction(fbb, p1, p2);
+    auto data = DemoBattle::CreateNotifyHealAction(fbb, p1, p2, p3);
     fbb.Finish(data);
 
     auto buf_size = fbb.GetSize();
@@ -216,13 +220,14 @@ void notify_heal_action_udp(int seq_id, const flatbuffers::Vector<const DemoBatt
 };
 
 namespace DemoBattle {
-void notify_meditation_action_udp(int seq_id, const flatbuffers::Vector<const DemoBattle::MeditationDetail *>* actions, long actor_key)
+void notify_meditation_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::MeditationDetail *>* actions, long actor_key)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = seq_id;
-    auto p2 = fbb.CreateVectorOfStructs(actions->Get(0), actions->size());
+    auto p2 = player_id;
+    auto p3 = fbb.CreateVectorOfStructs(actions->Get(0), actions->size());
 
-    auto data = DemoBattle::CreateNotifyMeditationAction(fbb, p1, p2);
+    auto data = DemoBattle::CreateNotifyMeditationAction(fbb, p1, p2, p3);
     fbb.Finish(data);
 
     auto buf_size = fbb.GetSize();

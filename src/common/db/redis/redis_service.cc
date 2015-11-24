@@ -5,10 +5,16 @@
 
 #include <boost/asio/ip/address.hpp>
 
+namespace {
+    const int CONNECTION_WATCH_TIME = 1000;
+};
+
 RedisService::RedisService() : cli(nullptr), work(ios), connected(false)
 {
     port = 0;
     signal = NO_SIGNAL;
+    
+    last_watch = AppTime::now();
 
     cli = new RedisClient(ios);
     cli->installErrorHandler(std::bind(&RedisService::errorHandle,
@@ -33,7 +39,7 @@ bool RedisService::connect(const std::string& address,
     host = address;
     port = _port;
 
-    Logger::log("connection %s:%d", address.c_str(), _port);
+    Logger::debug("connection %s:%d", address.c_str(), _port);
     ios.reset();
 
     if (cli) {
@@ -45,7 +51,7 @@ bool RedisService::connect(const std::string& address,
 
         execQueueTask();
     }
-
+    
     if (cli->connect(addr, _port)) {
         Logger::log("connection success!");
 
@@ -55,6 +61,8 @@ bool RedisService::connect(const std::string& address,
         return true;
     } else {
         Logger::log("connection failure!");
+        
+        AtomicOperator<int>::lock_test_and_set(&signal, SIG_CONNECTION);
 
         return false;
     }
@@ -215,6 +223,15 @@ void RedisService::invoke(std::function<void()> exec_func)
 
 void RedisService::watchConnection()
 {
+    auto now = AppTime::now();
+    auto diff_time = (int)((float)(now - last_watch).count() / 1000.0);
+    
+    if (diff_time < CONNECTION_WATCH_TIME) {
+        return;
+    }
+    
+    last_watch = now;
+    
     if (signal == SIG_CONNECTION) {
         try {
             connect(host, port);
@@ -235,7 +252,7 @@ RedisService::Item::ptr RedisService::addItem(
 
 void RedisService::errorHandle(const std::string& s)
 {
-    Logger::log("connection error!");
+    Logger::debug("connection error!");
 
     while (!item_queue.empty()) {
         auto item = item_queue.front();

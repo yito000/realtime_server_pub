@@ -55,11 +55,12 @@ void BattlePrcoessorDetail::playerAction(BattleInfo::ptr battle_info,
         
         // TODO: dispatch command id
         
-        const int DAMAGE = 10;
+        const int DAMAGE = 50;
         target_mobile->damageHp(DAMAGE);
         
         DemoBattle::AttackDetail command(ch_packet->character_id, 
-            target_mobile->getCharacterId(), ch_packet->command_id, DAMAGE); 
+            target_player->getPlayerId(), target_mobile->getCharacterId(), 
+            ch_packet->command_id, DAMAGE); 
         attack_detail_list.push_back(command);
     }
     
@@ -75,9 +76,9 @@ void BattlePrcoessorDetail::playerAction(BattleInfo::ptr battle_info,
             const DemoBattle::AttackDetail *>*>(fbb.GetBufferPointer());
     
     DemoBattle::notify_attack_action(battle_info->getBattleSeqId(),
-        buffer_p, player1->getActorKey());
+        self_player->getPlayerId(), buffer_p, player1->getActorKey());
     DemoBattle::notify_attack_action(battle_info->getBattleSeqId(),
-        buffer_p, player2->getActorKey());
+        self_player->getPlayerId(), buffer_p, player2->getActorKey());
     
     battle_info->incBattleSeqId();
 }

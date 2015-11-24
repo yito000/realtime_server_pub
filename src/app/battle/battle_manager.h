@@ -26,7 +26,8 @@ public:
     void endBattle(const std::string& battle_key);
     void playerInput(BattleInputInfo::ptr input);
     
-    void addActorInfo(long actor_key, const std::string& battle_key, int thread_index);
+    void addActorInfo(long actor_key, const std::string& battle_key);
+    void removeActorInfo(long actor_key, const std::string& battle_key);
     void receiveError(const WsActor* actor);
     
 private:

@@ -1,4 +1,5 @@
 #include "battle_processor.h"
+#include "battle/battle_manager.h"
 
 #include <boost/thread.hpp>
 
@@ -184,6 +185,7 @@ void BattleProcessor::execError(ErrorPacket* packet)
     if (b_it != battle_list.end()) {
         BattleInfo::ptr battle_info = b_it->second;
         
+        Logger::debug("error: end battle");
         endBattle(battle_info);
     }
 }
@@ -240,6 +242,8 @@ void BattleProcessor::execJoin2(Join2Packet* packet)
     
     Logger::debug("result value is String: %s", packet->base64_redis_value.c_str());
     Logger::debug("decoded buffer size: %d", out_buf.size());
+    
+    battle_manager.addActorInfo(packet->actor_key, packet->battle_key);
     
     //
     auto data = &out_buf[0];
@@ -399,6 +403,9 @@ void BattleProcessor::endBattle(BattleInfo::ptr battle_info)
     
     DemoBattle::notify_end_phase(-1, player1->getActorKey());
     DemoBattle::notify_end_phase(-1, player2->getActorKey());
+    
+    battle_manager.addActorInfo(player1->getActorKey(), battle_info->getBattleKey());
+    battle_manager.addActorInfo(player2->getActorKey(), battle_info->getBattleKey());
     
     // TODO: save battle result
     

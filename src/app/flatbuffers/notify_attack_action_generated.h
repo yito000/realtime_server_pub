@@ -14,28 +14,32 @@ struct NotifyAttackAction;
 MANUALLY_ALIGNED_STRUCT(4) AttackDetail FLATBUFFERS_FINAL_CLASS {
  private:
   int32_t character_id_;
-  int32_t target_id_;
+  int32_t target_player_id_;
+  int32_t target_character_id_;
   int32_t action_id_;
   int32_t total_damage_;
 
  public:
-  AttackDetail(int32_t character_id, int32_t target_id, int32_t action_id, int32_t total_damage)
-    : character_id_(flatbuffers::EndianScalar(character_id)), target_id_(flatbuffers::EndianScalar(target_id)), action_id_(flatbuffers::EndianScalar(action_id)), total_damage_(flatbuffers::EndianScalar(total_damage)) { }
+  AttackDetail(int32_t character_id, int32_t target_player_id, int32_t target_character_id, int32_t action_id, int32_t total_damage)
+    : character_id_(flatbuffers::EndianScalar(character_id)), target_player_id_(flatbuffers::EndianScalar(target_player_id)), target_character_id_(flatbuffers::EndianScalar(target_character_id)), action_id_(flatbuffers::EndianScalar(action_id)), total_damage_(flatbuffers::EndianScalar(total_damage)) { }
 
   int32_t character_id() const { return flatbuffers::EndianScalar(character_id_); }
-  int32_t target_id() const { return flatbuffers::EndianScalar(target_id_); }
+  int32_t target_player_id() const { return flatbuffers::EndianScalar(target_player_id_); }
+  int32_t target_character_id() const { return flatbuffers::EndianScalar(target_character_id_); }
   int32_t action_id() const { return flatbuffers::EndianScalar(action_id_); }
   int32_t total_damage() const { return flatbuffers::EndianScalar(total_damage_); }
 };
-STRUCT_END(AttackDetail, 16);
+STRUCT_END(AttackDetail, 20);
 
 struct NotifyAttackAction FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t seq_id() const { return GetField<int32_t>(4, 0); }
-  const flatbuffers::Vector<const AttackDetail *> *actions() const { return GetPointer<const flatbuffers::Vector<const AttackDetail *> *>(6); }
+  int32_t player_id() const { return GetField<int32_t>(6, 0); }
+  const flatbuffers::Vector<const AttackDetail *> *actions() const { return GetPointer<const flatbuffers::Vector<const AttackDetail *> *>(8); }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, 4 /* seq_id */) &&
-           VerifyField<flatbuffers::uoffset_t>(verifier, 6 /* actions */) &&
+           VerifyField<int32_t>(verifier, 6 /* player_id */) &&
+           VerifyField<flatbuffers::uoffset_t>(verifier, 8 /* actions */) &&
            verifier.Verify(actions()) &&
            verifier.EndTable();
   }
@@ -45,20 +49,23 @@ struct NotifyAttackActionBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_seq_id(int32_t seq_id) { fbb_.AddElement<int32_t>(4, seq_id, 0); }
-  void add_actions(flatbuffers::Offset<flatbuffers::Vector<const AttackDetail *>> actions) { fbb_.AddOffset(6, actions); }
+  void add_player_id(int32_t player_id) { fbb_.AddElement<int32_t>(6, player_id, 0); }
+  void add_actions(flatbuffers::Offset<flatbuffers::Vector<const AttackDetail *>> actions) { fbb_.AddOffset(8, actions); }
   NotifyAttackActionBuilder(flatbuffers::FlatBufferBuilder &_fbb) : fbb_(_fbb) { start_ = fbb_.StartTable(); }
   NotifyAttackActionBuilder &operator=(const NotifyAttackActionBuilder &);
   flatbuffers::Offset<NotifyAttackAction> Finish() {
-    auto o = flatbuffers::Offset<NotifyAttackAction>(fbb_.EndTable(start_, 2));
+    auto o = flatbuffers::Offset<NotifyAttackAction>(fbb_.EndTable(start_, 3));
     return o;
   }
 };
 
 inline flatbuffers::Offset<NotifyAttackAction> CreateNotifyAttackAction(flatbuffers::FlatBufferBuilder &_fbb,
    int32_t seq_id = 0,
+   int32_t player_id = 0,
    flatbuffers::Offset<flatbuffers::Vector<const AttackDetail *>> actions = 0) {
   NotifyAttackActionBuilder builder_(_fbb);
   builder_.add_actions(actions);
+  builder_.add_player_id(player_id);
   builder_.add_seq_id(seq_id);
   return builder_.Finish();
 }
