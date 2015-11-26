@@ -344,7 +344,7 @@ void App::initMainLoop(Setting::const_ptr setting)
 //    main_loop->addActorManager(down_actor_manager); // TODO: delete
 
     auto task = new DelayedTask;
-    task->interval = 5;
+    task->interval = 1;
     task->func = std::bind(&MainLoop::update, main_loop);
 
     app_scheduler->addTask("_main_loop", task);
