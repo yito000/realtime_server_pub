@@ -4,11 +4,19 @@
 #include "network/udp_socket_proxy.h"
 #include "flatbuffers_socket_manager.h"
 
+#include "log/logger.h"
+
 UdpServer::UdpServer(boost::asio::io_service& _ios,
     const AddrType addr_type, short port) :
     ios(_ios)
 {
     bool ipv6_mode = addr_type == AddrType::ADDR_V6;
+    
+    if (ipv6_mode) {
+        Logger::debug("setup ipv6 udp server");
+    } else {
+        Logger::debug("setup ipv4 udp server");
+    }
     
     socket = UdpSocketProxy::createServer(ios,
         ipv6_mode ? UdpSocketProxy::AddressType::ipv6 : UdpSocketProxy::AddressType::ipv4,

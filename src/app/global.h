@@ -2,12 +2,16 @@
 #define GLOBAL_H
 
 class RouteMap;
+class UdpRouteMap;
 class ErrorHandleRouteMap;
 
 struct AppGlobalSetting
 {
     RouteMap* user_route_map;
     RouteMap* system_route_map;
+    
+    UdpRouteMap* user_route_map_udp;
+    UdpRouteMap* system_route_map_udp;
     
     ErrorHandleRouteMap* user_err_route_map;
     ErrorHandleRouteMap* cluster_err_route_map;

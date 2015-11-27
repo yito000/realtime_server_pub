@@ -8,6 +8,8 @@ enum class BattlePacketType {
     JOIN2,
     LEAVE,
     PLAYER_INPUT,
+    PLAYER_INPUT_UDP,
+    UDP_HANDSHAKE,
     UNKNOWN = -1
 };
 

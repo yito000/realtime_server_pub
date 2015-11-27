@@ -3,6 +3,7 @@
 
 #include "smart_ptr.hpp"
 #include <list>
+#include <boost/asio.hpp>
 
 #include "battle/player/character/battle_character.h"
 
@@ -27,6 +28,11 @@ public:
     bool isJoinedBattle() const;
     void setJoinFlag(bool b);
     
+    const boost::asio::ip::udp::endpoint& getUdpEndpoint() const;
+    void setUdpEndpoint(const boost::asio::ip::udp::endpoint& ep);
+    
+    bool enableUdp() const;
+    
 private:
     BattlePlayer();
     bool init(int _player_id, long actor_key, const std::string& _name, 
@@ -37,7 +43,10 @@ private:
     std::string name;
     std::list<BattleCharacter::ptr> characters;
     
+    boost::asio::ip::udp::endpoint udp_endpoint;
+    
     bool joined;
+    bool enable_udp_flag;
 };
 
 #endif

@@ -13,6 +13,8 @@
 #include "battle/packet/join2_packet.h"
 #include "battle/packet/leave_packet.h"
 #include "battle/packet/player_input_packet.h"
+#include "battle/packet/player_input_udp_packet.h"
+#include "battle/packet/udp_handshake_packet.h"
 
 #include "lib/base64/base64.h"
 #include "battle_info_generated.h"
@@ -139,6 +141,14 @@ void BattleProcessor::dispatchPacket(BattlePacket* packet)
             break;
         }
         
+        // TODO: PLAYER_INPUT_UDP
+        
+        case BattlePacketType::UDP_HANDSHAKE: {
+            execUdpHandshake(dynamic_cast<UdpHandshakePacket*>(packet));
+            
+            break;
+        }
+        
         default:
             break;
     }
@@ -237,13 +247,14 @@ void BattleProcessor::execJoin2(Join2Packet* packet)
         return;
     }
     
+    // TODO: validate access token
     Base64::ByteBuffer out_buf;
     Base64::decode(packet->base64_redis_value, out_buf);
     
     Logger::debug("result value is String: %s", packet->base64_redis_value.c_str());
     Logger::debug("decoded buffer size: %d", out_buf.size());
     
-    battle_manager.addActorInfo(packet->actor_key, packet->battle_key);
+    battle_manager.addActorInfo(packet->actor_key, packet->battle_key, packet->player_id);
     
     //
     auto data = &out_buf[0];
@@ -375,6 +386,50 @@ void BattleProcessor::execPlayerInput(PlayerInputPacket* packet)
     }
 }
 
+void BattleProcessor::execPlayerInputUdp(PlayerInputUdpPacket* packet)
+{
+    if (!packet) {
+        return;
+    }
+    
+    auto it = battle_list.find(packet->battle_key);
+    if (it != battle_list.end()) {
+        BattleInfo::ptr battle_info = it->second;
+        
+        auto player1 = battle_info->getPlayer1();
+        auto player2 = battle_info->getPlayer2();
+        
+        if ((player1->enableUdp() && player1->getUdpEndpoint() == packet->ep) ||
+            (player2->enableUdp() && player2->getUdpEndpoint() == packet->ep)) {
+            
+            processor_detail->playerActionUdp(battle_info, packet);
+        }
+    }
+}
+
+void BattleProcessor::execUdpHandshake(UdpHandshakePacket* packet)
+{
+    if (!packet) {
+        return;
+    }
+    
+    auto it = battle_list.find(packet->battle_key);
+    if (it != battle_list.end()) {
+        BattleInfo::ptr battle_info = it->second;
+        
+        auto player1 = battle_info->getPlayer1();
+        auto player2 = battle_info->getPlayer2();
+        
+        if (player1->getPlayerId() == packet->player_id) {
+            player1->setUdpEndpoint(packet->ep);
+        }
+        
+        if (player2->getPlayerId() == packet->player_id) {
+            player2->setUdpEndpoint(packet->ep);
+        }
+    }
+}
+
 void BattleProcessor::startBattle(BattleInfo::ptr battle_info)
 {
     Logger::log("start battle");
@@ -404,8 +459,8 @@ void BattleProcessor::endBattle(BattleInfo::ptr battle_info)
     DemoBattle::notify_end_phase(-1, player1->getActorKey());
     DemoBattle::notify_end_phase(-1, player2->getActorKey());
     
-    battle_manager.addActorInfo(player1->getActorKey(), battle_info->getBattleKey());
-    battle_manager.addActorInfo(player2->getActorKey(), battle_info->getBattleKey());
+    battle_manager.removeActorInfo(player1->getActorKey(), battle_info->getBattleKey());
+    battle_manager.removeActorInfo(player2->getActorKey(), battle_info->getBattleKey());
     
     // TODO: save battle result
     

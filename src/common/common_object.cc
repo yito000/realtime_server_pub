@@ -77,6 +77,26 @@ void CommonObject::setSystemRouter(Router::ptr r)
     system_router = r;
 }
 
+UdpRouter::ptr CommonObject::getUserUdpRouter()
+{
+    return user_router_udp;
+}
+
+void CommonObject::setUserUdpRouter(UdpRouter::ptr r)
+{
+    user_router_udp = r;
+}
+
+UdpRouter::ptr CommonObject::getSystemUdpRouter()
+{
+    return system_router_udp;
+}
+
+void CommonObject::setSystemUdpRouter(UdpRouter::ptr r)
+{
+    system_router_udp = r;
+}
+
 ErrorHandleRouter::ptr CommonObject::getUserErrorHandleRouter()
 {
     return user_err_handle_router;

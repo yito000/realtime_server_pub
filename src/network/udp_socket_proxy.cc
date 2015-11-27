@@ -38,7 +38,7 @@ void UdpSocketProxy::run()
         return;
     }
     
-    AtomicOperator<bool>::lock_test_and_set(&running, false);
+    AtomicOperator<bool>::lock_test_and_set(&running, true);
     udp_socket->receive();
 }
 
@@ -145,9 +145,9 @@ bool UdpSocketProxy::initServer(AddressType addr_type,
     mode_server = true;
     
     if (addr_type == UdpSocketProxy::AddressType::ipv6) {
-        udp_socket = new AsyncUdpSocket(ios, true);
+        udp_socket = new AsyncUdpSocket(ios, true, port);
     } else {
-        udp_socket = new AsyncUdpSocket(ios, false);
+        udp_socket = new AsyncUdpSocket(ios, false, port);
     }
     
     // set default callback

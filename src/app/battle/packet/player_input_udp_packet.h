@@ -1,5 +1,5 @@
-#ifndef PLAYER_INPUT_PACKET_H
-#define PLAYER_INPUT_PACKET_H
+#ifndef PLAYER_INPUT_UDP_PACKET_H
+#define PLAYER_INPUT_UDP_PACKET_H
 
 #include "battle/packet/battle_packet.h"
 #include "battle/packet/character_input_packet_info.h"
@@ -8,20 +8,20 @@
 
 #include <string>
 #include <list>
+#include <boost/asio.hpp>
 
-struct PlayerInputPacket : public BattlePacket
+struct PlayerInputUdpPacket : public BattlePacket
 {
     std::string battle_key;
     int player_id;
-    long actor_key;
+    boost::asio::ip::udp::endpoint ep;
     std::list<CharacterInputPacket::ptr> input_list;
     
-    PlayerInputPacket()
+    PlayerInputUdpPacket()
     {
-        packet_type = (int)BattlePacketType::PLAYER_INPUT;
+        packet_type = (int)BattlePacketType::PLAYER_INPUT_UDP;
         
         player_id = -1;
-        actor_key = -1;
     }
 };
 

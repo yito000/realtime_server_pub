@@ -19,6 +19,8 @@ class JoinPacket;
 class Join2Packet;
 class LeavePacket;
 class PlayerInputPacket;
+class PlayerInputUdpPacket;
+class UdpHandshakePacket;
 
 class BattleManager;
 
@@ -45,6 +47,8 @@ private:
     void execJoin2(Join2Packet* packet);
     void execLeave(LeavePacket* packet);
     void execPlayerInput(PlayerInputPacket* packet);
+    void execPlayerInputUdp(PlayerInputUdpPacket* packet);
+    void execUdpHandshake(UdpHandshakePacket* packet);
     
     void startBattle(BattleInfo::ptr battle_info);
     void endBattle(BattleInfo::ptr battle_info);

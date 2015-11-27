@@ -59,11 +59,29 @@ void BattlePlayer::setJoinFlag(bool b)
     joined = b;
 }
 
+const boost::asio::ip::udp::endpoint& BattlePlayer::getUdpEndpoint() const
+{
+    return udp_endpoint;
+}
+
+void BattlePlayer::setUdpEndpoint(const boost::asio::ip::udp::endpoint& ep)
+{
+    udp_endpoint = ep;
+    
+    enable_udp_flag = true;
+}
+
+bool BattlePlayer::enableUdp() const
+{
+    return enable_udp_flag;
+}
+
 // private member function
 BattlePlayer::BattlePlayer() :
     player_id(0),
     actor_key(0),
-    joined(false)
+    joined(false),
+    enable_udp_flag(false)
 {
     //
 }

@@ -25,6 +25,7 @@
 
 #include "app/flatbuffers/register_glue_fb.h"
 #include "app/flatbuffers/register_demo_battle_cli.h"
+#include "app/flatbuffers/register_udp_handshake.h"
 
 void Global::onStart(AppGlobalSetting& g_setting, App* app)
 {
@@ -66,6 +67,13 @@ void Global::onStart(AppGlobalSetting& g_setting, App* app)
         // NOTE: glue code test
         register_glue_fb(*route_map);
         register_demo_battle_cli(*route_map);
+    }
+    
+    if (g_setting.user_route_map_udp) {
+        auto route_map_udp = g_setting.user_route_map_udp;
+        
+        register_udp_handshake(*route_map_udp);
+        // TODO: register player input command UDP
     }
 
     //

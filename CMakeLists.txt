@@ -56,6 +56,8 @@ add_executable(
   src/app/flatbuffers/glue_fb_glue.cc
   src/app/flatbuffers/register_demo_battle_cli.cc
   src/app/flatbuffers/register_glue_fb.cc
+  src/app/flatbuffers/register_udp_handshake.cc
+  src/app/flatbuffers/udp_handshake.cc
   src/app/global.cc
   src/app/protobuf/event/pb_ev_res_uiid.cc
   src/app/protobuf/event/pb_ev_uiid.cc
@@ -91,7 +93,9 @@ add_executable(
   src/common/global_rand.cc
   src/common/router/command_dispatcher.cc
   src/common/router/detail/route_map.cc
+  src/common/router/detail/udp_route_map.cc
   src/common/router/router.cc
+  src/common/router/udp_router.cc
   src/common/scheduler/app_scheduler.cc
   src/common/scheduler/delayed_task_processor.cc
   src/common/system_actor/server_node.cc
@@ -160,12 +164,15 @@ add_executable(
   src/app/battle/internal/battle_status_code.h
   src/app/battle/internal/battle_turn_result.h
   src/app/battle/packet/battle_packet.h
+  src/app/battle/packet/character_input_packet_info.h
   src/app/battle/packet/end_battle_packet.h
   src/app/battle/packet/error_packet.h
   src/app/battle/packet/join2_packet.h
   src/app/battle/packet/join_packet.h
   src/app/battle/packet/leave_packet.h
   src/app/battle/packet/player_input_packet.h
+  src/app/battle/packet/player_input_udp_packet.h
+  src/app/battle/packet/udp_handshake_packet.h
   src/app/battle/player/battle_player.h
   src/app/battle/player/character/battle_character.h
   src/app/event/receive_uiid.h
@@ -195,8 +202,11 @@ add_executable(
   src/app/flatbuffers/notify_start_phase_generated.h
   src/app/flatbuffers/register_demo_battle_cli.h
   src/app/flatbuffers/register_glue_fb.h
+  src/app/flatbuffers/register_udp_handshake.h
   src/app/flatbuffers/table/uiid_generated.h
   src/app/flatbuffers/test_generated.h
+  src/app/flatbuffers/udp_handshake.h
+  src/app/flatbuffers/udp_handshake_generated.h
   src/app/global.h
   src/app/protobuf/event/pb_ev_res_uiid.h
   src/app/protobuf/event/pb_ev_uiid.h
@@ -243,8 +253,11 @@ add_executable(
   src/common/macros.h
   src/common/router/command_dispatcher.h
   src/common/router/detail/route_map.h
+  src/common/router/detail/udp_route_map.h
   src/common/router/route_map_base.h
   src/common/router/router.h
+  src/common/router/udp_route_map_base.h
+  src/common/router/udp_router.h
   src/common/scheduler/app_scheduler.h
   src/common/scheduler/delayed_task.h
   src/common/scheduler/delayed_task_processor.h

@@ -1,6 +1,7 @@
 #include "battle_processor_detail.h"
 
 #include "app/flatbuffers/demo_battle.h"
+#include "app/flatbuffers/demo_battle_udp.h"
 #include "log/logger.h"
 
 BattlePrcoessorDetail::ptr BattlePrcoessorDetail::create()
@@ -47,40 +48,30 @@ void BattlePrcoessorDetail::playerAction(BattleInfo::ptr battle_info,
         return;
     }
     
-    std::vector<DemoBattle::AttackDetail> attack_detail_list;
+    engage(battle_info, self_player, target_player, packet->input_list);
+}
+
+void BattlePrcoessorDetail::playerActionUdp(BattleInfo::ptr battle_info, PlayerInputUdpPacket* packet)
+{
+    auto player1 = battle_info->getPlayer1();
+    auto player2 = battle_info->getPlayer2();
     
-    // for test
-    for (auto ch_packet: packet->input_list) {
-        BattleCharacter::ptr self_mobile = self_player->getCharacterFromId(ch_packet->character_id);
-        
-        // TODO: dispatch command id
-        
-        const int DAMAGE = 50;
-        target_mobile->damageHp(DAMAGE);
-        
-        DemoBattle::AttackDetail command(ch_packet->character_id, 
-            target_player->getPlayerId(), target_mobile->getCharacterId(), 
-            ch_packet->command_id, DAMAGE); 
-        attack_detail_list.push_back(command);
+    BattlePlayer::ptr self_player;
+    BattlePlayer::ptr target_player;
+    
+    if (player1->enableUdp() && player1->getUdpEndpoint() == packet->ep) {
+        self_player = player1;
+        target_player = player2;
+    } else if (player2->enableUdp() && player2->getUdpEndpoint() == packet->ep) {
+        self_player = player2;
+        target_player = player1;
     }
     
-    if (attack_detail_list.size() <= 0) {
+    if (!self_player || !target_player) {
         return;
     }
     
-    // for test
-    flatbuffers::FlatBufferBuilder fbb;
-    fbb.CreateVectorOfStructs(attack_detail_list);
-    auto buffer_p = 
-        reinterpret_cast<const flatbuffers::Vector<
-            const DemoBattle::AttackDetail *>*>(fbb.GetBufferPointer());
-    
-    DemoBattle::notify_attack_action(battle_info->getBattleSeqId(),
-        self_player->getPlayerId(), buffer_p, player1->getActorKey());
-    DemoBattle::notify_attack_action(battle_info->getBattleSeqId(),
-        self_player->getPlayerId(), buffer_p, player2->getActorKey());
-    
-    battle_info->incBattleSeqId();
+    engage(battle_info, self_player, target_player, packet->input_list);
 }
 
 BattleTurnResult::ptr BattlePrcoessorDetail::update(BattleInfo::ptr battle_info, 
@@ -131,4 +122,66 @@ BattlePrcoessorDetail::BattlePrcoessorDetail()
 bool BattlePrcoessorDetail::init()
 {
     return true;
+}
+
+void BattlePrcoessorDetail::engage(BattleInfo::ptr battle_info, BattlePlayer::ptr self_player,
+    BattlePlayer::ptr target_player, const std::list<CharacterInputPacket::ptr>& input_list)
+{
+    // TODO: targeting
+    BattleCharacter::ptr target_mobile;
+    for (auto t_ch: target_player->getCharacters()) {
+        if (!t_ch->isDead()) {
+            target_mobile = t_ch;
+            break;
+        }
+    }
+    
+    if (!target_mobile) {
+        return;
+    }
+    
+    std::vector<DemoBattle::AttackDetail> attack_detail_list;
+    
+    // for test
+    for (auto ch_packet: input_list) {
+        BattleCharacter::ptr self_mobile = self_player->getCharacterFromId(ch_packet->character_id);
+        
+        // TODO: dispatch command id
+        
+        const int DAMAGE = 50;
+        target_mobile->damageHp(DAMAGE);
+        
+        DemoBattle::AttackDetail command(ch_packet->character_id, 
+            target_player->getPlayerId(), target_mobile->getCharacterId(), 
+            ch_packet->command_id, DAMAGE); 
+        attack_detail_list.push_back(command);
+    }
+    
+    if (attack_detail_list.size() <= 0) {
+        return;
+    }
+    
+    // for test
+    flatbuffers::FlatBufferBuilder fbb;
+    fbb.CreateVectorOfStructs(attack_detail_list);
+    auto buffer_p = 
+        reinterpret_cast<const flatbuffers::Vector<
+            const DemoBattle::AttackDetail *>*>(fbb.GetBufferPointer());
+    
+    if (self_player->enableUdp()) {
+        DemoBattle::notify_attack_action_udp(battle_info->getBattleSeqId(),
+            self_player->getPlayerId(), buffer_p, self_player->getUdpEndpoint());
+    }
+    
+    if (target_player->enableUdp()) {
+        DemoBattle::notify_attack_action_udp(battle_info->getBattleSeqId(),
+            self_player->getPlayerId(), buffer_p, target_player->getUdpEndpoint());
+    }
+    
+    DemoBattle::notify_attack_action(battle_info->getBattleSeqId(),
+        self_player->getPlayerId(), buffer_p, self_player->getActorKey());
+    DemoBattle::notify_attack_action(battle_info->getBattleSeqId(),
+        self_player->getPlayerId(), buffer_p, target_player->getActorKey());
+    
+    battle_info->incBattleSeqId();
 }

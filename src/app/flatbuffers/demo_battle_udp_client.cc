@@ -4,7 +4,7 @@
 #include "network/udp_socket_proxy.h"
 
 namespace DemoBattle {
-void notify_attack_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::AttackDetail *>* actions, long actor_key)
+void notify_attack_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::AttackDetail *>* actions, const boost::asio::ip::udp::endpoint& ep)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = seq_id;
@@ -52,13 +52,13 @@ void notify_attack_action_udp(int seq_id, int player_id, const flatbuffers::Vect
             packet.push_back(buf[i]);
         }
 
-        udp_client->send(packet);
+        udp_client->send(packet, ep);
     }
 }
 };
 
 namespace DemoBattle {
-void notify_buff_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::BuffDetail *>* actions, long actor_key)
+void notify_buff_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::BuffDetail *>* actions, const boost::asio::ip::udp::endpoint& ep)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = seq_id;
@@ -106,13 +106,13 @@ void notify_buff_action_udp(int seq_id, int player_id, const flatbuffers::Vector
             packet.push_back(buf[i]);
         }
 
-        udp_client->send(packet);
+        udp_client->send(packet, ep);
     }
 }
 };
 
 namespace DemoBattle {
-void notify_debuff_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::DebuffDetail *>* actions, long actor_key)
+void notify_debuff_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::DebuffDetail *>* actions, const boost::asio::ip::udp::endpoint& ep)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = seq_id;
@@ -160,13 +160,13 @@ void notify_debuff_action_udp(int seq_id, int player_id, const flatbuffers::Vect
             packet.push_back(buf[i]);
         }
 
-        udp_client->send(packet);
+        udp_client->send(packet, ep);
     }
 }
 };
 
 namespace DemoBattle {
-void notify_heal_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::HealDetail *>* actions, long actor_key)
+void notify_heal_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::HealDetail *>* actions, const boost::asio::ip::udp::endpoint& ep)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = seq_id;
@@ -214,13 +214,13 @@ void notify_heal_action_udp(int seq_id, int player_id, const flatbuffers::Vector
             packet.push_back(buf[i]);
         }
 
-        udp_client->send(packet);
+        udp_client->send(packet, ep);
     }
 }
 };
 
 namespace DemoBattle {
-void notify_meditation_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::MeditationDetail *>* actions, long actor_key)
+void notify_meditation_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::MeditationDetail *>* actions, const boost::asio::ip::udp::endpoint& ep)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = seq_id;
@@ -268,13 +268,13 @@ void notify_meditation_action_udp(int seq_id, int player_id, const flatbuffers::
             packet.push_back(buf[i]);
         }
 
-        udp_client->send(packet);
+        udp_client->send(packet, ep);
     }
 }
 };
 
 namespace DemoBattle {
-void notify_start_phase_udp(int seq_id, long actor_key)
+void notify_start_phase_udp(int seq_id, const boost::asio::ip::udp::endpoint& ep)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = seq_id;
@@ -320,13 +320,13 @@ void notify_start_phase_udp(int seq_id, long actor_key)
             packet.push_back(buf[i]);
         }
 
-        udp_client->send(packet);
+        udp_client->send(packet, ep);
     }
 }
 };
 
 namespace DemoBattle {
-void notify_end_phase_udp(int seq_id, long actor_key)
+void notify_end_phase_udp(int seq_id, const boost::asio::ip::udp::endpoint& ep)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = seq_id;
@@ -372,13 +372,13 @@ void notify_end_phase_udp(int seq_id, long actor_key)
             packet.push_back(buf[i]);
         }
 
-        udp_client->send(packet);
+        udp_client->send(packet, ep);
     }
 }
 };
 
 namespace DemoBattle {
-void notify_leave_player_udp(int player_id, long actor_key)
+void notify_leave_player_udp(int player_id, const boost::asio::ip::udp::endpoint& ep)
 {
     flatbuffers::FlatBufferBuilder fbb;
     auto p1 = player_id;
@@ -424,7 +424,7 @@ void notify_leave_player_udp(int player_id, long actor_key)
             packet.push_back(buf[i]);
         }
 
-        udp_client->send(packet);
+        udp_client->send(packet, ep);
     }
 }
 };

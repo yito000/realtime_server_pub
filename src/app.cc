@@ -105,6 +105,8 @@ int App::start(int argc, char** argv)
         AppGlobalSetting g_setting;
         g_setting.user_route_map = user_route_map.get();
         g_setting.system_route_map = system_route_map.get();
+        g_setting.user_route_map_udp = user_route_map_udp.get();
+        g_setting.system_route_map_udp = system_route_map_udp.get();
         g_setting.user_err_route_map = user_err_handle_route_map.get();
         g_setting.cluster_err_route_map = cluster_err_handle_route_map.get();
         g_setting.server_err_route_map = server_err_handle_route_map.get();
@@ -239,6 +241,8 @@ Setting::ptr App::initSettings(ArgsInfo& args)
     //
     user_route_map = new RouteMap;
     system_route_map = new RouteMap;
+    user_route_map_udp = new UdpRouteMap;
+    system_route_map_udp = new UdpRouteMap;
     user_err_handle_route_map = new ErrorHandleRouteMap;
     cluster_err_handle_route_map = new ErrorHandleRouteMap;
     server_err_handle_route_map = new ErrorHandleRouteMap;
@@ -301,12 +305,19 @@ void App::initScheduler(Setting::const_ptr setting)
 
 void App::initRouter(Setting::const_ptr setting)
 {
+    // tcp router
     user_router = new Router(*user_route_map);
     CommonObject::getInstance()->setUserRouter(user_router);
 
-    //
     system_router = new Router(*system_route_map);
     CommonObject::getInstance()->setSystemRouter(system_router);
+    
+    // udp router
+    user_router_udp = new UdpRouter(*user_route_map_udp);
+    CommonObject::getInstance()->setUserUdpRouter(user_router_udp);
+    
+    system_router_udp = new UdpRouter(*system_route_map_udp);
+    CommonObject::getInstance()->setSystemUdpRouter(system_router_udp);
 }
 
 void App::initErrorHandleRouter(Setting::const_ptr setting)

@@ -1,0 +1,9 @@
+namespace DemoBattle;
+
+table UdpHandshake {
+    battle_key: string;
+    player_id: int;
+    access_token: string;
+}
+
+root_type UdpHandshake;

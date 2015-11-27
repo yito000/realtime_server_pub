@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <boost/asio.hpp>
 
 struct BattleInputCommandDetail
 {
@@ -39,6 +40,21 @@ struct BattleInputInfo : public SmartPtr<BattleInputInfo>
     {
         player_id = -1;
         actor_key = -1;
+    }
+};
+
+struct BattleInputInfoUdp : public SmartPtr<BattleInputInfoUdp>
+{
+    typedef boost::intrusive_ptr<BattleInputInfoUdp> ptr;
+    
+    std::string battle_key;
+    int player_id;
+    std::vector<BattleInputCommandDetail> list;
+    boost::asio::ip::udp::endpoint ep;
+    
+    BattleInputInfoUdp()
+    {
+        player_id = -1;
     }
 };
 

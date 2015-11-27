@@ -10,6 +10,7 @@
 #include "thread/bidirectional_communicator.h"
 #include "scheduler/app_scheduler.h"
 #include "router/router.h"
+#include "router/udp_router.h"
 #include "error/error_handle_router.h"
 #include "actor/actor_manager.h"
 #include "cluster/cluster.h"
@@ -18,6 +19,7 @@
 
 #include "error/internal/error_handle_route_map.h"
 #include "router/detail/route_map.h"
+#include "router/detail/udp_route_map.h"
 
 struct ArgsInfo
 {
@@ -79,6 +81,8 @@ private:
     VoltdbProcessor::ptr v_processor;
     Router::ptr user_router;
     Router::ptr system_router;
+    UdpRouter::ptr user_router_udp;
+    UdpRouter::ptr system_router_udp;
     
     ErrorHandleRouter::ptr user_err_handle_router;
     ErrorHandleRouter::ptr cluster_err_handle_router;
@@ -86,6 +90,8 @@ private:
 
     RouteMap::ptr user_route_map;
     RouteMap::ptr system_route_map;
+    UdpRouteMap::ptr user_route_map_udp;
+    UdpRouteMap::ptr system_route_map_udp;
 
     ErrorHandleRouteMap::ptr user_err_handle_route_map;
     ErrorHandleRouteMap::ptr cluster_err_handle_route_map;

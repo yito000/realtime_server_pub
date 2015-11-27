@@ -1,5 +1,7 @@
 #include "async_udp_socket.h"
 
+#include "log/logger.h"
+
 AsyncUdpSocket::AsyncUdpSocket(
     boost::asio::io_service& io_service, bool _ipv6_mode, int port) :
     ios(io_service),

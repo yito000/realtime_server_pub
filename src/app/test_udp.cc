@@ -10,27 +10,31 @@ void TestUdp::receiveCallback(const boost::system::error_code& ec,
     const boost::asio::ip::udp::endpoint& ep, 
     const AsyncUdpSocket* const socket)
 {
-    Logger::log("receive udp packet size=%d", size);
+    if (ec) {
+        Logger::log("udp receive error: %s", ec.message().c_str());
+        return;
+    }
     
-    std::vector<unsigned char> p;
-    p.reserve(size);
+    Logger::debug("receive udp packet size=%d", size);
+    
+    UdpCommandInfo::ptr udp_info = new UdpCommandInfo;
+    udp_info->ep = ep;
+    udp_info->packet.reserve(size);
     
     for (int i = 0; i < size; i++) {
-        p.push_back(packet[i]);
+        udp_info->packet.push_back(packet[i]);
     }
     
-    if (!CommandDispatcher::bulkDispatch(0, p)) {
-        /*
-        std::string s = "ok dayo!";
-        std::vector<char> res_packet(s.begin(), s.end());
-        
-        socket->send(res_packet, ep);
-        */
-    }
+    CommandDispatcher::bulkDispatchUDP(udp_info);
 }
 
 void TestUdp::sendCallback(const boost::system::error_code& ec,
     std::size_t size, const AsyncUdpSocket* const socket)
 {
-    Logger::log("send udp packet");
+    if (ec) {
+        Logger::log("udp send error: %s", ec.message().c_str());
+        return;
+    }
+    
+    Logger::debug("send udp packet");
 }
