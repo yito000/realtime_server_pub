@@ -13,23 +13,23 @@
 #include <boost/asio.hpp>
 
 namespace DemoBattle {
-void notify_attack_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::AttackDetail *>* actions, const boost::asio::ip::udp::endpoint& ep);
+void notify_attack_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::AttackDetail *>* actions, const boost::asio::ip::udp::endpoint& ep = boost::asio::ip::udp::endpoint());
 };
 
 namespace DemoBattle {
-void notify_buff_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::BuffDetail *>* actions, const boost::asio::ip::udp::endpoint& ep);
+void notify_buff_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::BuffDetail *>* actions, const boost::asio::ip::udp::endpoint& ep = boost::asio::ip::udp::endpoint());
 };
 
 namespace DemoBattle {
-void notify_debuff_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::DebuffDetail *>* actions, const boost::asio::ip::udp::endpoint& ep);
+void notify_debuff_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::DebuffDetail *>* actions, const boost::asio::ip::udp::endpoint& ep = boost::asio::ip::udp::endpoint());
 };
 
 namespace DemoBattle {
-void notify_heal_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::HealDetail *>* actions, const boost::asio::ip::udp::endpoint& ep);
+void notify_heal_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::HealDetail *>* actions, const boost::asio::ip::udp::endpoint& ep = boost::asio::ip::udp::endpoint());
 };
 
 namespace DemoBattle {
-void notify_meditation_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::MeditationDetail *>* actions, const boost::asio::ip::udp::endpoint& ep);
+void notify_meditation_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::MeditationDetail *>* actions, const boost::asio::ip::udp::endpoint& ep = boost::asio::ip::udp::endpoint());
 };
 
 namespace DemoBattle {

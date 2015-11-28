@@ -141,7 +141,11 @@ void BattleProcessor::dispatchPacket(BattlePacket* packet)
             break;
         }
         
-        // TODO: PLAYER_INPUT_UDP
+        case BattlePacketType::PLAYER_INPUT_UDP: {
+            execPlayerInputUdp(dynamic_cast<PlayerInputUdpPacket*>(packet));
+            
+            break;
+        }
         
         case BattlePacketType::UDP_HANDSHAKE: {
             execUdpHandshake(dynamic_cast<UdpHandshakePacket*>(packet));

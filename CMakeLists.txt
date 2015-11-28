@@ -46,6 +46,8 @@ add_executable(
   src/app/event/send_uiid.cc
   src/app/flatbuffers/demo_battle_cli.cc
   src/app/flatbuffers/demo_battle_cli_glue.cc
+  src/app/flatbuffers/demo_battle_cli_glue_udp.cc
+  src/app/flatbuffers/demo_battle_cli_udp.cc
   src/app/flatbuffers/demo_battle_client.cc
   src/app/flatbuffers/demo_battle_udp_client.cc
   src/app/flatbuffers/event/fb_event_res_uiid.cc
@@ -55,6 +57,7 @@ add_executable(
   src/app/flatbuffers/glue_fb.cc
   src/app/flatbuffers/glue_fb_glue.cc
   src/app/flatbuffers/register_demo_battle_cli.cc
+  src/app/flatbuffers/register_demo_battle_cli_udp.cc
   src/app/flatbuffers/register_glue_fb.cc
   src/app/flatbuffers/register_udp_handshake.cc
   src/app/flatbuffers/udp_handshake.cc
@@ -183,6 +186,8 @@ add_executable(
   src/app/flatbuffers/demo_battle.h
   src/app/flatbuffers/demo_battle_cli.h
   src/app/flatbuffers/demo_battle_cli_glue.h
+  src/app/flatbuffers/demo_battle_cli_glue_udp.h
+  src/app/flatbuffers/demo_battle_cli_udp.h
   src/app/flatbuffers/demo_battle_udp.h
   src/app/flatbuffers/event/fb_event_res_uiid.h
   src/app/flatbuffers/event/fb_event_uiid.h
@@ -201,6 +206,7 @@ add_executable(
   src/app/flatbuffers/notify_meditation_action_generated.h
   src/app/flatbuffers/notify_start_phase_generated.h
   src/app/flatbuffers/register_demo_battle_cli.h
+  src/app/flatbuffers/register_demo_battle_cli_udp.h
   src/app/flatbuffers/register_glue_fb.h
   src/app/flatbuffers/register_udp_handshake.h
   src/app/flatbuffers/table/uiid_generated.h
