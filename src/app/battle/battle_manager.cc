@@ -112,6 +112,7 @@ void BattleManager::playerInput(BattleInputInfo::ptr input)
 {
     auto input_packet = new PlayerInputPacket;
     input_packet->battle_key = input->battle_key;
+    input_packet->seq_id = input->seq_id;
     input_packet->player_id = input->player_id;
     input_packet->actor_key = input->actor_key;
     
@@ -128,6 +129,7 @@ void BattleManager::playerInputUdp(BattleInputInfoUdp::ptr input)
 {
     auto input_packet = new PlayerInputUdpPacket;
     input_packet->battle_key = input->battle_key;
+    input_packet->seq_id = input->seq_id;
     input_packet->player_id = input->player_id;
     input_packet->ep = input->ep;
     

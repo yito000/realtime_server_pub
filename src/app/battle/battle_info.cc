@@ -58,6 +58,32 @@ void BattleInfo::incBattleSeqId()
     battle_seq_id++;
 }
 
+bool BattleInfo::validSeqId(int seq_id, BattlePlayer::ptr player)
+{
+    if (player == player1) {
+        auto it = player1_seq_ids.find(seq_id);
+        auto ret = it == player1_seq_ids.end();
+        
+        return ret;
+    } else if (player == player2) {
+        auto it = player2_seq_ids.find(seq_id);
+        auto ret = it == player2_seq_ids.end();
+        
+        return ret;
+    }
+    
+    return false;
+}
+
+void BattleInfo::setSeqId(int seq_id, BattlePlayer::ptr player)
+{
+    if (player == player1) {
+        player1_seq_ids.insert(seq_id);
+    } else if (player == player2) {
+        player2_seq_ids.insert(seq_id);
+    }
+}
+
 // private member function
 BattleInfo::BattleInfo() :
     battle_seq_id(1)

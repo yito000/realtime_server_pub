@@ -5,12 +5,13 @@
 
 namespace DemoBattle {
 
-void input_command(const std::string& battle_key, int player_id, 
+void input_command(const std::string& battle_key, int seq_id, int player_id, 
     const flatbuffers::Vector<const CommandDetail *>* list,
     long actor_key)
 {
     BattleInputInfo::ptr input = new BattleInputInfo;
     input->battle_key = battle_key;
+    input->seq_id = seq_id;
     input->player_id = player_id;
     input->actor_key = actor_key;
     

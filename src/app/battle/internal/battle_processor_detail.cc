@@ -48,6 +48,13 @@ void BattlePrcoessorDetail::playerAction(BattleInfo::ptr battle_info,
         return;
     }
     
+    auto valid_input = battle_info->validSeqId(packet->seq_id, self_player);
+    if (!valid_input) {
+        Logger::log("packet duprecated! ... seq_id=%d", packet->seq_id);
+        return;
+    }
+    
+    battle_info->setSeqId(packet->seq_id, self_player);
     engage(battle_info, self_player, target_player, packet->input_list);
 }
 
@@ -71,6 +78,13 @@ void BattlePrcoessorDetail::playerActionUdp(BattleInfo::ptr battle_info, PlayerI
         return;
     }
     
+    auto valid_input = battle_info->validSeqId(packet->seq_id, self_player);
+    if (!valid_input) {
+        Logger::log("packet duprecated! ... seq_id=%d", packet->seq_id);
+        return;
+    }
+    
+    battle_info->setSeqId(packet->seq_id, self_player);
     engage(battle_info, self_player, target_player, packet->input_list);
 }
 

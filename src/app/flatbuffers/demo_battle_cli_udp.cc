@@ -5,18 +5,17 @@
 
 namespace DemoBattle {
 
-void input_command_udp(const std::__1::string& battle_key, int player_id, const flatbuffers::Vector<const DemoBattle::CommandDetail *>* list, const boost::asio::ip::udp::endpoint& ep)
+void input_command_udp(const std::__1::string& battle_key, int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::CommandDetail *>* list, const boost::asio::ip::udp::endpoint& ep)
 {
     BattleInputInfoUdp::ptr input = new BattleInputInfoUdp;
     input->battle_key = battle_key;
+    input->seq_id = seq_id;
     input->player_id = player_id;
     input->ep = ep;
     
     for (auto p: *list) {
         input->list.push_back(BattleInputCommandDetail(p->characeter_id(), p->command_id()));
     }
-    
-    Logger::log("input!! input_command_udp");
     
     BattleManager::getInstance()->playerInputUdp(input);
 }

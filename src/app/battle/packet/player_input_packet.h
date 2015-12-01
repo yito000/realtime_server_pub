@@ -11,6 +11,7 @@
 
 struct PlayerInputPacket : public BattlePacket
 {
+    int seq_id;
     std::string battle_key;
     int player_id;
     long actor_key;
@@ -20,6 +21,7 @@ struct PlayerInputPacket : public BattlePacket
     {
         packet_type = (int)BattlePacketType::PLAYER_INPUT;
         
+        seq_id = 0;
         player_id = -1;
         actor_key = -1;
     }

@@ -8,7 +8,7 @@
 #include "battle_exit_generated.h"
 
 namespace DemoBattle {
-void input_command_udp(const std::__1::string& battle_key, int player_id, const flatbuffers::Vector<const DemoBattle::CommandDetail *>* list, const boost::asio::ip::udp::endpoint& ep = boost::asio::ip::udp::endpoint());
+void input_command_udp(const std::__1::string& battle_key, int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::CommandDetail *>* list, const boost::asio::ip::udp::endpoint& ep = boost::asio::ip::udp::endpoint());
 };
 
 namespace DemoBattle {

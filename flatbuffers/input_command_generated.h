@@ -27,14 +27,16 @@ STRUCT_END(CommandDetail, 8);
 
 struct InputCommand FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::String *battle_key() const { return GetPointer<const flatbuffers::String *>(4); }
-  int32_t player_id() const { return GetField<int32_t>(6, 0); }
-  const flatbuffers::Vector<const CommandDetail *> *list() const { return GetPointer<const flatbuffers::Vector<const CommandDetail *> *>(8); }
+  int32_t seq_id() const { return GetField<int32_t>(6, 0); }
+  int32_t player_id() const { return GetField<int32_t>(8, 0); }
+  const flatbuffers::Vector<const CommandDetail *> *list() const { return GetPointer<const flatbuffers::Vector<const CommandDetail *> *>(10); }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<flatbuffers::uoffset_t>(verifier, 4 /* battle_key */) &&
            verifier.Verify(battle_key()) &&
-           VerifyField<int32_t>(verifier, 6 /* player_id */) &&
-           VerifyField<flatbuffers::uoffset_t>(verifier, 8 /* list */) &&
+           VerifyField<int32_t>(verifier, 6 /* seq_id */) &&
+           VerifyField<int32_t>(verifier, 8 /* player_id */) &&
+           VerifyField<flatbuffers::uoffset_t>(verifier, 10 /* list */) &&
            verifier.Verify(list()) &&
            verifier.EndTable();
   }
@@ -44,32 +46,35 @@ struct InputCommandBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_battle_key(flatbuffers::Offset<flatbuffers::String> battle_key) { fbb_.AddOffset(4, battle_key); }
-  void add_player_id(int32_t player_id) { fbb_.AddElement<int32_t>(6, player_id, 0); }
-  void add_list(flatbuffers::Offset<flatbuffers::Vector<const CommandDetail *>> list) { fbb_.AddOffset(8, list); }
+  void add_seq_id(int32_t seq_id) { fbb_.AddElement<int32_t>(6, seq_id, 0); }
+  void add_player_id(int32_t player_id) { fbb_.AddElement<int32_t>(8, player_id, 0); }
+  void add_list(flatbuffers::Offset<flatbuffers::Vector<const CommandDetail *>> list) { fbb_.AddOffset(10, list); }
   InputCommandBuilder(flatbuffers::FlatBufferBuilder &_fbb) : fbb_(_fbb) { start_ = fbb_.StartTable(); }
   InputCommandBuilder &operator=(const InputCommandBuilder &);
   flatbuffers::Offset<InputCommand> Finish() {
-    auto o = flatbuffers::Offset<InputCommand>(fbb_.EndTable(start_, 3));
+    auto o = flatbuffers::Offset<InputCommand>(fbb_.EndTable(start_, 4));
     return o;
   }
 };
 
 inline flatbuffers::Offset<InputCommand> CreateInputCommand(flatbuffers::FlatBufferBuilder &_fbb,
    flatbuffers::Offset<flatbuffers::String> battle_key = 0,
+   int32_t seq_id = 0,
    int32_t player_id = 0,
    flatbuffers::Offset<flatbuffers::Vector<const CommandDetail *>> list = 0) {
   InputCommandBuilder builder_(_fbb);
   builder_.add_list(list);
   builder_.add_player_id(player_id);
+  builder_.add_seq_id(seq_id);
   builder_.add_battle_key(battle_key);
   return builder_.Finish();
 }
 
-inline const InputCommand *GetInputCommand(const void *buf) { return flatbuffers::GetRoot<InputCommand>(buf); }
+inline const DemoBattle::InputCommand *GetInputCommand(const void *buf) { return flatbuffers::GetRoot<DemoBattle::InputCommand>(buf); }
 
-inline bool VerifyInputCommandBuffer(flatbuffers::Verifier &verifier) { return verifier.VerifyBuffer<InputCommand>(); }
+inline bool VerifyInputCommandBuffer(flatbuffers::Verifier &verifier) { return verifier.VerifyBuffer<DemoBattle::InputCommand>(); }
 
-inline void FinishInputCommandBuffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<InputCommand> root) { fbb.Finish(root); }
+inline void FinishInputCommandBuffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<DemoBattle::InputCommand> root) { fbb.Finish(root); }
 
 }  // namespace DemoBattle
 

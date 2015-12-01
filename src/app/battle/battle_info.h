@@ -4,6 +4,7 @@
 #include "smart_ptr.hpp"
 #include <string>
 #include <queue>
+#include <set>
 
 #include "battle/player/battle_player.h"
 #include "lib/time/app_time.h"
@@ -28,6 +29,9 @@ public:
     int getBattleSeqId() const;
     void incBattleSeqId();
     
+    bool validSeqId(int seq_id, BattlePlayer::ptr player);
+    void setSeqId(int seq_id, BattlePlayer::ptr player);
+    
 private:
     BattleInfo();
     bool init(const std::string& _battle_key,
@@ -36,6 +40,9 @@ private:
     std::string battle_key;
     BattlePlayer::ptr player1;
     BattlePlayer::ptr player2;
+    
+    std::set<int> player1_seq_ids;
+    std::set<int> player2_seq_ids;
     
     AppTime::Point last_update;
     int battle_seq_id;

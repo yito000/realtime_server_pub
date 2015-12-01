@@ -12,6 +12,7 @@
 
 struct PlayerInputUdpPacket : public BattlePacket
 {
+    int seq_id;
     std::string battle_key;
     int player_id;
     boost::asio::ip::udp::endpoint ep;
@@ -21,6 +22,7 @@ struct PlayerInputUdpPacket : public BattlePacket
     {
         packet_type = (int)BattlePacketType::PLAYER_INPUT_UDP;
         
+        seq_id = 0;
         player_id = -1;
     }
 };

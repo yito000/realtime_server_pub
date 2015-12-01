@@ -7,7 +7,7 @@
 
 namespace DemoBattle {
 
-void input_command(const std::string& battle_key, int player_id, 
+void input_command(const std::string& battle_key, int seq_id, int player_id, 
     const flatbuffers::Vector<const CommandDetail *>* list,
     long actor_key = -1);
 
