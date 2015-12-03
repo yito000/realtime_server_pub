@@ -5,6 +5,7 @@
 
 #include <list>
 #include <functional>
+#include <atomic>
 
 #include "network/io/async_udp_socket.h"
 
@@ -48,7 +49,7 @@ private:
     boost::asio::io_service& ios;
     
     AsyncUdpSocket* udp_socket;
-    bool running;
+    std::atomic<bool> running;
     bool mode_server;
 };
 

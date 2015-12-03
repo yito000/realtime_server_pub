@@ -9,6 +9,7 @@
 #include <list>
 #include <deque>
 
+#include <atomic>
 #include <functional>
 #include <boost/asio.hpp>
 
@@ -113,7 +114,7 @@ private:
     int timeout_millis;
     WebsocketDelegate* ws_delegate;
     std::deque<PacketInfo> packet_queue;
-    bool process_write;
+    std::atomic<bool> process_write;
 
     // todo enum state flag
     bool first_process;

@@ -6,6 +6,7 @@
 
 #include <string>
 #include <list>
+#include <atomic>
 
 #include <unordered_map>
 #include <boost/lockfree/queue.hpp>
@@ -59,7 +60,7 @@ private:
     BattlePrcoessorDetail::ptr processor_detail;
     
     BattleManager& battle_manager;
-    bool end_flag;
+    std::atomic<bool> end_flag;
 };
 
 #endif

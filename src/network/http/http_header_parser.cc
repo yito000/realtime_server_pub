@@ -98,7 +98,7 @@ bool HttpHeaderParser::getResponseCode(const std::string& str, HttpResponseHeade
 
 bool HttpHeaderParser::readLine(const std::string& line, HttpResponseHeader& header)
 {
-    char* pos = strstr(line.c_str(), ":");
+    char* pos = (char*)strstr(line.c_str(), ":");
     
     if (pos) {
         size_t len = pos - line.c_str();
@@ -179,9 +179,9 @@ HttpResponseHeader::CacheControl HttpHeaderParser::getCacheControl(const std::st
     if (std::regex_match(cache_control, cache_no_cache)) {
         return HttpResponseHeader::NO_CACHE;
     } else if (std::regex_match(cache_control, cache_no_store)) {
-        return HttpResponseHeader::NO_STORE;
+        return HttpResponseHeader::CACHE_NO_STORE;
     } else if (std::regex_match(ss, maxage_delimiter) ) {
-        char* pos = strstr(ss.c_str(), "=");
+        char* pos = (char*)strstr(ss.c_str(), "=");
         pos++;
         
         header.cache_maxage = boost::lexical_cast<int>(pos);

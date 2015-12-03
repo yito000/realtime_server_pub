@@ -28,7 +28,7 @@ public:
     template <typename U> STLCustomAllocator(const STLCustomAllocator<U, Allocator>&) throw() {}
     ~STLCustomAllocator() throw() {}
     
-    pointer allocate(size_type num, STLCustomAllocator< T, Allocator >::const_pointer hint = 0)
+    pointer allocate(size_type num, const void* hint = 0)
     {
         if (num <= 1) {
             return (pointer)(GolbalAllocator::operator new(sizeof(T)));

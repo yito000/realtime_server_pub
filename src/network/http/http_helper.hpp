@@ -566,7 +566,7 @@ private:
             std::cout << "buffer string: " << std::endl << buffer_str << std::endl;
 #endif
             
-            header_end_pos = strstr(buffer_str.c_str(), "\r\n\r\n");
+            header_end_pos = (char*)strstr(buffer_str.c_str(), "\r\n\r\n");
         }
         
         size_t len = header_end_pos - buffer_str.c_str();

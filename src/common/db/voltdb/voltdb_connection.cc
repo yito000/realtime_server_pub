@@ -1,6 +1,4 @@
 #include "voltdb_connection.h"
-
-#include "atomic/atomic_operator.hpp"
 #include "log/logger.h"
 
 class ResponseCallback : public voltdb::ProcedureCallback
@@ -66,10 +64,10 @@ void VoltdbConnection::connect(const std::string& _host,
     try {
         cli.createConnection(_host, _port);
 
-        AtomicOperator<int>::lock_test_and_set(&signal, NO_SIGNAL);
+        signal.exchange(NO_SIGNAL);
         connected = true;
     } catch (voltdb::NoConnectionsException& e) {
-        AtomicOperator<int>::lock_test_and_set(&signal, SIG_CONNECTION);
+        signal.exchange(SIG_CONNECTION);
         connected = false;
 
         Logger::debug("error: no connection");
@@ -95,7 +93,7 @@ void VoltdbConnection::invoke(voltdb::Procedure& procedure,
         cli.invoke(procedure, res_callback);
         cli.runOnce();
     } catch (voltdb::NoConnectionsException& e) {
-        AtomicOperator<int>::lock_test_and_set(&signal, SIG_CONNECTION);
+        signal.exchange(SIG_CONNECTION);
 
         connected = false;
     } catch (std::exception& e) {
@@ -112,7 +110,7 @@ void VoltdbConnection::invoke(voltdb::Procedure& procedure,
         cli.invoke(procedure, res_callback);
         cli.runOnce();
     } catch (voltdb::NoConnectionsException& e) {
-        AtomicOperator<int>::lock_test_and_set(&signal, SIG_CONNECTION);
+        signal.exchange(SIG_CONNECTION);
 
         if (err_callback) {
             err_callback(e);

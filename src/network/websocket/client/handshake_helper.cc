@@ -2,11 +2,14 @@
 
 #include "../secret/secret_key.h"
 
+#include <iostream>
 #include <sstream>
 #include <regex>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
+
+#include "log/logger.h"
 
 namespace {
     std::regex upgrade("Upgrade", std::regex_constants::icase);
@@ -37,24 +40,29 @@ HandShakeResponse::ptr createResponseObject(ByteBuffer* packet)
     HandShakeResponse::ptr res = new HandShakeResponse;
 
     std::getline(ss, tmp_str);
-//    std::cout << tmp_str << std::endl;
+    
+#ifndef NDEBUG
+    std::cout << tmp_str << std::endl;
+#endif
 
     if (!getResponseCode(tmp_str, res)) {
         return NULL;
     }
-
+    
     if (res->status_code != 101) {
         return res;
     }
 
     while (std::getline(ss, tmp_str)) {
-//        std::cout << tmp_str << std::endl;
+#ifndef NDEBUG
+        std::cout << tmp_str << std::endl;
+#endif
 
         if (!readHeaderLine(tmp_str, res)) {
             return NULL;
         }
     }
-
+    
     return res;
 }
 
@@ -77,7 +85,7 @@ bool HandshakeHelper::validate(ByteBuffer* packet,
     if (!response) {
         return false;
     }
-
+    
     if (response->status_code != 101) {
         return false;
     }
@@ -95,17 +103,18 @@ bool HandshakeHelper::validate(ByteBuffer* packet,
     auto c_name = response->connection;
     std::transform(response->connection.begin(),
         response->connection.end(), c_name.begin(), tolower);
-
+    
     if (c_name != "upgrade") {
         return false;
     }
 
     //
     auto secret = calcResponseSecret(handshake_req->secret_key);
+    
     if (response->secret_accept != secret) {
         return false;
     }
-
+    
     return true;
 }
 
@@ -145,7 +154,7 @@ bool getResponseCode(const std::string& line,
 bool readHeaderLine(const std::string& line,
     HandShakeResponse::ptr response)
 {
-    char* pos = strstr(line.c_str(), ":");
+    char* pos = (char*)strstr(line.c_str(), ":");
 
     if (pos) {
         size_t len = pos - line.c_str();

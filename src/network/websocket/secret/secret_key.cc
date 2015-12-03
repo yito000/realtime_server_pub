@@ -4,6 +4,8 @@
 #include "crypt/crypt.h"
 #include "random/random.h"
 
+#include <chrono>
+
 #include "log/logger.h"
 
 namespace {
@@ -40,7 +42,6 @@ std::string SecretKey::calcResponse(const std::string& sec_key)
 
     auto enc_str = Base64::encode(sha1_str);
 
-    Logger::debug("sha1 string=%s", sha1_str.c_str());
     Logger::debug("calc base64 encoded string=%s", enc_str.c_str());
 
     return enc_str;

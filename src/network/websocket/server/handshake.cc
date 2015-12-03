@@ -49,7 +49,7 @@ HandShakeRequest::ptr HandShake::parseReqHeader(ByteBuffer* buf)
 bool HandShake::getFirstLine(const std::string& str, 
     HandShakeRequest::ptr req)
 {
-    char* pos = strstr(str.c_str(), " ");
+    char* pos = (char*)strstr(str.c_str(), " ");
 
     if (pos) {
         size_t m_len = pos - str.c_str();
@@ -61,7 +61,7 @@ bool HandShake::getFirstLine(const std::string& str,
             pos++;
         }
 
-        char* path_pos = strstr(pos, " ");
+        char* path_pos = (char*)strstr(pos, " ");
         if (path_pos) {
             int p_len = path_pos - pos;
             std::string path(pos, p_len);
@@ -90,7 +90,7 @@ bool HandShake::getFirstLine(const std::string& str,
 bool HandShake::readHeaderLine(const std::string& line,
     HandShakeRequest::ptr req)
 {
-    char* pos = strstr(line.c_str(), ":");
+    char* pos = (char*)strstr(line.c_str(), ":");
 
     if (pos) {
         size_t len = pos - line.c_str();

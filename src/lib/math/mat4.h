@@ -5,8 +5,14 @@
 #include "vec4.h"
 #include "quaternion.h"
 
+#include <type_traits> 
+
 #ifdef __SSE__
 #include <xmmintrin.h>
+#endif
+
+#ifdef __ARM_NEON__
+#include <arm_neon.h>
 #endif
 
 class Mat4
@@ -15,6 +21,11 @@ public:
 #ifdef __SSE__
     union {
         __m128 col[4];
+        float m[16];
+    };
+#elif __ARM_NEON__
+    union {
+        float32x4x4_t col;
         float m[16];
     };
 #else

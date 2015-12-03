@@ -24,7 +24,7 @@ struct HttpResponseHeader : public SmartPtr<HttpResponseHeader>
     enum CacheControl {
         UNKNOWN_CACHE_CONTROL = 0,
         NO_CACHE = 1, 
-        NO_STORE = 2, 
+        CACHE_NO_STORE = 2, 
         CACHE_PUBLIC = 4, 
         CACHE_PRIVATE = 8, 
         CACHE_CONTROLER_MAXAGE = 16,

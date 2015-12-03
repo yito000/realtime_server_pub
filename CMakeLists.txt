@@ -347,7 +347,6 @@ add_executable(
   src/setting_loader.h
   src/lib/allocator/custom_allocator.hpp
   src/lib/allocator/stl_custom_allocator.hpp
-  src/lib/atomic/atomic_operator.hpp
   src/lib/atomic/spin_lock.hpp
   src/lib/smart_ptr.hpp
   src/network/http/http_helper.hpp

@@ -6,6 +6,8 @@
 #include "delayed_task.h"
 #include "delayed_task_processor.h"
 
+#include <atomic>
+
 class AppScheduler : public SmartPtr<AppScheduler>
 {
 public:
@@ -27,7 +29,7 @@ private:
 
     int interval_millis;
     bool init;
-    bool end;
+    std::atomic<bool> end;
 };
 
 #endif

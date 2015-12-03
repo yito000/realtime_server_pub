@@ -1,6 +1,5 @@
 #include "udp_socket_proxy.h"
 
-#include "atomic/atomic_operator.hpp"
 #include <boost/thread.hpp>
 
 #include "macros.h"
@@ -34,11 +33,11 @@ UdpSocketProxy* UdpSocketProxy::createServer(
 
 void UdpSocketProxy::run()
 {
-    if (running) {
+    if (running.load()) {
         return;
     }
     
-    AtomicOperator<bool>::lock_test_and_set(&running, true);
+    running.exchange(true);
     udp_socket->receive();
 }
 
@@ -75,6 +74,7 @@ void UdpSocketProxy::setSendCallback(UdpSendCallback callback)
 void UdpSocketProxy::send(const ByteBuffer& packet) const
 {
     ASSERT(!mode_server, "This method is Client Mode Only.");
+    Logger::log("send udp packet");
     
     udp_socket->send(packet, endpoint);
 }

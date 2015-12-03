@@ -10,6 +10,7 @@
 
 #include <functional>
 #include <boost/asio.hpp>
+#include <atomic>
 
 #include "handshake.h"
 #include "server_frame_data.h"
@@ -131,7 +132,7 @@ private:
     SessionDelegate* session_delegate;
     std::string valid_protocol;
     std::deque<PacketInfo> packet_queue;
-    bool process_write;
+    std::atomic<bool> process_write;
 
     bool start_flag;
     bool handshake_ok;

@@ -2,6 +2,7 @@
 #define MATH_UTIL_H
 
 #include <float.h>
+#include <math.h>
 
 class MathUtil
 {

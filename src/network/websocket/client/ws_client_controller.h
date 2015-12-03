@@ -5,8 +5,11 @@
 #include "network/websocket/client/websocket_async.h"
 
 #include "common/data_buffer.h"
+
 #include <list>
 #include <functional>
+#include <boost/thread.hpp>
+#include <atomic>
 
 typedef std::function<bool(bool, boost::asio::ssl::verify_context&)> VerifyCallback;
 
@@ -27,7 +30,11 @@ public:
     void run();
     void stopController();
     
-    void startWebsocket(client::WebsocketAsync* socket);
+    void pause();
+    void resume();
+    
+    void startWebsocket(client::WebsocketAsync* socket, 
+        client::HandShakeRequest::ptr h_req);
     void stopWebsocket(client::WebsocketAsync* socket);
     
     void setVerifyMode(VerifyMode verify_mode);
@@ -37,6 +44,13 @@ public:
     void setVerifyCallback(VerifyCallback callback);
     
 private:
+    enum {
+        SERVER_RUNNING,
+        SERVER_PAUSED,
+        SERVER_RESUME,
+        SERVER_END
+    };
+    
     WsClientController();
     
     std::list<client::WebsocketAsync*> client_list;
@@ -44,7 +58,10 @@ private:
     boost::asio::io_service::work work;
     boost::asio::ssl::context ssl_context;
     
-    bool running;
+    boost::condition_variable ws_cond;
+    boost::mutex ws_mutex;
+    
+    std::atomic<int> server_flag;
     VerifyCallback verify_callback;
 };
 

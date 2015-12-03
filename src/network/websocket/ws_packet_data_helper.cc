@@ -2,6 +2,8 @@
 
 #include "random/random.h"
 
+#include <chrono>
+
 namespace {
     Random s_rand(std::chrono::system_clock::now().
         time_since_epoch().count() / 1000 / 1000);
@@ -12,8 +14,8 @@ PacketData::ptr WsPacketDataHelper::buildPacket(int op_code,
 {
     auto packet = new PacketData;
 
-    char s_op_code[4] = {0};
-    char size_buf[4] = {0};
+    unsigned char s_op_code[4] = {0};
+    unsigned char size_buf[4] = {0};
 
     s_op_code[0] = (op_code >> 24) & 255;
     s_op_code[1] = (op_code >> 16) & 255;
@@ -49,8 +51,8 @@ PacketData::ptr WsPacketDataHelper::buildPacket(int op_code,
     auto packet = new PacketData;
     auto size = v.size();
 
-    char s_op_code[4] = {0};
-    char size_buf[4] = {0};
+    unsigned char s_op_code[4] = {0};
+    unsigned char size_buf[4] = {0};
 
     s_op_code[0] = (op_code >> 24) & 255;
     s_op_code[1] = (op_code >> 16) & 255;

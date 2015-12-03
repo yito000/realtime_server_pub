@@ -1,6 +1,4 @@
 #include "redis_service.h"
-
-#include "atomic/atomic_operator.hpp"
 #include "log/logger.h"
 
 #include <boost/asio/ip/address.hpp>
@@ -55,14 +53,14 @@ bool RedisService::connect(const std::string& address,
     if (cli->connect(addr, _port)) {
         Logger::log("connection success!");
 
-        AtomicOperator<int>::lock_test_and_set(&signal, NO_SIGNAL);
+        signal.exchange(NO_SIGNAL);
         connected = true;
 
         return true;
     } else {
         Logger::log("connection failure!");
         
-        AtomicOperator<int>::lock_test_and_set(&signal, SIG_CONNECTION);
+        signal.exchange(SIG_CONNECTION);
 
         return false;
     }
@@ -210,7 +208,7 @@ void RedisService::update()
     } catch (std::exception& e) {
         Logger::debug("%s", e.what());
 
-        AtomicOperator<int>::lock_test_and_set(&signal, SIG_CONNECTION);
+        signal.exchange(SIG_CONNECTION);
         connected = false;
     }
 }
@@ -261,7 +259,7 @@ void RedisService::errorHandle(const std::string& s)
         item_queue.pop();
     }
 
-    AtomicOperator<int>::lock_test_and_set(&signal, SIG_CONNECTION);
+    signal.exchange(SIG_CONNECTION);
 }
 
 void RedisService::execQueueTask()

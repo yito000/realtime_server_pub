@@ -4,6 +4,8 @@
 #include "actor/ws_actor.h"
 #include "network/websocket/client/websocket_async.h"
 
+#include <atomic>
+
 class ClusterActor : public WsActor
 {
 public:
@@ -34,9 +36,9 @@ private:
     int node_id;
     client::WebsocketAsync* websocket;
     
-    mutable bool first_process;
-    mutable size_t read_cnt;
-    mutable size_t write_cnt;
+    mutable std::atomic<bool> first_process;
+    mutable std::atomic<size_t> read_cnt;
+    mutable std::atomic<size_t> write_cnt;
     std::string uuid;
 };
 

@@ -3,8 +3,6 @@
 #include "common_object.h"
 #include "router/command_dispatcher.h"
 
-#include "atomic/atomic_operator.hpp"
-
 #include "network/websocket/packet.h"
 #include "log/logger.h"
 
@@ -36,7 +34,7 @@ void ServerNode::write(PacketData::ptr pd,
         return;
     }
     
-    AtomicOperator<size_t>::increment(&write_cnt);
+    write_cnt.fetch_add(1);
     session->write(pd, send_callback);
 }
 
@@ -47,8 +45,8 @@ void ServerNode::close() const
 
 void ServerNode::onStart() const
 {
-    AtomicOperator<size_t>::increment(&read_cnt);
-    AtomicOperator<bool>::lock_test_and_set(&first_process, false);
+    read_cnt.fetch_add(1);
+    first_process.exchange(false);
     
     session->read();
 }
@@ -68,13 +66,13 @@ void ServerNode::onReceiveFinish(boost::system::error_code ec) const
     if (!ec && session->isOpen()) {
         session->read();
     } else {
-        AtomicOperator<size_t>::decrement(&read_cnt);
+        read_cnt.fetch_sub(1);
     }
 }
 
 void ServerNode::onSendFinish(boost::system::error_code ec) const
 {
-    AtomicOperator<size_t>::decrement(&write_cnt);
+    write_cnt.fetch_sub(1);
 }
 
 void ServerNode::onError(Operation operation, 

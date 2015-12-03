@@ -4,7 +4,6 @@
 #include <boost/thread.hpp>
 
 #include "common_object.h"
-#include "lib/atomic/atomic_operator.hpp"
 #include "lib/time/app_time.h"
 
 #include "battle/packet/end_battle_packet.h"
@@ -39,7 +38,7 @@ BattleProcessor::ptr BattleProcessor::create(BattleManager& _battle_manager,
 
 void BattleProcessor::runLoop()
 {
-    while (!end_flag) {
+    while (!end_flag.load()) {
         BattlePacket* packet;
         
         for (int i = 0; i < LOOP_COUNT; i++) {
@@ -79,7 +78,7 @@ void BattleProcessor::pushPacket(BattlePacket* packet)
 
 void BattleProcessor::endLoop()
 {
-    AtomicOperator<bool>::lock_test_and_set(&end_flag, true);
+    end_flag.exchange(true);
 }
 
 // private member function

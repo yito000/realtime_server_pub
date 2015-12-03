@@ -1,5 +1,7 @@
 #include "ssl_mt.h"
 
+#ifndef TARGET_OS_WIN64
+
 #include <stdio.h>
 #include <pthread.h>
 #include <openssl/err.h>
@@ -70,3 +72,5 @@ int ssl_thread_cleanup(void)
 
     return 1;
 }
+
+#endif

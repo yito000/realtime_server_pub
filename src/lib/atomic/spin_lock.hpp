@@ -5,13 +5,13 @@
 #include <boost/thread.hpp>
 #include <boost/chrono.hpp>
 
-#include "atomic_operator.hpp"
+#include <atomic>
 
 template <std::size_t LOOP_COUNT = 50>
 class Spinlock {
 private:
     typedef enum {Locked = 1, Unlocked = 0} LockState;
-    long atomic_lock;
+    std::atomic<long> atomic_lock;
 
 public:
     Spinlock() : atomic_lock(Unlocked) {}
@@ -19,9 +19,9 @@ public:
     inline void lock()
     {
         int cnt = 0;
-        auto du = boost::chrono::milliseconds(1);
+        auto du = boost::chrono::milliseconds(0);
 
-        while (AtomicOperator<long>::lock_test_and_set(&atomic_lock, Locked) == Locked) {
+        while (atomic_lock.exchange(Locked) == Locked) {
             if (cnt >= LOOP_COUNT) {
                 boost::this_thread::sleep_for(du);
             }
@@ -32,7 +32,7 @@ public:
 
     inline void unlock()
     {
-        AtomicOperator<long>::lock_release(&atomic_lock);
+        atomic_lock.store(Unlocked);
     }
 };
 

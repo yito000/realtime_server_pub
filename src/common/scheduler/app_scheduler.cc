@@ -3,7 +3,6 @@
 #include <boost/chrono.hpp>
 #include <boost/thread.hpp>
 
-#include "lib/atomic/atomic_operator.hpp"
 #include "log/logger.h"
 
 AppScheduler::AppScheduler() : 
@@ -42,7 +41,7 @@ void AppScheduler::run()
 
     auto du = boost::chrono::milliseconds(interval_millis);
 
-    while (!end) {
+    while (!end.load()) {
         task_processor->poll();
 
         boost::this_thread::sleep_for(du);
@@ -62,5 +61,5 @@ void AppScheduler::removeTask(const std::string name)
 
 void AppScheduler::endScheduler()
 {
-    AtomicOperator<bool>::lock_test_and_set(&end, true);
+    end.exchange(true);
 }

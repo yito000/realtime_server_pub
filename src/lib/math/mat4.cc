@@ -9,6 +9,11 @@
 #include "sse/matrix_sse_inl.h"
 #endif
 
+#ifdef __ARM_NEON__
+#include "neon/matrix_neon.h"
+#include "neon/matrix_neon_inl.h"
+#endif
+
 Mat4::Mat4()
 {
     identity();
@@ -214,6 +219,8 @@ void Mat4::multiply(const Mat4& matrix)
 {
 #ifdef __SSE__
     MatrixSSE::multiply(this->col, matrix.col, this->col);
+#elif __ARM_NEON__
+    MatrixNeon::multiply(this->col, matrix.col, this->col);
 #else
     MultiplyMatrix(*this, matrix, this);
 #endif
@@ -223,6 +230,8 @@ void Mat4::multiply(const Mat4& matrix, Mat4* dst)
 {
 #ifdef __SSE__
     MatrixSSE::multiply(this->col, matrix.col, dst->col);
+#elif __ARM_NEON__
+    MatrixNeon::multiply(this->col, matrix.col, dst->col);
 #else
     MultiplyMatrix(*this, matrix, dst);
 #endif
@@ -682,6 +691,8 @@ void Mat4::multiplyVector(const Vec4& v, Vec4* dst) const
 {
 #ifdef __SSE__
     MatrixSSE::transformVector4(col, v.v, dst->v);
+#elif __ARM_NEON__
+    MatrixNeon::transformVector4(col, v.v, dst->v);
 #else
     float x = v.x;
     float y = v.y;

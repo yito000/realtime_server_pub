@@ -3,8 +3,6 @@
 #include "network/io/async_socket.h"
 #include "network/io/async_ssl_socket.h"
 
-#include "atomic/atomic_operator.hpp"
-
 #include <sstream>
 #include <regex>
 
@@ -362,7 +360,7 @@ void WebsocketAsync::writeAsync(PacketData::ptr packet_data,
     const std::string mask_key, SendCallback send_callback)
 {
     ios.dispatch([this, packet_data, mask_key, send_callback]() {
-        if (process_write) {
+        if (process_write.load()) {
             PacketInfo p_info;
             p_info.packet = packet_data;
             p_info.mask_key = mask_key;
@@ -378,7 +376,7 @@ void WebsocketAsync::writeAsync(PacketData::ptr packet_data,
 void WebsocketAsync::writeAsyncInternal(PacketData::ptr packet_data,
     const std::string mask_key, SendCallback send_callback)
 {
-    AtomicOperator<bool>::lock_test_and_set(&process_write, true);
+    process_write.exchange(true);
     
     auto du = boost::posix_time::milliseconds(timeout_millis);
     
@@ -420,7 +418,7 @@ void WebsocketAsync::writeAsyncInternal(PacketData::ptr packet_data,
                 writeAsyncInternal(p_info.packet, p_info.mask_key, p_info.callback);
             }
             
-            AtomicOperator<bool>::lock_test_and_set(&process_write, false);
+            process_write.exchange(false);
         });
 }
 

@@ -5,6 +5,7 @@
 #include "smart_ptr.hpp"
 
 #include <functional>
+#include <atomic>
 
 typedef std::function<void(voltdb::InvocationResponse&)> VoltQueryCallback;
 typedef std::function<void(std::exception&)> VoltErrorCallback;
@@ -54,7 +55,7 @@ private:
     unsigned short port;
 
     bool connected;
-    int signal;
+    std::atomic<int> signal;
     VoltLogger* v_logger;
 };
 

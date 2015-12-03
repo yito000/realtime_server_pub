@@ -3,8 +3,6 @@
 #include "common_object.h"
 #include "router/command_dispatcher.h"
 
-#include "atomic/atomic_operator.hpp"
-
 #include "network/websocket/packet.h"
 #include "log/logger.h"
 
@@ -41,14 +39,14 @@ void UserClient::write(PacketData::ptr pd,
         return;
     }
     
-    AtomicOperator<size_t>::increment(&write_cnt);
+    write_cnt.fetch_add(1);
     session->write(pd, send_callback);
 }
 
 void UserClient::onStart() const
 {
-    AtomicOperator<size_t>::increment(&read_cnt);
-    AtomicOperator<bool>::lock_test_and_set(&first_process, false);
+    read_cnt.fetch_add(1);
+    first_process.exchange(false);
     
     session->read();
 }
@@ -68,13 +66,13 @@ void UserClient::onReceiveFinish(boost::system::error_code ec) const
     if (!ec && session->isOpen()) {
         session->read();
     } else {
-        AtomicOperator<size_t>::decrement(&read_cnt);
+        read_cnt.fetch_sub(1);
     }
 }
 
 void UserClient::onSendFinish(boost::system::error_code ec) const
 {
-    AtomicOperator<size_t>::decrement(&write_cnt);
+    write_cnt.fetch_sub(1);
 }
 
 void UserClient::onError(Operation operation, 

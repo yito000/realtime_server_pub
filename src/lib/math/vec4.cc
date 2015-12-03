@@ -20,6 +20,14 @@ Vec4::Vec4(float* f) :
     //
 }
 
+Vec4::Vec4(const Vec4& copy)
+{
+    this->x = copy.x;
+    this->y = copy.y;
+    this->z = copy.z;
+    this->w = copy.w;
+}
+
 void Vec4::add(const Vec4& v)
 {
     x += v.x;

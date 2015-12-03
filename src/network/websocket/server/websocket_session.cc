@@ -5,8 +5,6 @@
 #include "network/io/async_socket.h"
 #include "network/io/async_ssl_socket.h"
 
-#include "atomic/atomic_operator.hpp"
-
 #include <boost/lexical_cast.hpp>
 #include <boost/thread.hpp>
 
@@ -382,7 +380,7 @@ void WebsocketSession::writeAsync(PacketData::ptr packet_data,
     SendCallback send_callback)
 {
     ios.dispatch([this, packet_data, send_callback]() {
-        if (process_write) {
+        if (process_write.load()) {
             PacketInfo p_info;
             p_info.packet = packet_data;
             p_info.callback = send_callback;
@@ -397,7 +395,7 @@ void WebsocketSession::writeAsync(PacketData::ptr packet_data,
 void WebsocketSession::writeAsyncInternal(PacketData::ptr packet_data,
     SendCallback send_callback)
 {
-    AtomicOperator<bool>::lock_test_and_set(&process_write, true);
+    process_write.exchange(true);
     
     auto du = boost::posix_time::milliseconds(timeout_millis);
     
@@ -439,7 +437,7 @@ void WebsocketSession::writeAsyncInternal(PacketData::ptr packet_data,
                 writeAsyncInternal(p_info.packet, p_info.callback);
             }
             
-            AtomicOperator<bool>::lock_test_and_set(&process_write, false);
+            process_write.exchange(false);
         });
 }
 

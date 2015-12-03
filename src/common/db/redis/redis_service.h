@@ -9,6 +9,7 @@
 #include <string>
 #include <queue>
 #include <boost/function.hpp>
+#include <atomic>
 
 typedef std::function<void(const std::string&)> RedisSubscribeCallback;
 typedef std::function<void(const RedisValue&)> RedisPublishCallback;
@@ -80,7 +81,7 @@ private:
     unsigned short port;
 
     bool connected;
-    int signal;
+    std::atomic<int> signal;
     AppTime::Point last_watch;
 };
 

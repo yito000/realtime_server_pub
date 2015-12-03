@@ -1,8 +1,14 @@
 #ifndef VEC4_H
 #define VEC4_H
 
+#include <type_traits> 
+
 #ifdef __SSE__
 #include <xmmintrin.h>
+#endif
+
+#ifdef __ARM_NEON__
+#include <arm_neon.h>
 #endif
 
 class Vec4
@@ -18,6 +24,16 @@ public:
         };
         __m128 v;
     };
+#elif __ARM_NEON__
+    union {
+        struct {
+            float x;
+            float y;
+            float z;
+            float w;
+        };
+        float32x4_t v;
+    };
 #else
     float x;
     float y;
@@ -28,6 +44,7 @@ public:
     Vec4();
     Vec4(float _x, float _y, float _z, float _w);
     Vec4(float* f);
+    Vec4(const Vec4& copy);
     
     void add(const Vec4& v);
     void subtract(const Vec4& v);

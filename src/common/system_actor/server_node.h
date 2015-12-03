@@ -4,6 +4,8 @@
 #include "actor/ws_actor.h"
 #include "network/websocket/server/websocket_session.h"
 
+#include <atomic>
+
 class ServerNode : public WsActor
 {
 public:
@@ -33,9 +35,9 @@ public:
 private:
     server::WebsocketContext* session;
     
-    mutable bool first_process;
-    mutable size_t read_cnt;
-    mutable size_t write_cnt;
+    mutable std::atomic<bool> first_process;
+    mutable std::atomic<size_t> read_cnt;
+    mutable std::atomic<size_t> write_cnt;
 };
 
 #endif
