@@ -5,9 +5,6 @@
 #include <vector>
 #include <boost/asio.hpp>
 
-class WsActor;
-typedef boost::intrusive_ptr<WsActor> WsActorPtr;
-
 struct UdpCommandInfo : public SmartPtr<UdpCommandInfo>
 {
     typedef boost::intrusive_ptr<UdpCommandInfo> ptr;
