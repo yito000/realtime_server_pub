@@ -61,7 +61,7 @@ public:
         ws_delegate = wd;
     }
     
-    long getKey() const;
+    int64_t getKey() const;
 
 private:
     struct PacketInfo

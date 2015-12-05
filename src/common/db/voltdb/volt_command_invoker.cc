@@ -91,7 +91,7 @@ void VoltCommandInvoker::retryQuery(const std::string command_name,
             std::move(result_callback), --retry);
 
         std::string name = "_retry_invoke" +
-            std::to_string(reinterpret_cast<long>(task.get()));
+            std::to_string(reinterpret_cast<int64_t>(task.get()));
 
         sche->addTask(name, task);
     }

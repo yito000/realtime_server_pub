@@ -117,9 +117,9 @@ void WebsocketSession::destroyAsync()
     });
 }
 
-long WebsocketSession::getKey() const
+int64_t WebsocketSession::getKey() const
 {
-    return std::hash<long>()(reinterpret_cast<long>(this)) ^
+    return std::hash<int64_t>()(reinterpret_cast<long>(this)) ^
         std::hash<std::string>()(uuid);
 }
 

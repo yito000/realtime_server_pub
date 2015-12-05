@@ -40,7 +40,7 @@ public:
     virtual void write(PacketData::ptr packet_data,
         SendCallback send_callback) = 0;
     
-    virtual long getKey() const = 0;
+    virtual int64_t getKey() const = 0;
 };
 
 class WebsocketSession : public WebsocketContext
@@ -84,7 +84,7 @@ public:
         valid_protocol = p;
     }
     
-    virtual long getKey() const override;
+    virtual int64_t getKey() const override;
 
 private:
     struct PacketInfo
