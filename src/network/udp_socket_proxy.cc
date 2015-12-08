@@ -116,9 +116,9 @@ bool UdpSocketProxy::init(AddressType addr_type,
     }
     
     if (addr_type == UdpSocketProxy::AddressType::ipv6) {
-        udp_socket = new AsyncUdpSocket(ios, true);
+        udp_socket = new AsyncUdpSocket(ios, true, endpoint);
     } else {
-        udp_socket = new AsyncUdpSocket(ios, false);
+        udp_socket = new AsyncUdpSocket(ios, false, endpoint);
     }
     
     // set default callback

@@ -14,8 +14,6 @@ void glue_udp_input_command__(const boost::asio::ip::udp::endpoint& ep, const un
         return;
     }
     
-    Logger::log("input!! glue_udp_input_command__");
-
     auto input_command_data = DemoBattle::GetInputCommand(data);
     DemoBattle::input_command_udp(input_command_data->battle_key()->c_str(), input_command_data->seq_id(), input_command_data->player_id(), const_cast<flatbuffers::Vector<const DemoBattle::CommandDetail *>*>(input_command_data->list()), ep);
 }

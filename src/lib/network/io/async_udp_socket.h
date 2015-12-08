@@ -29,7 +29,7 @@ public:
 
     // client mode
     AsyncUdpSocket(boost::asio::io_service& io_service,
-        bool _ipv6_mode);
+        bool _ipv6_mode, const boost::asio::ip::udp::endpoint& endpoint);
 
     ~AsyncUdpSocket();
 

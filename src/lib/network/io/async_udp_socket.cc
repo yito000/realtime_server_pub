@@ -16,12 +16,14 @@ AsyncUdpSocket::AsyncUdpSocket(
 }
 
 AsyncUdpSocket::AsyncUdpSocket(
-    boost::asio::io_service& io_service, bool _ipv6_mode) :
+    boost::asio::io_service& io_service, bool _ipv6_mode,
+    const boost::asio::ip::udp::endpoint& endpoint) :
     ios(io_service),
     ios_st(ios), 
     server_mode(false),
     ipv6_mode(_ipv6_mode),
-    socket(ios)
+    socket(ios),
+    received_endpoint(endpoint)
 {
     socket.open(ipv6_mode ? 
         boost::asio::ip::udp::v6() : boost::asio::ip::udp::v4());
@@ -48,7 +50,7 @@ void AsyncUdpSocket::send(const ByteBuffer& packet,
     const boost::asio::ip::udp::endpoint& endpoint) const
 {
     socket.async_send_to(
-        boost::asio::buffer(packet), endpoint,
+        boost::asio::buffer(packet.data(), packet.size()), endpoint,
         ios_st.wrap(boost::bind(&AsyncUdpSocket::handleSend, this, _1, _2)));
 }
 
@@ -71,7 +73,7 @@ void AsyncUdpSocket::send(const ByteBuffer& packet,
 void AsyncUdpSocket::receive()
 {
     socket.async_receive_from(
-        boost::asio::buffer(buf), received_endpoint,
+        boost::asio::buffer(buf.data(), buf.size()), received_endpoint,
         ios_st.wrap(boost::bind(&AsyncUdpSocket::handleReceive, this, _1, _2)));
 }
 

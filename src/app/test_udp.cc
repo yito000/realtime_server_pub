@@ -16,6 +16,7 @@ void TestUdp::receiveCallback(const boost::system::error_code& ec,
     }
     
     Logger::debug("receive udp packet size=%d", size);
+    Logger::debug("addr=%s, port=%d", ep.address().to_string().c_str(), ep.port());
     
     UdpCommandInfo::ptr udp_info = new UdpCommandInfo;
     udp_info->ep = ep;
