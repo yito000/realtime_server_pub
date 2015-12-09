@@ -1,3 +1,5 @@
+#ifdef USE_VOLTDB
+
 #ifndef VOLTDB_IO_SERVICE_H
 #define VOLTDB_IO_SERVICE_H
 
@@ -22,5 +24,7 @@ private:
     boost::asio::io_service& io_service;
     VoltdbConnection::ptr voltdb_conn;
 };
+
+#endif
 
 #endif

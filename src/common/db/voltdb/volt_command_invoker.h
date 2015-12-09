@@ -1,3 +1,5 @@
+#ifdef USE_VOLTDB
+
 #ifndef VOLT_COMMAND_INVOKER_H
 #define VOLT_COMMAND_INVOKER_H
 
@@ -32,5 +34,7 @@ private:
         VoltParamCallback param_callback,
         VoltResultCallback result_callback, int retry);
 };
+
+#endif
 
 #endif

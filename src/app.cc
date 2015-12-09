@@ -451,6 +451,7 @@ void App::initKeyValueCache(Setting::const_ptr setting)
 
 void App::initVoltdbThread(Setting::const_ptr setting)
 {
+#ifdef USE_VOLTDB
     if (!setting->connect_voltdb) {
         return;
     }
@@ -482,6 +483,7 @@ void App::initVoltdbThread(Setting::const_ptr setting)
     //
     scheduler_list.push_back(sche);
     task_comm->postWorker(std::bind(&AppScheduler::run, sche));
+#endif
 }
 
 void App::initRedisClient(Setting::const_ptr setting)

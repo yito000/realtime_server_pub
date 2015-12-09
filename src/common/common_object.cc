@@ -127,6 +127,7 @@ void CommonObject::setServerErrorHandleRouter(ErrorHandleRouter::ptr eh_router)
     server_err_handle_router = eh_router;
 }
 
+#ifdef USE_VOLTDB
 VoltdbIOService::ptr CommonObject::getVoltdbIOService()
 {
     return volt_io_service;
@@ -136,6 +137,7 @@ void CommonObject::setVoltdbIOService(VoltdbIOService::ptr v_ios)
 {
     volt_io_service = v_ios;
 }
+#endif
 
 RedisService::ptr CommonObject::getRedisService()
 {

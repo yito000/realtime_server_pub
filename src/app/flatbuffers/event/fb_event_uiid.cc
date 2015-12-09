@@ -4,8 +4,8 @@
 
 #include "redis/user_record_redis.h"
 
-#include "record/user_record_voltdb.h"
-#include "record/voltdb_record.h"
+//#include "record/user_record_voltdb.h"
+//#include "record/voltdb_record.h"
 
 #include "app_director.h"
 

@@ -1,3 +1,5 @@
+#ifdef USE_VOLTDB
+
 #ifndef USER_RECORD_VOLTDB_H
 #define USER_RECORD_VOLTDB_H
 
@@ -20,5 +22,7 @@ private:
 
     UserRecordVoltdb();
 };
+
+#endif
 
 #endif

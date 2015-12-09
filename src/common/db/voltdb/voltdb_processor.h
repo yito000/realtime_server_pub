@@ -1,3 +1,5 @@
+#ifdef USE_VOLTDB
+
 #ifndef VOLTDB_PROCESSOR_H
 #define VOLTDB_PROCESSOR_H
 
@@ -24,5 +26,7 @@ private:
 
     VoltdbConnection::ptr voltdb_conn;
 };
+
+#endif
 
 #endif

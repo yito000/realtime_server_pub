@@ -9,9 +9,11 @@
 #include "scheduler/app_scheduler.h"
 #include "router/router.h"
 #include "router/udp_router.h"
-
-#include "db/voltdb/voltdb_io_service.h"
 #include "db/redis/redis_service.h"
+
+#ifdef USE_VOLTDB
+#include "db/voltdb/voltdb_io_service.h"
+#endif
 
 class CommonObject
 {
@@ -54,8 +56,10 @@ public:
     ErrorHandleRouter::ptr getServerErrorHandleRouter();
     void setServerErrorHandleRouter(ErrorHandleRouter::ptr eh_router);
 
+#ifdef USE_VOLTDB
     VoltdbIOService::ptr getVoltdbIOService();
     void setVoltdbIOService(VoltdbIOService::ptr v_ios);
+#endif
 
     RedisService::ptr getRedisService();
     void setRedisService(RedisService::ptr r_service);
@@ -80,7 +84,10 @@ private:
     ErrorHandleRouter::ptr cluster_err_handle_router;
     ErrorHandleRouter::ptr server_err_handle_router;
 
+#ifdef USE_VOLTDB
     VoltdbIOService::ptr volt_io_service;
+#endif
+
     RedisService::ptr redis_service;
 };
 

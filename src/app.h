@@ -15,7 +15,10 @@
 #include "actor/actor_manager.h"
 #include "cluster/cluster.h"
 #include "main_loop.h"
+
+#ifdef USE_VOLTDB
 #include "db/voltdb/voltdb_processor.h"
+#endif
 
 #include "error/internal/error_handle_route_map.h"
 #include "router/detail/route_map.h"
@@ -78,11 +81,14 @@ private:
     Cluster::ptr cluster;
 
     MainLoop::ptr main_loop;
-    VoltdbProcessor::ptr v_processor;
     Router::ptr user_router;
     Router::ptr system_router;
     UdpRouter::ptr user_router_udp;
     UdpRouter::ptr system_router_udp;
+
+#ifdef USE_VOLTDB
+    VoltdbProcessor::ptr v_processor;
+#endif
     
     ErrorHandleRouter::ptr user_err_handle_router;
     ErrorHandleRouter::ptr cluster_err_handle_router;

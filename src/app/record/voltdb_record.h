@@ -1,3 +1,5 @@
+#ifdef USE_VOLTDB
+
 #ifndef VOLTDB_RECORD_H
 #define VOLTDB_RECORD_H
 
@@ -6,3 +8,4 @@
 
 #endif
 
+#endif

@@ -1,3 +1,5 @@
+#ifdef USE_VOLTDB
+
 #include "voltdb_connection.h"
 #include "log/logger.h"
 
@@ -135,3 +137,5 @@ void VoltdbConnection::drain()
 {
     while (!cli.drain()) {}
 }
+
+#endif

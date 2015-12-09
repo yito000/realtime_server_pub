@@ -1,3 +1,5 @@
+#ifdef USE_VOLTDB
+
 #include "voltdb_processor.h"
 
 VoltdbProcessor::VoltdbProcessor(VoltdbConnection::ptr v_conn) : 
@@ -13,3 +15,5 @@ void VoltdbProcessor::run()
 
     voltdb_conn->drain();
 }
+
+#endif

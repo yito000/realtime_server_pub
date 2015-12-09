@@ -1,3 +1,5 @@
+#ifdef USE_VOLTDB
+
 #ifndef VOLTDB_CONNECTION_H
 #define VOLTDB_CONNECTION_H
 
@@ -58,5 +60,7 @@ private:
     std::atomic<int> signal;
     VoltLogger* v_logger;
 };
+
+#endif
 
 #endif

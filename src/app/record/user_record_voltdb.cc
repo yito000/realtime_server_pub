@@ -1,3 +1,5 @@
+#ifdef USE_VOLTDB
+
 #include "user_record_voltdb.h"
 #include "common_object.h"
 
@@ -35,3 +37,5 @@ UserRecordVoltdb::UserRecordVoltdb()
 {
     //
 }
+
+#endif

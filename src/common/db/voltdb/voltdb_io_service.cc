@@ -1,3 +1,5 @@
+#ifdef USE_VOLTDB
+
 #include "voltdb_io_service.h"
 
 #include "voltdb_processor.h"
@@ -17,3 +19,5 @@ VoltdbConnection::ptr VoltdbIOService::getVoltdbConnection()
 {
     return voltdb_conn;
 }
+
+#endif

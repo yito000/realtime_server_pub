@@ -1,3 +1,5 @@
+#ifdef USE_VOLTDB
+
 #include "volt_command_invoker.h"
 #include "common_object.h"
 
@@ -96,3 +98,5 @@ void VoltCommandInvoker::retryQuery(const std::string command_name,
         sche->addTask(name, task);
     }
 }
+
+#endif

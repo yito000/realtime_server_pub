@@ -62,10 +62,6 @@ add_executable(
   src/app/flatbuffers/register_udp_handshake.cc
   src/app/flatbuffers/udp_handshake.cc
   src/app/global.cc
-  src/app/protobuf/event/pb_ev_res_uiid.cc
-  src/app/protobuf/event/pb_ev_uiid.cc
-  src/app/protobuf/event/pb_master.cc
-  src/app/protobuf/message/uiid.pb.cc
   src/app/record/user.cc
   src/app/record/user_record_voltdb.cc
   src/app/redis/user_record_redis.cc
@@ -214,10 +210,6 @@ add_executable(
   src/app/flatbuffers/udp_handshake.h
   src/app/flatbuffers/udp_handshake_generated.h
   src/app/global.h
-  src/app/protobuf/event/pb_ev_res_uiid.h
-  src/app/protobuf/event/pb_ev_uiid.h
-  src/app/protobuf/event/pb_master.h
-  src/app/protobuf/message/uiid.pb.h
   src/app/record/user.h
   src/app/record/user_record_voltdb.h
   src/app/record/voltdb_record.h
@@ -358,18 +350,12 @@ target_link_libraries(
   realtime_server 
   ssl 
   crypto 
-  protobuf-lite
-  mysqlclient 
-  voltdbcpp 
   jemalloc 
-  event 
-  event_pthreads 
   boost_date_time 
   boost_filesystem 
   boost_iostreams 
   boost_system 
   boost_regex 
   boost_thread 
-  pthread
+  z 
 )
-

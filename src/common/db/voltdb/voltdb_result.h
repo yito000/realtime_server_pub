@@ -1,3 +1,5 @@
+#ifdef USE_VOLTDB
+
 #ifndef VOLTDB_RESULT_H
 #define VOLTDB_RESULT_H
 
@@ -15,3 +17,4 @@ struct VoltdbResult
 
 #endif
 
+#endif
