@@ -2,11 +2,13 @@ cmake_minimum_required(VERSION 2.8)
 add_definitions("-O0 -std=c++11 -stdlib=libc++ -g")
 #add_definitions("-O3 -std=c++11 -stdlib=libc++ -DNDEBUG")
 
-
 if (APPLE)
-    add_definitions("-DTARGET_OS_MACOSX")
+  add_definitions("-DTARGET_OS_MACOSX")
 elseif (CMAKE_SYSTEM_NAME MATCHES ".*Linux")
-    add_definitions("-DTARGET_OS_LINUX -pthread")
+  find_package(Threads)
+  
+  add_definitions("-DTARGET_OS_LINUX")
+  set(THREADS_PREFER_PTHREAD_FLAG ON)
 endif ()
 
 add_definitions("-DUSE_JEMALLOC")
