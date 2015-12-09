@@ -29,9 +29,15 @@ include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/src/app/flatbuffers 
 )
 
+if (APPLE)
 link_directories(
   ${CMAKE_CURRENT_LIST_DIR}/libs/lib
 )
+elseif (LINUX)
+link_directories(
+  /opt/local/lib
+)
+endif ()
 
 add_executable(
   realtime_server 
