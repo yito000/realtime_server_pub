@@ -56,7 +56,7 @@ void SetupSignalAction()
         memset(&st, 0, sizeof(st));
 
         st.sa_handler = HandleSigint;
-        st.sa_mask |= SA_RESTART;
+        st.sa_mask = SA_RESTART;
 
         sigaction(SIGINT, &st, NULL);
     }
@@ -66,7 +66,7 @@ void SetupSignalAction()
         memset(&st, 0, sizeof(st));
 
         st.sa_handler = HandleSighup;
-        st.sa_mask |= SA_RESTART;
+        st.sa_mask = SA_RESTART;
 
         sigaction(SIGHUP, &st, NULL);
     }
@@ -76,7 +76,7 @@ void SetupSignalAction()
         memset(&st, 0, sizeof(st));
 
         st.sa_handler = HandleSigterm;
-        st.sa_mask |= SA_RESTART;
+        st.sa_mask = SA_RESTART;
 
         sigaction(SIGTERM, &st, NULL);
     }
