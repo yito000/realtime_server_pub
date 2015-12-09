@@ -361,6 +361,7 @@ add_executable(
   src/common/thread/task_sender.ipp
 )
 
+if (APPLE)
 target_link_libraries(
   realtime_server 
   ssl 
@@ -373,5 +374,22 @@ target_link_libraries(
   boost_regex 
   boost_thread 
   z 
-  pthread
 )
+elseif (CMAKE_SYSTEM_NAME MATCHES ".*Linux")
+target_link_libraries(
+  realtime_server 
+  ssl 
+  crypto 
+  jemalloc 
+  boost_date_time 
+  boost_filesystem 
+  boost_iostreams 
+  boost_system 
+  boost_regex 
+  boost_thread 
+  z 
+  pthread 
+  c++ 
+  c++-abi
+)
+endif ()
