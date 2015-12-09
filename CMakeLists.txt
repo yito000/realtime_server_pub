@@ -372,3 +372,9 @@ target_link_libraries(
   boost_thread 
   z 
 )
+
+if (CMAKE_SYSTEM_NAME MATCHES ".*Linux")
+target_link_libraries(
+  pthread
+)
+endif ()
