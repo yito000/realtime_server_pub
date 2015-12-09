@@ -390,6 +390,6 @@ target_link_libraries(
   z 
   pthread 
   c++ 
-  c++-abi
+  c++abi
 )
 endif ()
