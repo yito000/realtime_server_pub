@@ -4,7 +4,7 @@ add_definitions("-O0 -std=c++11 -stdlib=libc++ -g")
 
 if (APPLE)
     add_definitions("-DTARGET_OS_MACOSX")
-elseif (LINUX)
+elseif (CMAKE_SYSTEM_NAME MATCHES ".*Linux")
     add_definitions("-DTARGET_OS_LINUX")
 endif ()
 
@@ -29,7 +29,7 @@ include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/src/app/flatbuffers 
 )
 
-if (LINUX)
+if (CMAKE_SYSTEM_NAME MATCHES ".*Linux")
 include_directories(
   /opt/local/include
 )
@@ -39,7 +39,7 @@ if (APPLE)
 link_directories(
   ${CMAKE_CURRENT_LIST_DIR}/libs/lib
 )
-elseif (LINUX)
+elseif (CMAKE_SYSTEM_NAME MATCHES ".*Linux")
 link_directories(
   /opt/local/lib
 )
