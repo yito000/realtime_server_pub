@@ -391,5 +391,6 @@ target_link_libraries(
   pthread 
   c++ 
   c++abi
+  dl
 )
 endif ()
