@@ -373,4 +373,5 @@ target_link_libraries(
   boost_regex 
   boost_thread 
   z 
+  pthread
 )
