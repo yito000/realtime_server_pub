@@ -29,6 +29,12 @@ include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/src/app/flatbuffers 
 )
 
+if (LINUX)
+include_directories(
+  /opt/local/include
+)
+endif ()
+
 if (APPLE)
 link_directories(
   ${CMAKE_CURRENT_LIST_DIR}/libs/lib
