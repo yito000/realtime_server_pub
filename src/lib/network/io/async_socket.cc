@@ -12,6 +12,9 @@ AsyncSocket::AsyncSocket(boost::asio::io_service& _ios) :
     read_timer(ios), 
     write_timer(ios)
 {
+    boost::asio::ip::tcp::no_delay option(true);
+    socket.set_option(option);
+    
     initTimer();
 }
 
@@ -26,6 +29,9 @@ AsyncSocket::AsyncSocket(boost::asio::io_service& _ios,
 {
     host = _host;
     protocol = std::to_string(_port);
+    
+    boost::asio::ip::tcp::no_delay option(true);
+    socket.set_option(option);
     
     initTimer();
 }

@@ -10,6 +10,9 @@ Socket::Socket(const std::string& _hostname, unsigned int port) :
 {
     hostname = _hostname;
     protocol = boost::lexical_cast<std::string>(port);
+    
+    boost::asio::ip::tcp::no_delay option(true);
+    socket.set_option(option);
 
     err = boost::asio::error::host_not_found;
 
@@ -21,6 +24,9 @@ Socket::Socket(const std::string& _hostname, const std::string& _protocol) :
 {
     hostname = _hostname;
     protocol = _protocol;
+    
+    boost::asio::ip::tcp::no_delay option(true);
+    socket.set_option(option);
 
     err = boost::asio::error::host_not_found;
 

@@ -16,6 +16,9 @@ AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios,
     write_timer(ios),
     server_mode(true)
 {
+    boost::asio::ip::tcp::no_delay option(true);
+    socket.lowest_layer().set_option(option);
+    
     initTimer();
 }
 
@@ -33,6 +36,9 @@ AsyncSSLSocket::AsyncSSLSocket(boost::asio::io_service& _ios,
 {
     host = _host;
     protocol = std::to_string(_port);
+    
+    boost::asio::ip::tcp::no_delay option(true);
+    socket.lowest_layer().set_option(option);
     
     initTimer();
 }
