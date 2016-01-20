@@ -12,9 +12,6 @@ AsyncSocket::AsyncSocket(boost::asio::io_service& _ios) :
     read_timer(ios), 
     write_timer(ios)
 {
-    boost::asio::ip::tcp::no_delay option(true);
-    socket.set_option(option);
-    
     initTimer();
 }
 
@@ -29,9 +26,6 @@ AsyncSocket::AsyncSocket(boost::asio::io_service& _ios,
 {
     host = _host;
     protocol = std::to_string(_port);
-    
-    boost::asio::ip::tcp::no_delay option(true);
-    socket.set_option(option);
     
     initTimer();
 }
@@ -185,6 +179,9 @@ void AsyncSocket::connectInternal(boost::system::error_code err,
                 if (ec) {
                     connectInternal(ec, endpoint_it, callback);
                 } else {
+                    boost::asio::ip::tcp::no_delay option(true);
+                    socket.set_option(option);
+                    
                     callback(ec);
                     
                     connect_timer.expires_at(boost::posix_time::pos_infin);

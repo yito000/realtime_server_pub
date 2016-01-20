@@ -14,9 +14,6 @@ SSLSocket::SSLSocket(const std::string& _hostname, unsigned int port) :
     hostname = _hostname;
     protocol = boost::lexical_cast<std::string>(port);
     
-    boost::asio::ip::tcp::no_delay option(true);
-    socket->lowest_layer().set_option(option);
-    
     checkDeadline();
 }
 
@@ -28,9 +25,6 @@ SSLSocket::SSLSocket(const std::string& _hostname, const std::string& _protocol)
     
     hostname = _hostname;
     protocol = _protocol;
-    
-    boost::asio::ip::tcp::no_delay option(true);
-    socket->lowest_layer().set_option(option);
     
     checkDeadline();
 }
@@ -64,9 +58,6 @@ void SSLSocket::connect(boost::posix_time::time_duration timeout)
     while (err && endpoint_it != end) {
         err = boost::asio::error::would_block;
         
-        socket->lowest_layer().close();
-        socket->lowest_layer().async_connect(*endpoint_it++, boost::bind(&SSLSocket::asyncCallback, this, _1, boost::ref(err)));
-        
         do {
             io_service.run_one();
         } while (err == boost::asio::error::would_block);
@@ -75,6 +66,9 @@ void SSLSocket::connect(boost::posix_time::time_duration timeout)
     if (err) {
         throw boost::system::system_error(err);
     }
+    
+    socket->lowest_layer().close();
+    socket->lowest_layer().async_connect(*endpoint_it++, boost::bind(&SSLSocket::asyncCallback, this, _1, boost::ref(err)));
     
     handshake(timeout);
 }
