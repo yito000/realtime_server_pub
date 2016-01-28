@@ -5,6 +5,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 FileStream::~FileStream()
 {
     close();
@@ -58,7 +60,8 @@ size_t FileStream::read(char* buf, size_t read_size)
         return 0;
     }
     
-    return fp->read(buf, read_size);
+    auto ret = fp->read(buf, read_size);
+    return ret;
 }
 
 bool FileStream::seek(size_t pos)
@@ -67,7 +70,8 @@ bool FileStream::seek(size_t pos)
         return false;
     }
     
-    return fp->seek(pos);
+    auto ret = fp->seek(pos);
+    return ret;
 }
 
 size_t FileStream::pos() const
@@ -76,7 +80,8 @@ size_t FileStream::pos() const
         return -1;
     }
     
-    return fp->pos();
+    auto ret = fp->pos();
+    return ret;
 }
 
 bool FileStream::reset()
@@ -140,5 +145,7 @@ void FileStream::open()
         fp->open(QIODevice::ReadOnly);
     }
 }
+
+END_NS
 
 #endif

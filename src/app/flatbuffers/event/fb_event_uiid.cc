@@ -14,6 +14,8 @@
 
 #include "log/logger.h"
 
+USING_NS
+
 void FbEvUiid::addUser(long actor_key,
     const unsigned char* data, int size)
 {

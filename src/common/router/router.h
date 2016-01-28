@@ -1,12 +1,14 @@
 #ifndef ROUTER_H
 #define ROUTER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <map>
 #include <functional>
 
 #include "route_map_base.h"
+
+BEGIN_NS
 
 class Router : public SmartPtr<Router>
 {
@@ -22,5 +24,7 @@ public:
 private:
     RouteMapBase& route_map;
 };
+
+END_NS
 
 #endif

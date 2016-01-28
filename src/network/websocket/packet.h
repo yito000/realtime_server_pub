@@ -1,9 +1,11 @@
 #ifndef PACKET_H
 #define PACKET_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <vector>
+
+BEGIN_NS
 
 enum PacketType {
     PACKET_TYPE_TEXT = 1,
@@ -32,6 +34,8 @@ struct PacketData : public SmartPtr<PacketData>
         packet_type = PACKET_TYPE_TEXT;
     }
 };
+
+END_NS
 
 #endif
 

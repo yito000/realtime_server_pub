@@ -1,14 +1,18 @@
 #ifndef FLATBUFFERS_SOCKET_MANAGER_H
 #define FLATBUFFERS_SOCKET_MANAGER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <string>
 #include <boost/asio.hpp>
 
 #include "network/websocket/packet.h"
 
+BEGIN_NS
+
 class UdpSocketProxy;
+
+END_NS
 
 class FlatbuffersSocketManager : public SmartPtr<FlatbuffersSocketManager>
 {
@@ -17,15 +21,15 @@ public:
     
     static FlatbuffersSocketManager::ptr getInstance();
     
-    void writeTCPSocket(PacketData::ptr packet, long actor_key);
+    void writeTCPSocket(fwx::PacketData::ptr packet, long actor_key);
     
-    UdpSocketProxy* getUdpSocket() const;
-    void setUdpSocket(UdpSocketProxy* socket);
+    fwx::UdpSocketProxy* getUdpSocket() const;
+    void setUdpSocket(fwx::UdpSocketProxy* socket);
     
 private:
     FlatbuffersSocketManager();
     
-    UdpSocketProxy* udp_socket;
+    fwx::UdpSocketProxy* udp_socket;
 };
 
 #endif

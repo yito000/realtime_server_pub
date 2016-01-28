@@ -4,6 +4,8 @@
 
 #include "log/logger.h"
 
+USING_NS
+
 void FbEvResponseUiid::response(long actor_key,
     const unsigned char* data, int size)
 {

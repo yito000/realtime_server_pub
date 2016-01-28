@@ -1,7 +1,7 @@
 #ifndef BATTLE_CHARACTER_H
 #define BATTLE_CHARACTER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <string>
 

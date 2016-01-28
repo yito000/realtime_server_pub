@@ -1,10 +1,12 @@
 #ifndef BIDIRECTIONAL_COMMUNICATOR_H
 #define BIDIRECTIONAL_COMMUNICATOR_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include "thread/task_dispatcher.h"
 #include "thread/multiple_task_dispatcher.h"
+
+BEGIN_NS
 
 class BidirectionalCommunicator : public SmartPtr<BidirectionalCommunicator>
 {
@@ -47,6 +49,8 @@ private:
 
     bool init_flag;
 };
+
+END_NS
 
 #endif
 

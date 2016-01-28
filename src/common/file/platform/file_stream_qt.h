@@ -3,7 +3,7 @@
 #ifndef FILE_STREAM_H
 #define FILE_STREAM_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include <string>
 #include <boost/iostreams/stream.hpp>
 #include <boost/iostreams/device/file_descriptor.hpp>
@@ -11,6 +11,8 @@
 #include "data_buffer.h"
 
 class QFile;
+
+BEGIN_NS
 
 // read only
 class FileStream : public SmartPtr<FileStream>
@@ -46,6 +48,8 @@ private:
 
     QFile* fp;
 };
+
+END_NS
 
 #endif
 

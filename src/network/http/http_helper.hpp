@@ -15,6 +15,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 template <typename Socket>
 class HttpHelper
 {
@@ -240,11 +242,18 @@ private:
         } while(1);
         
         if (!response_callback.empty()) {
-            ByteBuffer decompressed_buffer;
+            GzipByteBuffer decompressed_buffer;
+            ByteBuffer decompressed_copy_buffer;
             
-            Gzip::decompressBufToBuf(ret_buffer, decompressed_buffer);
+            Gzip::decompressBufToBuf((const char*)ret_buffer.data(), ret_buffer.size(), decompressed_buffer);
             
-            response_callback(*header, decompressed_buffer);
+            decompressed_copy_buffer.reserve(decompressed_buffer.size());
+            
+            for (int i = 0; i < decompressed_buffer.size(); i++) {
+                decompressed_copy_buffer.push_back(decompressed_buffer[i]);
+            }
+            
+            response_callback(*header, decompressed_copy_buffer);
         }
         
 #ifndef NDEBUG
@@ -511,11 +520,18 @@ private:
         }
         
         if (!response_callback.empty()) {
-            ByteBuffer decompressed_buffer;
+            GzipByteBuffer decompressed_buffer;
+            ByteBuffer decompressed_copy_buffer;
             
-            Gzip::decompressBufToBuf(buffer, decompressed_buffer);
+            Gzip::decompressBufToBuf((const char*)buffer.data(), buffer.size(), decompressed_buffer);
             
-            response_callback(*header, decompressed_buffer);
+            decompressed_copy_buffer.reserve(decompressed_buffer.size());
+            
+            for (int i = 0; i < decompressed_buffer.size(); i++) {
+                decompressed_copy_buffer.push_back(decompressed_buffer[i]);
+            }
+            
+            response_callback(*header, decompressed_copy_buffer);
         }
         
 #ifndef NDEBUG
@@ -581,5 +597,7 @@ private:
     size_t read_size;
     size_t header_size;
 };
+
+END_NS
 
 #endif

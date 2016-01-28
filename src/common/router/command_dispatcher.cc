@@ -11,6 +11,8 @@ namespace {
     const int HEADER_SIZE = OP_CODE_SIZE + SIZE_DATA_SIZE;
 };
 
+BEGIN_NS
+
 unsigned int charToUInt(const unsigned char* s)
 {
     unsigned int ret = 0;
@@ -65,7 +67,7 @@ bool CommandDispatcher::bulkDispatchUDP(UdpCommandInfo::ptr command_info)
     return result;
 }
 
-bool CommandDispatcher::bulkDispatch(long actor_key, 
+bool CommandDispatcher::bulkDispatch(int64_t actor_key,
     const std::vector<unsigned char>& data)
 {
     if (data.size() <= HEADER_SIZE) {
@@ -135,7 +137,7 @@ static bool DispatchCommandUDP(UdpRouter::ptr router,
 }
 
 static bool DispatchCommand(
-    Router::ptr router, long actor_key,
+    Router::ptr router, int64_t actor_key,
     int op_code, int start_index, int data_size,
     const std::vector<unsigned char>& data)
 {
@@ -187,7 +189,7 @@ bool CommandDispatcher::dispatchDataUDP(
     }
 }
 
-bool CommandDispatcher::dispatchData(long actor_key, 
+bool CommandDispatcher::dispatchData(int64_t actor_key,
     int op_code, int start_index, int data_size, 
     const std::vector<unsigned char>& data)
 {
@@ -211,3 +213,5 @@ bool CommandDispatcher::dispatchData(long actor_key,
         }
     }
 }
+
+END_NS

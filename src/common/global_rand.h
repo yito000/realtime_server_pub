@@ -1,8 +1,10 @@
 #ifndef GLOBAL_RAND_H
 #define GLOBAL_RAND_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include "random/random.h"
+
+BEGIN_NS
 
 class GlobalRand : public SmartPtr<GlobalRand>
 {
@@ -10,7 +12,6 @@ public:
     typedef boost::intrusive_ptr<GlobalRand> ptr;
     
     static GlobalRand::ptr getInstance();
-    ~GlobalRand();
     
     int getInt(int min, int max);
     void getAllAscii(int length, std::string& ret);
@@ -25,5 +26,7 @@ private:
     
     Random* rand;
 };
+
+END_NS
 
 #endif

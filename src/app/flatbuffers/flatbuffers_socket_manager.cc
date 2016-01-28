@@ -5,6 +5,8 @@
 
 #include "log/logger.h"
 
+USING_NS
+
 FlatbuffersSocketManager::ptr FlatbuffersSocketManager::getInstance()
 {
     static FlatbuffersSocketManager::ptr inst = new FlatbuffersSocketManager;

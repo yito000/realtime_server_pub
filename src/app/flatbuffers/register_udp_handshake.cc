@@ -3,6 +3,8 @@
 
 #include "udp_handshake.h"
 
+USING_NS
+
 void register_udp_handshake(UdpRouteMap& route_map)
 {
     route_map.addRoute(1, glue_udp_handshake__);

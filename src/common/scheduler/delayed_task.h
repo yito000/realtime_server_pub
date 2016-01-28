@@ -1,9 +1,11 @@
 #ifndef DELAYED_TASK_H
 #define DELAYED_TASK_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <functional>
+
+BEGIN_NS
 
 struct DelayedTask : public SmartPtr<DelayedTask>
 {
@@ -19,5 +21,7 @@ struct DelayedTask : public SmartPtr<DelayedTask>
         max_loop = 0;
     }
 };
+
+END_NS
 
 #endif

@@ -10,14 +10,14 @@ namespace {
     const int MAX_GZIP_LEVEL = 9;
 };
 
-void Gzip::compressBufToBuf(int level, const ByteBuffer& src, 
-    ByteBuffer& ret)
+void Gzip::compressBufToBuf(int level, const GzipByteBuffer& src, 
+    GzipByteBuffer& ret)
 {
     compressBufToBuf(level, (const char*)&src[0], src.size(), ret);
 }
 
 void Gzip::compressBufToBuf(int level, const char* buf, size_t size,
-    ByteBuffer& ret)
+    GzipByteBuffer& ret)
 {
     if (level < MIN_GZIP_LEVEL) {
         level = MIN_GZIP_LEVEL;
@@ -61,14 +61,14 @@ void Gzip::compressFileToFile(int level, const std::string& in_filepath,
 }
 */
 
-void Gzip::decompressBufToBuf(const ByteBuffer& compressed, ByteBuffer& ret)
+void Gzip::decompressBufToBuf(const GzipByteBuffer& compressed, GzipByteBuffer& ret)
 {
     decompressBufToBuf((const char*)&compressed[0], 
         compressed.size(), ret);
 }
 
 void Gzip::decompressBufToBuf(const char* buf, size_t size,
-    ByteBuffer& ret)
+    GzipByteBuffer& ret)
 {
     boost::iostreams::filtering_ostream filter;
     filter.push(boost::iostreams::gzip_decompressor() |

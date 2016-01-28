@@ -1,7 +1,7 @@
 #ifndef WEBSOCKET_ASYNC_H
 #define WEBSOCKET_ASYNC_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include "allocator/custom_allocator.hpp"
 
 #include <string>
@@ -15,14 +15,16 @@
 
 #include "client_frame_data.h"
 
-#include "../packet.h"
-#include "../socket_buffer.h"
+#include "network/websocket/packet.h"
+#include "network/io/socket_buffer.h"
 
 #include "network/io/async_socket_inf.h"
 #include "handshake.h"
 #include "websocket_delegate.h"
 
 #include <boost/asio/ssl.hpp>
+
+BEGIN_NS
 
 namespace client {
 
@@ -127,5 +129,7 @@ private:
 };
 
 };
+
+END_NS
 
 #endif

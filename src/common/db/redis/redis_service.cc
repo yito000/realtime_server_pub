@@ -3,6 +3,8 @@
 
 #include <boost/asio/ip/address.hpp>
 
+BEGIN_NS
+
 namespace {
     const int CONNECTION_WATCH_TIME = 1000;
 };
@@ -271,3 +273,5 @@ void RedisService::execQueueTask()
         item_queue.pop();
     }
 }
+
+END_NS

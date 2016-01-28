@@ -6,6 +6,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 long SimpleRandomRouter::getNode(PacketData::ptr pd)
 {
     if (!ref_node_list || ref_node_list->size() <= 0) {
@@ -32,3 +34,5 @@ long SimpleRandomRouter::getNode(PacketData::ptr pd)
 
     return -1;
 }
+
+END_NS

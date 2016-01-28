@@ -1,7 +1,7 @@
 #ifndef MULTIPLE_TASK_DISPATCHER_H
 #define MULTIPLE_TASK_DISPATCHER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>

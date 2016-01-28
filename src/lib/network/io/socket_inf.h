@@ -1,12 +1,12 @@
 #ifndef SOCKET_INF_H
 #define SOCKET_INF_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <string>
 #include <boost/asio.hpp>
 
-#include "socket_buffer.h"
+#include "network/io/socket_buffer.h"
 
 class SocketInf : public SmartPtr<SocketInf>
 {

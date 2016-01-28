@@ -1,10 +1,14 @@
 #ifndef WEBSOCKET_DELEGATE_H
 #define WEBSOCKET_DELEGATE_H
 
+#include "fw_env.h"
+
 #include "../packet.h"
 #include <boost/system/error_code.hpp>
 
 #include <functional>
+
+BEGIN_NS
 
 namespace client {
 
@@ -35,5 +39,7 @@ public:
 };
 
 };
+
+END_NS
 
 #endif

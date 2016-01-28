@@ -20,6 +20,8 @@
 
 #include "flatbuffers/demo_battle.h"
 
+USING_NS
+
 namespace {
     const int LOOP_COUNT = 1024;
     const int FRAME_RATE_MILLIS = 50;

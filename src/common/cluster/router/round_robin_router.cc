@@ -3,6 +3,8 @@
 
 #include "network/websocket/client/websocket_async.h"
 
+BEGIN_NS
+
 RoundRobinRouter::RoundRobinRouter() : 
     last_seq(-1)
 {
@@ -32,3 +34,5 @@ long RoundRobinRouter::getNode(PacketData::ptr pd)
 
     return node_info->node_id;
 }
+
+END_NS

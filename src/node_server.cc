@@ -3,6 +3,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 using boost::asio::ip::tcp;
 
 NodeServer::NodeServer(const AddrType addr_type, short port) : 
@@ -50,3 +52,5 @@ void NodeServer::run()
 {
     ios.poll();
 }
+
+END_NS

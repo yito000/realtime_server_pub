@@ -3,6 +3,8 @@
 #include "voltdb_connection.h"
 #include "log/logger.h"
 
+END_NS
+
 class ResponseCallback : public voltdb::ProcedureCallback
 {
 public:
@@ -137,5 +139,7 @@ void VoltdbConnection::drain()
 {
     while (!cli.drain()) {}
 }
+
+END_NS
 
 #endif

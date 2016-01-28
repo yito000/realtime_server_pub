@@ -1,11 +1,13 @@
 #ifndef ERROR_HANDLE_ROUTER_H
 #define ERROR_HANDLE_ROUTER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <boost/system/error_code.hpp>
 #include <map>
 #include <functional>
+
+BEGIN_NS
 
 class WsActor;
 class ErrorHandleRouteMap;
@@ -22,5 +24,7 @@ public:
 private:
     std::map<int, Callback>& error_func;
 };
+
+END_NS
 
 #endif

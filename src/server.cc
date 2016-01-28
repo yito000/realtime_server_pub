@@ -3,6 +3,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 Server::Server() : 
     end_flag(false)
 {
@@ -61,3 +63,5 @@ void Server::setUdpServer(UdpServer::ptr s)
 {
     udp_server = s;
 }
+
+END_NS

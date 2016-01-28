@@ -5,6 +5,8 @@
 
 #include "common/router/command_dispatcher.h"
 
+USING_NS
+
 void TestUdp::receiveCallback(const boost::system::error_code& ec,
     std::size_t size, const UdpPacketArray& packet, 
     const boost::asio::ip::udp::endpoint& ep, 

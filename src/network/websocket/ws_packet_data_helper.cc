@@ -4,6 +4,8 @@
 
 #include <chrono>
 
+BEGIN_NS
+
 namespace {
     Random s_rand(std::chrono::system_clock::now().
         time_since_epoch().count() / 1000 / 1000);
@@ -90,3 +92,5 @@ std::string WsPacketDataHelper::buildMaskKey()
     std::string ret(mask_key, 4);
     return ret;
 }
+
+END_NS

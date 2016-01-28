@@ -4,6 +4,7 @@
 #include <string>
 #include <functional>
 
+#include "fw_env.h"
 #include "redisclient.h"
 
 class UserRecordRedis

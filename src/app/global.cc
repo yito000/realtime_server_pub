@@ -28,6 +28,8 @@
 #include "app/flatbuffers/register_demo_battle_cli_udp.h"
 #include "app/flatbuffers/register_udp_handshake.h"
 
+USING_NS
+
 void Global::onStart(AppGlobalSetting& g_setting, App* app)
 {
     //

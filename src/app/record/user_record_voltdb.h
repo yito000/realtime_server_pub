@@ -8,13 +8,13 @@
 
 #include "db/voltdb/volt_command_invoker.h"
 
-class UserRecordVoltdb : public VoltCommandInvoker
+class UserRecordVoltdb : public fwx::VoltCommandInvoker
 {
 public:
     static UserRecordVoltdb* getInstance();
 
     void add(const std::string name, 
-        std::function<void(VoltdbResult&)> result_callback);
+        std::function<void(fwx::VoltdbResult&)> result_callback);
 
 private:
     void setupAddParam(voltdb::Procedure& procedure,

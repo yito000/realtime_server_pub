@@ -4,6 +4,8 @@
 #include "network/websocket/server/session_delegate.h"
 #include "thread/bidirectional_communicator.h"
 
+BEGIN_NS
+
 class NodeSessionDelegate : public server::SessionDelegate
 {
 public:
@@ -22,5 +24,7 @@ public:
 private:
     BidirectionalCommunicator::ptr task_comm;
 };
+
+END_NS
 
 #endif

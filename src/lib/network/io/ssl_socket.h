@@ -6,7 +6,7 @@
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 
-#include "socket_buffer.h"
+#include "network/io/socket_buffer.h"
 
 class SSLSocket : public SocketInf
 {

@@ -3,6 +3,8 @@
 #include "flatbuffers_socket_manager.h"
 #include "network/udp_socket_proxy.h"
 
+USING_NS
+
 namespace DemoBattle {
 void notify_attack_action_udp(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::AttackDetail *>* actions, const boost::asio::ip::udp::endpoint& ep)
 {

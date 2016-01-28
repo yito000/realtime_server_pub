@@ -1,5 +1,7 @@
 #include "common_object.h"
 
+BEGIN_NS
+
 CommonObject* CommonObject::getInstance()
 {
     static CommonObject inst;
@@ -154,3 +156,5 @@ CommonObject::CommonObject()
 {
     //
 }
+
+END_NS

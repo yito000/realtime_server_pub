@@ -1,9 +1,13 @@
 #ifndef SERVER_FRAME_DATA_H
 #define SERVER_FRAME_DATA_H
 
+#include "fw_env.h"
+
 #include <vector>
 
 #include "../packet.h"
+
+BEGIN_NS
 
 namespace server {
 
@@ -50,5 +54,7 @@ public:
 };
 
 };
+
+END_NS
 
 #endif

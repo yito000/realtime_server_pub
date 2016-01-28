@@ -1,9 +1,11 @@
 #ifndef HTTP_RESPONSE_HEADER_H
 #define HTTP_RESPONSE_HEADER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <boost/date_time.hpp>
+
+BEGIN_NS
 
 struct HttpResponseHeader : public SmartPtr<HttpResponseHeader>
 {
@@ -72,5 +74,7 @@ struct HttpResponseHeader : public SmartPtr<HttpResponseHeader>
         cache_maxage = 0;
     }
 };
+
+END_NS
 
 #endif

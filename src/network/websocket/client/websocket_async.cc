@@ -18,6 +18,8 @@
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
+BEGIN_NS
+
 namespace {
     const int DEFAULT_TIMEOUT = 60 * 1000;
 
@@ -376,7 +378,7 @@ void WebsocketAsync::writeAsync(PacketData::ptr packet_data,
 void WebsocketAsync::writeAsyncInternal(PacketData::ptr packet_data,
     const std::string mask_key, SendCallback send_callback)
 {
-    process_write.exchange(true);
+    process_write.store(true);
     
     auto du = boost::posix_time::milliseconds(timeout_millis);
     
@@ -418,7 +420,7 @@ void WebsocketAsync::writeAsyncInternal(PacketData::ptr packet_data,
                 writeAsyncInternal(p_info.packet, p_info.mask_key, p_info.callback);
             }
             
-            process_write.exchange(false);
+            process_write.store(false);
         });
 }
 
@@ -533,3 +535,5 @@ bool WebsocketAsync::deserializeFramingData(std::vector<unsigned char>& data,
 }
 
 };
+
+END_NS

@@ -3,6 +3,8 @@
 
 #include "common/app_director.h"
 
+BEGIN_NS
+
 template <typename T>
 boost::intrusive_ptr< TaskSender<T> > TaskSender<T>::create()
 {
@@ -102,5 +104,7 @@ void TaskSender<T>::postPackagedTask(ActThreadType t_type, std::function<T()> fu
             break;
     }
 }
+
+END_NS
 
 #endif

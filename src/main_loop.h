@@ -1,11 +1,13 @@
 #ifndef MAIN_LOOP_H
 #define MAIN_LOOP_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include <map>
 
 #include "thread/bidirectional_communicator.h"
 #include "actor/actor_manager.h"
+
+BEGIN_NS
 
 class MainLoop : public SmartPtr<MainLoop>
 {
@@ -29,5 +31,7 @@ private:
     std::map<void*, ActorManager::ptr> actor_manager_list;
     bool first_update_flag;
 };
+
+END_NS
 
 #endif

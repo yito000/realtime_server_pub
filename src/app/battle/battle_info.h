@@ -1,7 +1,7 @@
 #ifndef BATTLE_INFO_H
 #define BATTLE_INFO_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include <string>
 #include <queue>
 #include <set>

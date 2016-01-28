@@ -5,6 +5,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 namespace {
     const int RETRY_DELAY_MILLIS = 1000 * 30;
 };
@@ -98,5 +100,7 @@ void VoltCommandInvoker::retryQuery(const std::string command_name,
         sche->addTask(name, task);
     }
 }
+
+END_NS
 
 #endif

@@ -14,6 +14,8 @@
 
 #include "log/logger.h"
 
+USING_NS
+
 namespace {
     const int QUEUE_SIZE = 20480;
 };

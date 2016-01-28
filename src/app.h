@@ -1,7 +1,7 @@
 #ifndef APP_H
 #define APP_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <string>
 
@@ -23,6 +23,8 @@
 #include "error/internal/error_handle_route_map.h"
 #include "router/detail/route_map.h"
 #include "router/detail/udp_route_map.h"
+
+BEGIN_NS
 
 struct ArgsInfo
 {
@@ -104,5 +106,7 @@ private:
     ErrorHandleRouteMap::ptr server_err_handle_route_map;
     std::vector<TaskDispatcher::ptr> io_threads;
 };
+
+END_NS
 
 #endif

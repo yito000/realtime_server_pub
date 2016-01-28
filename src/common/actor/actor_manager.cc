@@ -3,6 +3,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 ActorManager::ActorManager(BidirectionalCommunicator::ptr t_comm) : 
     task_comm(t_comm)
 {
@@ -217,3 +219,5 @@ void ActorManager::update()
         task_comm->postMaster(func);
     }
 }
+
+END_NS

@@ -12,6 +12,8 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 
+BEGIN_NS
+
 namespace {
     // TODO
     auto uuid_gen = boost::uuids::random_generator();
@@ -119,3 +121,5 @@ long ClusterActor::getKey() const
 {
     return node_id;
 }
+
+END_NS

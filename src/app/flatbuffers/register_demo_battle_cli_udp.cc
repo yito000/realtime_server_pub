@@ -3,6 +3,8 @@
 
 #include "demo_battle_cli_glue_udp.h"
 
+USING_NS
+
 void register_demo_battle_cli_udp(UdpRouteMap& route_map)
 {
     route_map.addRoute(10000, glue_udp_input_command__);

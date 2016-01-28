@@ -1,9 +1,11 @@
 #ifndef WS_CLIENT_FACTORY_H
 #define WS_CLIENT_FACTORY_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include "network/websocket/client/websocket_async.h"
+
+BEGIN_NS
 
 class WsClientController;
 
@@ -27,5 +29,7 @@ private:
     boost::asio::io_service& ios;
     boost::asio::ssl::context& ssl_context;
 };
+
+END_NS
 
 #endif

@@ -1,12 +1,11 @@
 #ifndef WEBSOCKET_EXCEPTION_H
 #define WEBSOCKET_EXCEPTION_H
 
+#include "fw_env.h"
+
 #include "exception/base_exception.h"
 
-class WebsocketException;
-
-#define THROW_WEBSOCKET_EXCEPTION(message) \
-    throw WebsocketException(message, __FILE__, __func__, __LINE__)
+BEGIN_NS
 
 class WebsocketException : public BaseException
 {
@@ -17,7 +16,15 @@ public:
     {
         //
     }
+    
+    WebsocketException(const char* _message) : 
+        BaseException(_message, __FILE__, __func__, __LINE__)
+    {
+        //
+    }
 };
+
+END_NS
 
 #endif
 

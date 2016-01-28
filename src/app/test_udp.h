@@ -1,7 +1,7 @@
 #ifndef TEST_UDP_H
 #define TEST_UDP_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <boost/asio.hpp>
 #include <boost/array.hpp>

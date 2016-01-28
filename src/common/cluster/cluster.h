@@ -1,7 +1,7 @@
 #ifndef CLUSTER_H
 #define CLUSTER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include <list>
 
 #include "cluster/cluster_node_info.h"
@@ -9,6 +9,8 @@
 
 #include "network/websocket/packet.h"
 #include "thread/bidirectional_communicator.h"
+
+BEGIN_NS
 
 class ClusterBuilder;
 
@@ -58,5 +60,7 @@ private:
 
     bool watch_mode;
 };
+
+END_NS
 
 #endif

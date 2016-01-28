@@ -3,6 +3,8 @@
 
 #include "glue_fb_glue.h"
 
+USING_NS
+
 void register_glue_fb(RouteMap& route_map)
 {
     route_map.addRoute(1000, glue_test__);

@@ -1,9 +1,12 @@
 #ifndef CLIENT_HANDSHAKE_H
 #define CLIENT_HANDSHAKE_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
+
 #include <string>
 #include <set>
+
+BEGIN_NS
 
 namespace client {
 
@@ -41,6 +44,8 @@ struct HandShakeResponse : public SmartPtr<HandShakeResponse>
 };
 
 };
+
+END_NS
 
 #endif
 

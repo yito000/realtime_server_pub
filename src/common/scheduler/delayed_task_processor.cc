@@ -5,6 +5,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 DelayedTaskProcessor::ptr DelayedTaskProcessor::create()
 {
     auto inst = new DelayedTaskProcessor;
@@ -108,3 +110,5 @@ bool DelayedTaskProcessor::init()
 
     return true;
 }
+
+END_NS

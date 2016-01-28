@@ -1,5 +1,7 @@
 #include "client_frame_data.h"
 
+BEGIN_NS
+
 namespace client {
 
 void FrameData::serialize(bool end, PacketType packet_type,
@@ -214,3 +216,5 @@ bool FrameData::deserialize(std::vector<unsigned char>& data,
 }
 
 };
+
+END_NS

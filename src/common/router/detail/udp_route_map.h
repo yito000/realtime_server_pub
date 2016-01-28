@@ -3,6 +3,8 @@
 
 #include "router/udp_route_map_base.h"
 
+BEGIN_NS
+
 class UdpRouter;
 
 class UdpRouteMap : public UdpRouteMapBase
@@ -12,5 +14,7 @@ public:
 
     void addRoute(int op_code, UdpRouteCallback callback);
 };
+
+END_NS
 
 #endif

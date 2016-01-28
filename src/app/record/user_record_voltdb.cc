@@ -6,6 +6,8 @@
 #include "db/voltdb/voltdb_result.h"
 #include "db/voltdb/voltdb.h"
 
+USING_NS
+
 UserRecordVoltdb* UserRecordVoltdb::getInstance()
 {
     static UserRecordVoltdb inst;

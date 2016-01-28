@@ -1,5 +1,7 @@
 #include "udp_router.h"
 
+BEGIN_NS
+
 UdpRouter::UdpRouter(UdpRouteMapBase& pr_map) : 
     route_map(pr_map)
 {
@@ -16,3 +18,5 @@ UdpRouter::Callback UdpRouter::getRoute(int op_code)
     UdpRouter::Callback ret;
     return ret;
 }
+
+END_NS

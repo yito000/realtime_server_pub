@@ -8,6 +8,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 NodeSessionDelegate::NodeSessionDelegate(BidirectionalCommunicator::ptr t_comm) :
     task_comm(t_comm)
 {
@@ -77,3 +79,5 @@ void NodeSessionDelegate::onError(server::WebsocketSession* session,
 //        session->close();
     });
 }
+
+END_NS

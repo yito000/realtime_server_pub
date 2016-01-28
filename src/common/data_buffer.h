@@ -1,7 +1,9 @@
 #ifndef DATA_BUFFER_H
 #define DATA_BUFFER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
+
+BEGIN_NS
 
 class FileStream;
 
@@ -12,23 +14,40 @@ class DataBuffer : public SmartPtr<DataBuffer>
 public:
     typedef boost::intrusive_ptr<DataBuffer> ptr;
     
-    static DataBuffer::ptr create(unsigned char* buf, size_t s, bool dup = true)
+    enum class Flag {
+        COPY,
+        REFERENCE,
+        OWNERSHIP
+    };
+    
+    static DataBuffer::ptr create(unsigned char* buf, size_t s, Flag flag = Flag::OWNERSHIP)
     {
-        if (buf && dup) {
-            unsigned char* tmp_b = new unsigned char[s];
-            memcpy(tmp_b, buf, s);
+        switch (flag) {
+            case Flag::COPY: {
+                if (buf && s > 0) {
+                    unsigned char* tmp_b = new unsigned char[s];
+                    memcpy(tmp_b, buf, s);
+                    
+                    buf = tmp_b;
+                }
+                break;
+            }
             
-            buf = tmp_b;
+            default:
+                break;
         }
         
         auto ret = new DataBuffer(buf, s);
+        if (flag != Flag::REFERENCE) {
+            ret->has_buffer = true;
+        }
         
         return ret;
     }
     
     ~DataBuffer()
     {
-        if (buf) {
+        if (buf && has_buffer) {
             delete[] buf;
         }
     }
@@ -60,11 +79,14 @@ public:
     }
     
 private:
-    DataBuffer(unsigned char* b, size_t s)
+    DataBuffer(unsigned char* b, size_t s) :
+        buf(nullptr),
+        size(0),
+        has_buffer(false)
     {
         if (b) {
             buf = b;
-        } else {
+        } else if (s > 0) {
             buf = new unsigned char[s];
             memset(buf, 0, s);
         }
@@ -74,6 +96,9 @@ private:
     
     unsigned char* buf;
     size_t size;
+    bool has_buffer;
 };
+
+END_NS
 
 #endif

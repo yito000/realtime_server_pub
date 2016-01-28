@@ -1,5 +1,7 @@
 #include "bidirectional_communicator.h"
 
+BEGIN_NS
+
 BidirectionalCommunicator::ptr BidirectionalCommunicator::create(int worker_threads)
 {
     auto inst = new BidirectionalCommunicator;
@@ -44,3 +46,5 @@ bool BidirectionalCommunicator::init(int worker_threads)
 
     return true;
 }
+
+END_NS

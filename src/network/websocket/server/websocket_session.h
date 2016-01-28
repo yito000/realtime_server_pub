@@ -1,6 +1,7 @@
 #ifndef WEBSOCKET_SESSION_H
 #define WEBSOCKET_SESSION_H
 
+#include "fw_env.h"
 #include "allocator/custom_allocator.hpp"
 
 #include <string>
@@ -15,13 +16,15 @@
 #include "handshake.h"
 #include "server_frame_data.h"
 
-#include "../packet.h"
-#include "../socket_buffer.h"
+#include "network/websocket/packet.h"
+#include "network/io/socket_buffer.h"
 
 #include "session_delegate.h"
 #include "network/io/async_socket_inf.h"
 
 #include <boost/asio/ssl.hpp>
+
+BEGIN_NS
 
 namespace server {
 
@@ -144,5 +147,7 @@ private:
 };
 
 };
+
+END_NS
 
 #endif

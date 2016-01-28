@@ -1,6 +1,10 @@
 #ifndef HTTP_STATUS_CODE_H
 #define HTTP_STATUS_CODE_H
 
+#include "fw_env.h"
+
+BEGIN_NS
+
 namespace http {
     const int OK = 200;
    
@@ -17,5 +21,7 @@ namespace http {
     const int SERVICE_UNAVAILABLE = 503;
     const int GATEWAY_TIMEOUT = 504;
 }
+
+END_NS
 
 #endif

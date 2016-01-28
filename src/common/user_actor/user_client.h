@@ -6,6 +6,8 @@
 
 #include <atomic>
 
+BEGIN_NS
+
 class UserClient : public WsActor
 {
 public:
@@ -39,5 +41,7 @@ private:
     mutable std::atomic<size_t> read_cnt;
     mutable std::atomic<size_t> write_cnt;
 };
+
+END_NS
 
 #endif

@@ -6,6 +6,8 @@
 #include "network/websocket/ws_packet_data_helper.h"
 #include "log/logger.h"
 
+USING_NS
+
 void ReceiveUiid::exec(long actor_key,
     const std::string uiid)
 {

@@ -6,6 +6,8 @@
 
 #include "common/file/file_util.h"
 
+BEGIN_NS
+
 using boost::asio::ip::tcp;
 
 TcpServer::TcpServer(boost::asio::io_service& _ios) : 
@@ -136,3 +138,5 @@ std::string TcpServer::passwordCallback() const
 {
     return password_string;
 }
+
+END_NS

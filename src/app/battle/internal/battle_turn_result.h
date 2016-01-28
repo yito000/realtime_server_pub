@@ -1,7 +1,7 @@
 #ifndef BATTLE_TURN_RESULT_H
 #define BATTLE_TURN_RESULT_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include "battle/internal/battle_status_code.h"
 

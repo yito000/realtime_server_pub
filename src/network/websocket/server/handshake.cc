@@ -6,6 +6,8 @@
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
 
+BEGIN_NS
+
 namespace {
     boost::regex upgrade("Upgrade", boost::regex::icase);
     boost::regex connection("Connection", boost::regex::icase);
@@ -158,3 +160,5 @@ void HandShake::parseProtocols(const std::string& p_str,
 }
 
 };
+
+END_NS

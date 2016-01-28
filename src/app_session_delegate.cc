@@ -7,6 +7,8 @@
 #include "user_actor/user_client.h"
 #include "log/logger.h"
 
+BEGIN_NS
+
 AppSessionDelegate::AppSessionDelegate(BidirectionalCommunicator::ptr t_comm) : 
     task_comm(t_comm)
 {
@@ -76,3 +78,5 @@ void AppSessionDelegate::onError(server::WebsocketSession* session,
 //        session->close();
     });
 }
+
+END_NS

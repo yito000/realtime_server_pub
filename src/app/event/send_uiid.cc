@@ -3,6 +3,8 @@
 #include "common/common_object.h"
 #include "log/logger.h"
 
+USING_NS
+
 void SendUiid::exec(long actor_key, const std::string uiid)
 {
     Logger::debug("uiid is %s", uiid.c_str());

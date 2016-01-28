@@ -9,6 +9,8 @@
 #include "cluster/cluster.h"
 #include "cluster/cluster_actor.h"
 
+BEGIN_NS
+
 ClusterNodeDelegate::ClusterNodeDelegate(int _node_id, 
     BidirectionalCommunicator::ptr t_comm, Cluster::ptr _cluster) : 
     node_id(_node_id), task_comm(t_comm), cluster(_cluster)
@@ -81,3 +83,5 @@ void ClusterNodeDelegate::onError(client::WebsocketAsync* ws,
 //        ws->close();
     });
 }
+
+END_NS

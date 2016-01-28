@@ -2,6 +2,8 @@
 
 #include "internal/error_handle_route_map.h"
 
+BEGIN_NS
+
 ErrorHandleRouter::ErrorHandleRouter(ErrorHandleRouteMap& eh_map) : 
     error_func(eh_map.error_func)
 {
@@ -18,3 +20,5 @@ ErrorHandleRouter::Callback ErrorHandleRouter::getCallback(int error_num)
     ErrorHandleRouter::Callback ret;
     return ret;
 }
+
+END_NS

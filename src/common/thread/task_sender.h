@@ -1,10 +1,12 @@
 #ifndef TASK_SENDER_H
 #define TASK_SENDER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <future>
 #include <boost/asio/io_service.hpp>
+
+BEGIN_NS
 
 enum class ActThreadType {
     MAIN_THREAD,
@@ -28,6 +30,8 @@ private:
     
     std::packaged_task< T() > p_task;
 };
+
+END_NS
 
 #include "task_sender.ipp"
 

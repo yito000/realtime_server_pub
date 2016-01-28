@@ -1,7 +1,7 @@
 #ifndef BATTLE_PROCESSOR_H
 #define BATTLE_PROCESSOR_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include "battle/packet/battle_packet.h"
 
 #include <string>

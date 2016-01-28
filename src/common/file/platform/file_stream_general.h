@@ -3,7 +3,7 @@
 #ifndef FILE_STREAM_H
 #define FILE_STREAM_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <stdio.h>
 #include <string>
@@ -13,7 +13,14 @@
 
 #include "data_buffer.h"
 
-// read only
+#ifdef TARGET_PLATFORM_ANDROID_NDK
+#include <android/native_activity.h>
+#include <android/asset_manager.h>
+#endif
+
+BEGIN_NS
+
+// read only class
 class FileStream : public SmartPtr<FileStream>
 {
     friend class FileUtil;
@@ -48,7 +55,13 @@ private:
     FILE* fp;
     std::string filename;
     size_t filesize;
+    
+#ifdef TARGET_PLATFORM_ANDROID_NDK
+    AAsset* android_asset;
+#endif
 };
+
+END_NS
 
 #endif
 

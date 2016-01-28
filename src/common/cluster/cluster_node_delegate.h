@@ -4,6 +4,8 @@
 #include "network/websocket/client/websocket_async.h"
 #include "thread/bidirectional_communicator.h"
 
+BEGIN_NS
+
 class Cluster;
 typedef boost::intrusive_ptr<Cluster> ClusterPtr;
 
@@ -29,5 +31,7 @@ private:
     
     ClusterPtr cluster;
 };
+
+END_NS
 
 #endif

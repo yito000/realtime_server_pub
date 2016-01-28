@@ -12,6 +12,8 @@
 #include "flatbuffers_socket_manager.h"
 #include "network/websocket/ws_packet_data_helper.h"
 
+USING_NS
+
 namespace DemoBattle {
 void notify_attack_action(int seq_id, int player_id, const flatbuffers::Vector<const DemoBattle::AttackDetail *>* actions, long actor_key)
 {

@@ -5,6 +5,8 @@
 #include "macros.h"
 #include "log/logger.h"
 
+BEGIN_NS
+
 UdpSocketProxy* UdpSocketProxy::create(
     boost::asio::io_service& _ios, AddressType addr_type,
     const std::string& host, unsigned short port)
@@ -37,7 +39,7 @@ void UdpSocketProxy::run()
         return;
     }
     
-    running.exchange(true);
+    running.store(true);
     udp_socket->receive();
 }
 
@@ -59,7 +61,11 @@ void UdpSocketProxy::setReceiveCallback(UdpReceiveCallback callback)
                     callback(ec, size, packet, ep, socket);
                 }
                 
-                udp_socket->receive();
+				if (!ec) {
+					udp_socket->receive();
+				} else {
+					Logger::log("udp receive error");
+				}
             });
         });
 }
@@ -74,7 +80,6 @@ void UdpSocketProxy::setSendCallback(UdpSendCallback callback)
 void UdpSocketProxy::send(const ByteBuffer& packet) const
 {
     ASSERT(!mode_server, "This method is Client Mode Only.");
-    Logger::log("send udp packet");
     
     udp_socket->send(packet, endpoint);
 }
@@ -162,3 +167,5 @@ bool UdpSocketProxy::initServer(AddressType addr_type,
     
     return true;
 }
+
+END_NS

@@ -1,13 +1,15 @@
 #ifndef UDP_ROUTER_H
 #define UDP_ROUTER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <map>
 #include <functional>
 #include <boost/asio.hpp>
 
 #include "udp_route_map_base.h"
+
+BEGIN_NS
 
 class UdpRouter : public SmartPtr<UdpRouter>
 {
@@ -23,5 +25,7 @@ public:
 private:
     UdpRouteMapBase& route_map;
 };
+
+END_NS
 
 #endif

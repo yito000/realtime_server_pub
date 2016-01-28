@@ -1,7 +1,7 @@
 #ifndef CHARACTER_INPUT_PACKET_INFO_H
 #define CHARACTER_INPUT_PACKET_INFO_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 struct CharacterInputPacket : public SmartPtr<CharacterInputPacket>
 {

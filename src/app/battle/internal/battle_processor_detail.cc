@@ -4,6 +4,8 @@
 #include "app/flatbuffers/demo_battle_udp.h"
 #include "log/logger.h"
 
+//USING_NS
+
 BattlePrcoessorDetail::ptr BattlePrcoessorDetail::create()
 {
     BattlePrcoessorDetail::ptr inst = new BattlePrcoessorDetail;

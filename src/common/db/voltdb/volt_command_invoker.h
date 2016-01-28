@@ -9,6 +9,8 @@
 #include "db/voltdb/voltdb_result.h"
 #include "db/voltdb/voltdb.h"
 
+BEGIN_NS
+
 typedef std::function<void(voltdb::Procedure&)> VoltParamCallback;
 typedef std::function<void(VoltdbResult&)> VoltResultCallback;
 
@@ -34,6 +36,8 @@ private:
         VoltParamCallback param_callback,
         VoltResultCallback result_callback, int retry);
 };
+
+END_NS
 
 #endif
 

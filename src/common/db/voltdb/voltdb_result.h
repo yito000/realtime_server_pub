@@ -5,6 +5,8 @@
 
 #include "voltdb.h"
 
+BEGIN_NS
+
 struct VoltdbResult
 {
     voltdb::InvocationResponse* res;
@@ -14,6 +16,8 @@ struct VoltdbResult
         res = NULL;
     }
 };
+
+END_NS
 
 #endif
 

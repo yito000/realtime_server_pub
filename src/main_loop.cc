@@ -3,6 +3,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 MainLoop::MainLoop() :
     first_update_flag(false)
 {
@@ -70,3 +72,5 @@ void MainLoop::updateActor(ActorManager::ptr actor_manager)
     
     actor_manager->update();
 }
+
+END_NS

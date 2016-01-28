@@ -1,12 +1,14 @@
 #ifndef HTTPS_CLIENT_H
 #define HTTPS_CLIENT_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include "http_request_params.h"
 #include "http_response_header.h"
 
 #include "network/io/ssl_socket.h"
+
+BEGIN_NS
 
 class HttpsClient : public SmartPtr<HttpsClient>
 {
@@ -21,5 +23,7 @@ public:
 private:
     SSLSocket::ptr socket;
 };
+
+END_NS
 
 #endif

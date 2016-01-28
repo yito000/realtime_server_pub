@@ -8,6 +8,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 namespace {
     Random s_rand(std::chrono::system_clock::now().
         time_since_epoch().count() / 1000 / 1000);
@@ -46,3 +48,5 @@ std::string SecretKey::calcResponse(const std::string& sec_key)
 
     return enc_str;
 }
+
+END_NS

@@ -3,6 +3,8 @@
 #include "cluster/router/round_robin_router.h"
 #include "cluster/router/simple_random_router.h"
 
+BEGIN_NS
+
 Cluster::ptr ClusterBuilder::build(Setting::const_ptr setting,
     BidirectionalCommunicator::ptr t_comm)
 {
@@ -21,3 +23,5 @@ Cluster::ptr ClusterBuilder::build(Setting::const_ptr setting,
 
     return cluster;
 }
+
+END_NS

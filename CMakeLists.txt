@@ -104,6 +104,9 @@ add_executable(
   src/common/file/platform/file_stream_qt.cc
   src/common/file/platform/file_util_general.cc
   src/common/file/platform/file_util_qt.cc
+  src/common/file/platform/file_writer_general.cc
+  src/common/file/platform/file_writer_qt.cc
+  src/common/file/platform/windows/app_path_win.cc
   src/common/global_rand.cc
   src/common/router/command_dispatcher.cc
   src/common/router/detail/route_map.cc
@@ -136,6 +139,7 @@ add_executable(
   src/lib/network/io/socket.cc
   src/lib/network/io/ssl_socket.cc
   src/lib/random/random.cc
+  src/lib/text/utf8_util.cc
   src/lib/thread/multiple_task_dispatcher.cc
   src/lib/thread/task_dispatcher.cc
   src/lib/time/app_time.cc
@@ -258,10 +262,15 @@ add_executable(
   src/common/file/file_path.h
   src/common/file/file_stream.h
   src/common/file/file_util.h
+  src/common/file/file_writer.h
   src/common/file/platform/apple/app_path_ios.h
   src/common/file/platform/apple/app_path_mac.h
   src/common/file/platform/file_stream_general.h
   src/common/file/platform/file_stream_qt.h
+  src/common/file/platform/file_writer_general.h
+  src/common/file/platform/file_writer_qt.h
+  src/common/file/platform/windows/app_path_win.h
+  src/common/fw_env.h
   src/common/global_rand.h
   src/common/macros.h
   src/common/router/command_dispatcher.h
@@ -300,6 +309,8 @@ add_executable(
   src/lib/math/mat4.h
   src/lib/math/mat4_inl.h
   src/lib/math/math_util.h
+  src/lib/math/neon/matrix_neon.h
+  src/lib/math/neon/matrix_neon_inl.h
   src/lib/math/quaternion.h
   src/lib/math/sse/matrix_sse.h
   src/lib/math/sse/matrix_sse_inl.h
@@ -315,6 +326,7 @@ add_executable(
   src/lib/network/io/socket_inf.h
   src/lib/network/io/ssl_socket.h
   src/lib/random/random.h
+  src/lib/text/utf8_util.h
   src/lib/thread/multiple_task_dispatcher.h
   src/lib/thread/task_dispatcher.h
   src/lib/time/app_time.h
@@ -343,7 +355,6 @@ add_executable(
   src/network/websocket/server/server_frame_data.h
   src/network/websocket/server/session_delegate.h
   src/network/websocket/server/websocket_session.h
-  src/network/websocket/socket_buffer.h
   src/network/websocket/ws_packet_data_helper.h
   src/node_server.h
   src/node_session_delegate.h

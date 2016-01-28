@@ -1,7 +1,7 @@
 #ifndef BATTLE_PROCESSOR_DETAIL_H
 #define BATTLE_PROCESSOR_DETAIL_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include "battle/battle_info.h"
 #include "battle/packet/player_input_packet.h"

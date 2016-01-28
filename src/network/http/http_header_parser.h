@@ -1,11 +1,15 @@
 #ifndef HTTP_HEADER_PARSER_H
 #define HTTP_HEADER_PARSER_H
 
+#include "fw_env.h"
+
 #include "http_response_header.h"
 #include <string>
 #include <regex>
 
 #include <boost/date_time.hpp>
+
+BEGIN_NS
 
 class HttpHeaderParser
 {
@@ -26,5 +30,7 @@ private:
     
     std::regex maxage_delimiter;
 };
+
+END_NS
 
 #endif

@@ -9,6 +9,8 @@
 #include "event/send_uiid.h"
 #include "log/logger.h"
 
+USING_NS
+
 void FbMaster::sendWorker(long actor_key,
     const unsigned char* data, int size)
 {

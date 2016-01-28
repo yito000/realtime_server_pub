@@ -1,7 +1,7 @@
 #ifndef BATTLE_ACTION_H
 #define BATTLE_ACTION_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 class BattleAction : public SmartPtr<BattleAction>
 {

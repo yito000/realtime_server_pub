@@ -1,13 +1,15 @@
 #ifndef APP_DIRECTOR_H
 #define APP_DIRECTOR_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include "thread/bidirectional_communicator.h"
 #include "variable/key_value_cache_storage.h"
 
 #include <boost/thread.hpp>
 #include <functional>
+
+BEGIN_NS
 
 typedef std::function<void(const std::string&)> VarGetCallback;
 typedef std::function<void(void*)> VarObjGetCallback;
@@ -59,5 +61,7 @@ private:
     
     boost::thread::id render_thread_id;
 };
+
+END_NS
 
 #endif

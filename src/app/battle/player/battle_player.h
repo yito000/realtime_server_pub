@@ -1,7 +1,7 @@
 #ifndef BATTLE_PLAYER_H
 #define BATTLE_PLAYER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include <list>
 #include <boost/asio.hpp>
 

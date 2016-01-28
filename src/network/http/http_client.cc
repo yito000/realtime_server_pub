@@ -5,6 +5,8 @@
 #include "http_helper.hpp"
 #include "network/io/socket.h"
 
+BEGIN_NS
+
 HttpResponseHeader::ptr HttpClient::sendGetRequest(HttpRequestParams::ptr params)
 {
     if (params->hostname == "" || params->path == "") {
@@ -59,3 +61,5 @@ void HttpClient::close()
         socket->close();
     }
 }
+
+END_NS

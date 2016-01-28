@@ -1,10 +1,12 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include "server/tcp_server.h"
 #include "server/udp_server.h"
+
+BEGIN_NS
 
 class Server : public SmartPtr<Server>
 {
@@ -33,5 +35,7 @@ private:
 
     bool end_flag;
 };
+
+END_NS
 
 #endif

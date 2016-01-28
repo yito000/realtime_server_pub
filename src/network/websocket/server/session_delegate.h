@@ -1,10 +1,14 @@
 #ifndef SESSION_DELEGATE_H
 #define SESSION_DELEGATE_H
 
+#include "fw_env.h"
+
 #include "../packet.h"
 #include <boost/system/error_code.hpp>
 
 #include <functional>
+
+BEGIN_NS
 
 namespace server {
 
@@ -35,5 +39,7 @@ public:
 };
 
 };
+
+END_NS
 
 #endif

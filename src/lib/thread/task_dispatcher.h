@@ -1,7 +1,7 @@
 #ifndef TASK_DISPACTHER_H
 #define TASK_DISPACTHER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>

@@ -4,10 +4,12 @@
 #define VOLTDB_CONNECTION_H
 
 #include "voltdb.h"
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <functional>
 #include <atomic>
+
+BEGIN_NS
 
 typedef std::function<void(voltdb::InvocationResponse&)> VoltQueryCallback;
 typedef std::function<void(std::exception&)> VoltErrorCallback;
@@ -60,6 +62,8 @@ private:
     std::atomic<int> signal;
     VoltLogger* v_logger;
 };
+
+END_NS
 
 #endif
 

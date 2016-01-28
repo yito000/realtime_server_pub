@@ -1,12 +1,14 @@
 #ifndef SERVER_HANDSHAKE_H
 #define SERVER_HANDSHAKE_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <string>
 #include <set>
 
-#include "../socket_buffer.h"
+#include "network/io/socket_buffer.h"
+
+BEGIN_NS
 
 namespace server {
 
@@ -68,5 +70,7 @@ private:
 };
 
 };
+
+END_NS
 
 #endif

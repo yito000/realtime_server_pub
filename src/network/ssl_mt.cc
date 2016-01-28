@@ -8,6 +8,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 #define MUTEX_TYPE       pthread_mutex_t
 #define MUTEX_SETUP(x)   pthread_mutex_init(&(x), NULL)
 #define MUTEX_CLEANUP(x) pthread_mutex_destroy(&(x))
@@ -72,5 +74,7 @@ int ssl_thread_cleanup(void)
 
     return 1;
 }
+
+END_NS
 
 #endif

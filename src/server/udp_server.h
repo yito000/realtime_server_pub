@@ -4,10 +4,13 @@
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
+
+class AsyncUdpSocket;
+
+BEGIN_NS
 
 class UdpSocketProxy;
-class AsyncUdpSocket;
 
 typedef boost::array<char, 65507> UdpPacketArray;
 
@@ -44,5 +47,7 @@ private:
     
     UdpSocketProxy* socket;
 };
+
+END_NS
 
 #endif

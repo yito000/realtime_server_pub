@@ -3,6 +3,8 @@
 
 #include "router/route_map_base.h"
 
+BEGIN_NS
+
 class Router;
 
 class RouteMap : public RouteMapBase
@@ -12,5 +14,7 @@ public:
 
     void addRoute(int op_code, RouteCallback callback);
 };
+
+END_NS
 
 #endif

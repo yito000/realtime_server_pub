@@ -1,5 +1,7 @@
 #include "battle_player.h"
 
+//USING_NS
+
 BattlePlayer::ptr BattlePlayer::create(
     int _player_id, long _actor_key, const std::string& _name,
     const std::list<BattleCharacter::ptr>& _characters)

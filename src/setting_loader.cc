@@ -8,6 +8,8 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
 
+BEGIN_NS
+
 namespace {
     const char* ATTR_IS_MASTER_NODE = "is_master_node";
     const char* ATTR_IS_IPV6 = "is_ipv6";
@@ -283,3 +285,5 @@ void SettingLoader::createClusterNodes(
         }
     }
 }
+
+END_NS

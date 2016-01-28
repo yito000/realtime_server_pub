@@ -1,8 +1,14 @@
 #ifndef register_udp_handshake_H
 #define register_udp_handshake_H
 
+#include "fw_env.h"
+
+BEGIN_NS
+
 class UdpRouteMap;
 
-void register_udp_handshake(UdpRouteMap& route_map);
+END_NS
+
+void register_udp_handshake(fwx::UdpRouteMap& route_map);
 
 #endif

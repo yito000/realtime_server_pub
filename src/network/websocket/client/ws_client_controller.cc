@@ -4,6 +4,8 @@
 
 #include <boost/thread.hpp>
 
+BEGIN_NS
+
 WsClientController::ptr WsClientController::getInstance()
 {
     static WsClientController::ptr inst = new WsClientController;
@@ -20,7 +22,7 @@ void WsClientController::run()
             
             continue;
         } else if (server_flag == SERVER_RESUME) {
-            server_flag.exchange(SERVER_RUNNING);
+            server_flag.store(SERVER_RUNNING);
             continue;
         }
         
@@ -32,7 +34,7 @@ void WsClientController::run()
 
 void WsClientController::stopController()
 {
-    server_flag.exchange(SERVER_END);
+    server_flag.store(SERVER_END);
     
     boost::mutex::scoped_lock lock(ws_mutex);
     ws_cond.notify_all();
@@ -40,12 +42,12 @@ void WsClientController::stopController()
 
 void WsClientController::pause()
 {
-    server_flag.exchange(SERVER_PAUSED);
+    server_flag.store(SERVER_PAUSED);
 }
 
 void WsClientController::resume()
 {
-    server_flag.exchange(SERVER_RESUME);
+    server_flag.store(SERVER_RESUME);
     
     boost::mutex::scoped_lock lock(ws_mutex);
     ws_cond.notify_all();
@@ -158,3 +160,5 @@ WsClientController::WsClientController() :
 {
     //
 }
+
+END_NS

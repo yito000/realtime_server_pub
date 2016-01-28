@@ -3,6 +3,8 @@
 #include "common_object.h"
 #include "log/logger.h"
 
+USING_NS
+
 UserRecordRedis* UserRecordRedis::getInstance()
 {
     static UserRecordRedis inst;

@@ -1,7 +1,7 @@
 #ifndef ACTOR_MANAGER_H
 #define ACTOR_MANAGER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include <map>
 #include <functional>
 
@@ -11,6 +11,8 @@
 #include "atomic/spin_lock.hpp"
 
 #include "thread/bidirectional_communicator.h"
+
+BEGIN_NS
 
 class ActorManager : public SmartPtr<ActorManager>
 {
@@ -61,5 +63,7 @@ private:
 
     BidirectionalCommunicator::ptr task_comm;
 };
+
+END_NS
 
 #endif

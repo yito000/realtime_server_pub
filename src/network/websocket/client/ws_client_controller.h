@@ -1,7 +1,7 @@
 #ifndef WS_CLIENT_CONTROLLER_H
 #define WS_CLIENT_CONTROLLER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include "network/websocket/client/websocket_async.h"
 
 #include "common/data_buffer.h"
@@ -10,6 +10,8 @@
 #include <functional>
 #include <boost/thread.hpp>
 #include <atomic>
+
+BEGIN_NS
 
 typedef std::function<bool(bool, boost::asio::ssl::verify_context&)> VerifyCallback;
 
@@ -64,5 +66,7 @@ private:
     std::atomic<int> server_flag;
     VerifyCallback verify_callback;
 };
+
+END_NS
 
 #endif

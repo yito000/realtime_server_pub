@@ -7,6 +7,8 @@
 
 #include "setting.h"
 
+BEGIN_NS
+
 class SettingLoader
 {
 public:
@@ -34,5 +36,7 @@ private:
     static void createClusterNodes(const boost::property_tree::ptree& p, 
         std::list<ClusterNodeSetting::ptr>& cluster_nodes);
 };
+
+END_NS
 
 #endif

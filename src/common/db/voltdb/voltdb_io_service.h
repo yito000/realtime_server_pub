@@ -3,10 +3,12 @@
 #ifndef VOLTDB_IO_SERVICE_H
 #define VOLTDB_IO_SERVICE_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include <boost/asio.hpp>
 
 #include "voltdb_connection.h"
+
+BEGIN_NS
 
 class VoltdbProcessor;
 
@@ -24,6 +26,8 @@ private:
     boost::asio::io_service& io_service;
     VoltdbConnection::ptr voltdb_conn;
 };
+
+END_NS
 
 #endif
 

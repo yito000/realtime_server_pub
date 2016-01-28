@@ -1,8 +1,10 @@
 #ifndef NODE_SERVER_H
 #define NODE_SERVER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include <boost/asio.hpp>
+
+BEGIN_NS
 
 namespace server {
 
@@ -66,5 +68,7 @@ private:
     int timeout_millis;
     std::string protocol;
 };
+
+END_NS
 
 #endif

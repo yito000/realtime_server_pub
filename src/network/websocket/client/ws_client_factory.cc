@@ -2,6 +2,8 @@
 
 #include "ws_client_controller.h"
 
+BEGIN_NS
+
 WsClientFactory::ptr WsClientFactory::getInstance()
 {
     static WsClientFactory::ptr inst = new WsClientFactory(*WsClientController::getInstance());
@@ -32,3 +34,5 @@ WsClientFactory::WsClientFactory(WsClientController& wsc_controller) :
 {
     //
 }
+
+END_NS

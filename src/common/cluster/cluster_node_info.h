@@ -1,9 +1,11 @@
 #ifndef CLUSTER_NODE_INFO_H
 #define CLUSTER_NODE_INFO_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <string>
+
+BEGIN_NS
 
 struct ClusterNodeInfo : public SmartPtr<ClusterNodeInfo>
 {
@@ -38,6 +40,8 @@ struct ActiveClusterNodeInfo : public SmartPtr<ActiveClusterNodeInfo>
         websocket = nullptr;
     }
 };
+
+END_NS
 
 #endif
 

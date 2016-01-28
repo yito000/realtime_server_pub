@@ -1,11 +1,13 @@
 #ifndef NODE_ROUTER_H
 #define NODE_ROUTER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include <list>
 
 #include "cluster/cluster_node_info.h"
 #include "network/websocket/packet.h"
+
+BEGIN_NS
 
 class NodeRouter : public SmartPtr<NodeRouter>
 {
@@ -25,6 +27,8 @@ public:
 protected:
     std::list<ActiveClusterNodeInfo::ptr>* ref_node_list;
 };
+
+END_NS
 
 #endif
 

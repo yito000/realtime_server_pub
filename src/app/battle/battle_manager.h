@@ -1,7 +1,7 @@
 #ifndef BATTLE_MANAGER_H
 #define BATTLE_MANAGER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <vector>
 #include <map>
@@ -10,7 +10,11 @@
 #include "battle/battle_processor.h"
 #include "battle/battle_input_info.h"
 
+BEGIN_NS
+
 class WsActor;
+
+END_NS
 
 class BattleManager : public SmartPtr<BattleManager>
 {
@@ -33,7 +37,7 @@ public:
     
     void addActorInfo(long actor_key, const std::string& battle_key, int player_id);
     void removeActorInfo(long actor_key, const std::string& battle_key);
-    void receiveError(const WsActor* actor);
+    void receiveError(const fwx::WsActor* actor);
     
 private:
     BattleManager();

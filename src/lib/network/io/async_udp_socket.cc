@@ -22,11 +22,11 @@ AsyncUdpSocket::AsyncUdpSocket(
     ios_st(ios), 
     server_mode(false),
     ipv6_mode(_ipv6_mode),
-    socket(ios),
+    socket(ios, boost::asio::ip::udp::endpoint(ipv6_mode ?
+		boost::asio::ip::udp::v6() : boost::asio::ip::udp::v4(), 0)),
     received_endpoint(endpoint)
 {
-    socket.open(ipv6_mode ? 
-        boost::asio::ip::udp::v6() : boost::asio::ip::udp::v4());
+    //
 }
 
 AsyncUdpSocket::~AsyncUdpSocket()

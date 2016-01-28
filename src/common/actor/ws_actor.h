@@ -1,12 +1,14 @@
 #ifndef WS_ACTOR_H
 #define WS_ACTOR_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include "allocator/custom_allocator.hpp"
 #include "network/websocket/packet.h"
 
 #include <functional>
 #include <boost/system/error_code.hpp>
+
+BEGIN_NS
 
 typedef std::function<void(boost::system::error_code)> WsUserSendCallback;
 
@@ -41,5 +43,7 @@ public:
     virtual bool isOpen() const = 0;
     virtual long getKey() const = 0;
 };
+
+END_NS
 
 #endif

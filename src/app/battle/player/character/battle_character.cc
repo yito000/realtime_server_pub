@@ -1,5 +1,7 @@
 #include "battle_character.h"
 
+//USING_NS
+
 BattleCharacter::ptr BattleCharacter::create(int _character_id,
     const std::string& _name)
 {

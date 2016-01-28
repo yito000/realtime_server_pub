@@ -4,7 +4,9 @@
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
+
+BEGIN_NS
 
 namespace server {
     class SessionDelegate;
@@ -88,5 +90,7 @@ private:
     
     std::string password_string;
 };
+
+END_NS
 
 #endif

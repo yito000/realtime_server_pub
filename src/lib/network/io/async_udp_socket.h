@@ -1,7 +1,7 @@
 #ifndef ASYNC_UDP_SOCKET_H
 #define ASYNC_UDP_SOCKET_H
 
-#include "socket_buffer.h"
+#include "network/io/socket_buffer.h"
 
 #include <boost/asio.hpp>
 #include <boost/array.hpp>

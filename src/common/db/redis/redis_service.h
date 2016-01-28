@@ -1,7 +1,7 @@
 #ifndef REDIS_SERVICE_H
 #define REDIS_SERVICE_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include "redisclient.h"
 
 #include "lib/time/app_time.h"
@@ -10,6 +10,8 @@
 #include <queue>
 #include <boost/function.hpp>
 #include <atomic>
+
+BEGIN_NS
 
 typedef std::function<void(const std::string&)> RedisSubscribeCallback;
 typedef std::function<void(const RedisValue&)> RedisPublishCallback;
@@ -84,5 +86,7 @@ private:
     std::atomic<int> signal;
     AppTime::Point last_watch;
 };
+
+END_NS
 
 #endif

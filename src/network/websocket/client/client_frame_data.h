@@ -1,10 +1,14 @@
 #ifndef CLIENT_FRAME_DATA_H
 #define CLIENT_FRAME_DATA_H
 
+#include "fw_env.h"
+
 #include <vector>
 #include <string>
 
 #include "../packet.h"
+
+BEGIN_NS
 
 namespace client {
 
@@ -52,5 +56,7 @@ public:
 };
 
 };
+
+END_NS
 
 #endif

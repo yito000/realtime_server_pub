@@ -24,7 +24,11 @@
 
 #if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
 #include <signal.h>
+#endif
 
+BEGIN_NS
+
+#if defined(TARGET_OS_LINUX) || defined(TARGET_OS_MACOSX)
 static volatile sig_atomic_t sig_flag = 0;
 static Server* g_server_cache = nullptr;
 
@@ -92,7 +96,7 @@ namespace {
 int App::start(int argc, char** argv)
 {
     auto file_util = FileUtil::getInstance();
-    file_util->addSearchPathPrefix(file_util->getCurrentPath());
+    file_util->addSearchRootPath(file_util->getCurrentPath());
     
     //
     ArgsInfo args_info;
@@ -560,3 +564,5 @@ void App::setupCluster(Setting::const_ptr setting)
     scheduler_list.push_back(sche);
     task_comm->postWorker(std::bind(&AppScheduler::run, sche));
 }
+
+END_NS

@@ -1,10 +1,14 @@
 #ifndef HANDSHAKE_HELPER_H
 #define HANDSHAKE_HELPER_H
 
+#include "fw_env.h"
+
 #include <string>
 
-#include "../socket_buffer.h"
+#include "network/io/socket_buffer.h"
 #include "handshake.h"
+
+BEGIN_NS
 
 namespace client {
 
@@ -19,5 +23,7 @@ public:
 };
 
 };
+
+END_NS
 
 #endif

@@ -1,13 +1,13 @@
 #ifndef ASYNC_SOCKET_INF_H
 #define ASYNC_SOCKET_INF_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <string>
 #include <boost/asio.hpp>
 #include <functional>
 
-#include "socket_buffer.h"
+#include "network/io/socket_buffer.h"
 
 typedef std::function<void(boost::system::error_code)> SocketConnectCallback;
 typedef std::function<void(boost::system::error_code, char*, std::size_t)> SocketReadCallback;

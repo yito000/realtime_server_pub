@@ -3,6 +3,8 @@
 
 #include "demo_battle_cli_glue.h"
 
+USING_NS
+
 void register_demo_battle_cli(RouteMap& route_map)
 {
     route_map.addRoute(10000, glue_input_command__);

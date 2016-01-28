@@ -3,6 +3,8 @@
 
 #include "node_router.h"
 
+BEGIN_NS
+
 class RoundRobinRouter : public NodeRouter
 {
 public:
@@ -13,5 +15,7 @@ public:
 private:
     int last_seq;
 };
+
+END_NS
 
 #endif

@@ -7,6 +7,8 @@
 #include "cluster_node_delegate.h"
 #include "network/websocket/client/handshake_helper.h"
 
+BEGIN_NS
+
 namespace {
     // todo setting
     const int TIMEOUT_MILLIS = 60 * 1000;
@@ -264,3 +266,5 @@ void Cluster::removeActiveNode(long node_id)
         }
     });
 }
+
+END_NS

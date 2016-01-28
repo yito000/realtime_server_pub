@@ -4,6 +4,8 @@
 
 #import <Foundation/Foundation.h>
 
+BEGIN_NS
+
 std::string AppPath::getHomeDirectory()
 {
     NSString* home = NSHomeDirectory();
@@ -17,5 +19,15 @@ std::string AppPath::getResourceDirectory()
     
     return std::string([str UTF8String]);
 }
+
+std::string AppPath::getApplicationSupportDirectory()
+{
+    NSString* str = [NSSearchPathForDirectoriesInDomains(
+        NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
+
+    return std::string([str UTF8String]);
+}
+
+END_NS
 
 #endif

@@ -5,6 +5,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 AppScheduler::AppScheduler() : 
     interval_millis(-1), 
     init(false), end(false)
@@ -63,3 +65,5 @@ void AppScheduler::endScheduler()
 {
     end.exchange(true);
 }
+
+END_NS

@@ -6,6 +6,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 UdpServer::UdpServer(boost::asio::io_service& _ios,
     const AddrType addr_type, short port) :
     ios(_ios)
@@ -48,3 +50,5 @@ void UdpServer::setSendCallback(UdpPacketSendCallback callback)
     send_callback = callback;
     socket->setSendCallback(send_callback);
 }
+
+END_NS

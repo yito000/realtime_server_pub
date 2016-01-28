@@ -1,7 +1,7 @@
 #ifndef COMMON_OBJECT_H
 #define COMMON_OBJECT_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include "actor/actor_manager.h"
 #include "cluster/cluster.h"
@@ -14,6 +14,8 @@
 #ifdef USE_VOLTDB
 #include "db/voltdb/voltdb_io_service.h"
 #endif
+
+BEGIN_NS
 
 class CommonObject
 {
@@ -90,5 +92,7 @@ private:
 
     RedisService::ptr redis_service;
 };
+
+END_NS
 
 #endif

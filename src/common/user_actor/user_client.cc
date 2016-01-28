@@ -6,6 +6,8 @@
 #include "network/websocket/packet.h"
 #include "log/logger.h"
 
+BEGIN_NS
+
 UserClient::UserClient(server::WebsocketContext* s) : 
     session(s),
     first_process(true),
@@ -104,3 +106,5 @@ long UserClient::getKey() const
 {
     return session->getKey();
 }
+
+END_NS

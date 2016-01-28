@@ -1,13 +1,15 @@
 #ifndef UDP_SOCKET_PROXY_H
 #define UDP_SOCKET_PROXY_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <list>
 #include <functional>
 #include <atomic>
 
 #include "network/io/async_udp_socket.h"
+
+BEGIN_NS
 
 class UdpSocketProxy : public SmartPtr<UdpSocketProxy>
 {
@@ -52,5 +54,7 @@ private:
     std::atomic<bool> running;
     bool mode_server;
 };
+
+END_NS
 
 #endif

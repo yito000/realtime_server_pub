@@ -9,6 +9,8 @@
 
 #include "time/time_formatter.h"
 
+BEGIN_NS
+
 namespace {
     std::regex last_modified("Last-Modified", std::regex_constants::icase);
     std::regex expires("Expires", std::regex_constants::icase);
@@ -257,3 +259,5 @@ void HttpHeaderParser::setContentEncoding(HttpResponseHeader& header, const std:
         header.content_encoding = HttpResponseHeader::TYPE_GZIP;
     }
 }
+
+END_NS

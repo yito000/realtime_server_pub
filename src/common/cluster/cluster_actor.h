@@ -6,6 +6,8 @@
 
 #include <atomic>
 
+BEGIN_NS
+
 class ClusterActor : public WsActor
 {
 public:
@@ -41,5 +43,7 @@ private:
     mutable std::atomic<size_t> write_cnt;
     std::string uuid;
 };
+
+END_NS
 
 #endif

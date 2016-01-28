@@ -4,7 +4,7 @@
 #include "battle/packet/battle_packet.h"
 #include "battle/packet/character_input_packet_info.h"
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <string>
 #include <list>

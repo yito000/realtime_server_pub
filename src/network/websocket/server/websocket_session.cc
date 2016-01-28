@@ -15,6 +15,8 @@
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
+BEGIN_NS
+
 namespace {
     // TODO
     auto uuid_gen = boost::uuids::random_generator();
@@ -119,7 +121,7 @@ void WebsocketSession::destroyAsync()
 
 int64_t WebsocketSession::getKey() const
 {
-    return std::hash<int64_t>()(reinterpret_cast<long>(this)) ^
+    return std::hash<int64_t>()(reinterpret_cast<int64_t>(this)) ^
         std::hash<std::string>()(uuid);
 }
 
@@ -311,13 +313,13 @@ HandShakeResponse::ptr WebsocketSession::validateWsHandshakeRequest(
     if (req->method == "GET") {
         //
     } else {
-        THROW_WEBSOCKET_EXCEPTION("invalid http method");
+        throw WebsocketException("invalid http method");
     }
 
     if (req->http_version == "1.1") {
         res->http_version = req->http_version;
     } else {
-        THROW_WEBSOCKET_EXCEPTION("invalid http version");
+        throw WebsocketException("invalid http version");
     }
 
     //
@@ -328,7 +330,7 @@ HandShakeResponse::ptr WebsocketSession::validateWsHandshakeRequest(
     if (u_name == "websocket") {
         res->upgrade = req->upgrade_name;
     } else {
-        THROW_WEBSOCKET_EXCEPTION("invalid upgrade");
+        throw WebsocketException("invalid upgrade");
     }
 
     //
@@ -339,13 +341,13 @@ HandShakeResponse::ptr WebsocketSession::validateWsHandshakeRequest(
     if (c_name == "upgrade") {
         res->connection = req->connection_name;
     } else {
-        THROW_WEBSOCKET_EXCEPTION("invalid connection name");
+        throw WebsocketException("invalid connection name");
     }
 
     if (req->secret_key != "") {
         res->secret_accept = SecretKey::calcResponse(req->secret_key);
     } else {
-        THROW_WEBSOCKET_EXCEPTION("auto error: secret key");
+        throw WebsocketException("auto error: secret key");
     }
 
     auto p_it = req->protocols.begin();
@@ -359,11 +361,11 @@ HandShakeResponse::ptr WebsocketSession::validateWsHandshakeRequest(
     }
 
     if (res->protocol == "") {
-        THROW_WEBSOCKET_EXCEPTION("invalid websocket protocol");
+        throw WebsocketException("invalid websocket protocol");
     }
 
     if (req->ws_version != WS_VERSION) {
-        THROW_WEBSOCKET_EXCEPTION("websocket version is not 13");
+        throw WebsocketException("websocket version is not 13");
     }
 
     res->status_code = 101;
@@ -395,7 +397,7 @@ void WebsocketSession::writeAsync(PacketData::ptr packet_data,
 void WebsocketSession::writeAsyncInternal(PacketData::ptr packet_data,
     SendCallback send_callback)
 {
-    process_write.exchange(true);
+    process_write.store(true);
     
     auto du = boost::posix_time::milliseconds(timeout_millis);
     
@@ -437,7 +439,7 @@ void WebsocketSession::writeAsyncInternal(PacketData::ptr packet_data,
                 writeAsyncInternal(p_info.packet, p_info.callback);
             }
             
-            process_write.exchange(false);
+            process_write.store(false);
         });
 }
 
@@ -557,3 +559,5 @@ bool WebsocketSession::deserializeFramingData(std::vector<unsigned char>& data,
 }
 
 };
+
+END_NS

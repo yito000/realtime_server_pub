@@ -4,7 +4,7 @@
 #include "socket_inf.h"
 #include <boost/asio.hpp>
 
-#include "socket_buffer.h"
+#include "network/io/socket_buffer.h"
 
 class Socket : public SocketInf
 {

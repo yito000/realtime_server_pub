@@ -3,6 +3,8 @@
 #include "log/logger.h"
 #include <chrono>
 
+BEGIN_NS
+
 GlobalRand::ptr GlobalRand::getInstance()
 {
     static GlobalRand::ptr inst = new GlobalRand;
@@ -49,7 +51,4 @@ GlobalRand::GlobalRand()
     rand = new Random(now.time_since_epoch().count());
 }
 
-GlobalRand::~GlobalRand()
-{
-    //
-}
+END_NS

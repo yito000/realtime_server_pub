@@ -1,8 +1,10 @@
-#if defined(TARGET_OS_IOS)
+#if defined(TARGET_OS_APPLE_IOS)
 
 #include "app_path_ios.h"
 
 #import <Foundation/Foundation.h>
+
+BEGIN_NS
 
 std::string AppPath::getHomeDirectory()
 {
@@ -17,5 +19,7 @@ std::string AppPath::getBundleDirectory()
     
     return std::string([str UTF8String]);
 }
+
+END_NS
 
 #endif

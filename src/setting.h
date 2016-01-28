@@ -1,11 +1,13 @@
 #ifndef SETTING_H
 #define SETTING_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <string>
 #include <list>
 #include <map>
+
+BEGIN_NS
 
 struct ClusterNodeSetting : public SmartPtr<ClusterNodeSetting>
 {
@@ -99,5 +101,6 @@ struct Setting : public SmartPtr<Setting>
     }
 };
 
-#endif
+END_NS
 
+#endif

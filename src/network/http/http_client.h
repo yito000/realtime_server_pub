@@ -1,12 +1,14 @@
 #ifndef HTTP_CLIENT_H
 #define HTTP_CLIENT_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include "http_request_params.h"
 #include "http_response_header.h"
 
 #include "network/io/socket.h"
+
+BEGIN_NS
 
 class HttpClient : public SmartPtr<HttpClient>
 {
@@ -21,5 +23,7 @@ public:
 private:
     Socket::ptr socket;
 };
+
+END_NS
 
 #endif

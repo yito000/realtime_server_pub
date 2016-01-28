@@ -1,7 +1,7 @@
 #ifndef BATTLE_INPUT_INFO_H
 #define BATTLE_INPUT_INFO_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <string>
 #include <vector>

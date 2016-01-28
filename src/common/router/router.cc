@@ -1,5 +1,7 @@
 #include "router.h"
 
+BEGIN_NS
+
 Router::Router(RouteMapBase& pr_map) : 
     route_map(pr_map)
 {
@@ -16,3 +18,5 @@ Router::Callback Router::getRoute(int op_code)
     Router::Callback ret;
     return ret;
 }
+
+END_NS

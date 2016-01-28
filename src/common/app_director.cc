@@ -2,6 +2,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 AppDirector::ptr AppDirector::getInstance()
 {
     static AppDirector::ptr inst = new AppDirector;
@@ -95,3 +97,5 @@ AppDirector::AppDirector()
 {
     //
 }
+
+END_NS

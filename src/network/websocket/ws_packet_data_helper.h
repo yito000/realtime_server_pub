@@ -1,8 +1,12 @@
 #ifndef WS_PACKET_DATA_HELPER_H
 #define WS_PACKET_DATA_HELPER_H
 
+#include "fw_env.h"
+
 #include <vector>
 #include "network/websocket/packet.h"
+
+BEGIN_NS
 
 class WsPacketDataHelper
 {
@@ -12,5 +16,7 @@ public:
     
     static std::string buildMaskKey();
 };
+
+END_NS
 
 #endif

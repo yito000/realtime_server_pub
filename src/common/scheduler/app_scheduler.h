@@ -1,12 +1,14 @@
 #ifndef APP_SCHEDULER_H
 #define APP_SCHEDULER_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include "delayed_task.h"
 #include "delayed_task_processor.h"
 
 #include <atomic>
+
+BEGIN_NS
 
 class AppScheduler : public SmartPtr<AppScheduler>
 {
@@ -31,5 +33,7 @@ private:
     bool init;
     std::atomic<bool> end;
 };
+
+END_NS
 
 #endif

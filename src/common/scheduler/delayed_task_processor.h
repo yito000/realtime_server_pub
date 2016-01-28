@@ -1,13 +1,15 @@
 #ifndef DELAYED_TASK_PROCESSOR_H
 #define DELAYED_TASK_PROCESSOR_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 #include "delayed_task.h"
 
 #include <map>
 #include <chrono>
 
 #include <boost/asio.hpp>
+
+BEGIN_NS
 
 class DelayedTaskProcessor : public SmartPtr<DelayedTaskProcessor>
 {
@@ -49,5 +51,7 @@ private:
 
     bool init_flag;
 };
+
+END_NS
 
 #endif

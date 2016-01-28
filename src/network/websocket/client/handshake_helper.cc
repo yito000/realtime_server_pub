@@ -11,6 +11,8 @@
 
 #include "log/logger.h"
 
+BEGIN_NS
+
 namespace {
     std::regex upgrade("Upgrade", std::regex_constants::icase);
     std::regex connection("Connection", std::regex_constants::icase);
@@ -200,3 +202,5 @@ bool setHeaderValue(const std::string& key,
 }
 
 };
+
+END_NS

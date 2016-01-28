@@ -6,7 +6,7 @@
 
 #include <boost/optional.hpp>
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 class KeyValueCacheStorage : public SmartPtr<KeyValueCacheStorage>
 {

@@ -1,6 +1,6 @@
 #ifdef TARGET_PLATFORM_QT
 
-#include "file_util.h"
+#include "file/file_util.h"
 
 #include <QFile>
 #include <QDir>
@@ -10,6 +10,8 @@
 #include <QDataStream>
 
 #include "log/logger.h"
+
+BEGIN_NS
 
 FileUtil::ptr FileUtil::getInstance()
 {
@@ -23,7 +25,7 @@ void AddNewPath()
     //
 }
 
-void FileUtil::addSearchPathPrefix(const std::string& path, int order)
+void FileUtil::addSearchRootPath(const std::string& path, int order)
 {
     boost::mutex::scoped_lock(mutex);
     
@@ -44,7 +46,7 @@ void FileUtil::addSearchPathPrefix(const std::string& path, int order)
         });
 }
 
-void FileUtil::removeSeachPathPrefix(const std::string& path)
+void FileUtil::removeSearchRootPath(const std::string& path)
 {
     boost::mutex::scoped_lock(mutex);
     
@@ -91,6 +93,42 @@ void FileUtil::removeRelativeSearchDirectory(const std::string& dir)
     }
 }
 
+void FileUtil::addWritablePath(const std::string& path, int order)
+{
+    boost::mutex::scoped_lock(mutex);
+    
+    auto it = writable_path_list.begin();
+    for (; it != writable_path_list.end(); ++it) {
+        if (path == (*it)->path) {
+            return;
+        }
+    }
+
+    auto path_info = new PathInfo;
+    path_info->path = path;
+    path_info->order = order;
+
+    writable_path_list.push_back(path_info);
+    writable_path_list.sort([](const FileUtil::PathInfo::ptr& left,
+            const FileUtil::PathInfo::ptr& right) {
+            
+            return left->order < right->order;
+        });
+}
+
+void FileUtil::removeWritablePath(const std::string& path)
+{
+    boost::mutex::scoped_lock(mutex);
+    
+    auto it = writable_path_list.begin();
+    for (; it != writable_path_list.end(); ++it) {
+        if (path == (*it)->path) {
+            writable_path_list.erase(it);
+            return;
+        }
+    }
+}
+
 std::string FileUtil::getCurrentPath()
 {
     return "";
@@ -126,7 +164,7 @@ FileStream::ptr FileUtil::getFileStream(const std::string& filename) const
         return nullptr;
     }
 
-    auto fs = new FileStream(path);
+    FileStream::ptr fs = new FileStream(path);
     fs->open();
 
     if (fs->isOpen()) {
@@ -194,73 +232,46 @@ FilePathList FileUtil::getFileListFromDir(const std::string& dirpath, bool recur
     return std::move(ret);
 }
 
+void FileUtil::getWritablePaths(std::list<std::string>& out_list)
+{
+    for (auto p: writable_path_list) {
+        out_list.push_back(p->path);
+    }
+}
+
 bool FileUtil::writeBinaryToFile(const std::string& filepath, DataBuffer::ptr data_buffer)
 {
-    if (data_buffer) {
-        return writeBinaryToFile(filepath, (const char*)data_buffer->getBuffer(), data_buffer->getSize());
-    } else {
-        return writeBinaryToFile(filepath, nullptr, 0);
-    }
+    FileWriter::ptr file_writer = new FileWriter;
+    
+    return file_writer->writeBinaryToFile(filepath, data_buffer);
 }
 
 bool FileUtil::writeBinaryToFile(const std::string& filepath, const char* buffer, size_t size)
 {
-    QFile f(filepath.c_str());
+    FileWriter::ptr file_writer = new FileWriter;
     
-    f.open(QIODevice::WriteOnly);
-    if (!f.isOpen()) {
-        return false;
-    }
-    
-    QDataStream out(&f);
-    if (buffer && size > 0) {
-        out.writeRawData(buffer, size);
-    }
-    
-    auto write_status = out.status();
-    f.close();
-    
-    if (write_status != QDataStream::WriteFailed) {
-        return true;
-    } else {
-        return false;
-    }
+    return file_writer->writeBinaryToFile(filepath, buffer, size);
 }
 
 bool FileUtil::writeTextToFile(const std::string& filepath, DataBuffer::ptr data_buffer)
 {
-    if (data_buffer) {
-        return writeTextToFile(filepath, (const char*)data_buffer->getBuffer(), data_buffer->getSize());
-    } else {
-        return writeTextToFile(filepath, std::string());
-    }
+    FileWriter::ptr file_writer = new FileWriter;
+    
+    return file_writer->writeTextToFile(filepath, data_buffer);
 }
 
 bool FileUtil::writeTextToFile(const std::string& filepath, const std::string& text)
 {
-    QFile f(filepath.c_str());
+    FileWriter::ptr file_writer = new FileWriter;
     
-    f.open(QIODevice::WriteOnly | QIODevice::Text);
-    if (!f.isOpen()) {
-        return false;
-    }
-    
-    QTextStream out(&f);
-    out << text.c_str();
-    
-    auto write_status = out.status();
-    f.close();
-    
-    if (write_status != QTextStream::WriteFailed) {
-        return true;
-    } else {
-        return false;
-    }
+    return file_writer->writeTextToFile(filepath, text);
 }
 
 bool FileUtil::writeTextToFile(const std::string& filepath, const char* buffer, size_t size)
 {
-    return writeTextToFile(filepath, std::string(buffer, size));
+    FileWriter::ptr file_writer = new FileWriter;
+    
+    return file_writer->writeTextToFile(filepath, buffer, size);
 }
 
 // private member function
@@ -273,5 +284,7 @@ bool FileUtil::isAbsolutePath(const std::string& path) const
 {
     return path.find("/") == 0 || path.find(":/") == 0;
 }
+
+END_NS
 
 #endif

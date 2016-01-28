@@ -1,7 +1,7 @@
 #ifndef HTTP_REQUEST_PARAMS_H
 #define HTTP_REQUEST_PARAMS_H
 
-#include "smart_ptr.hpp"
+#include "fw_env.h"
 
 #include <string>
 #include <map>
@@ -11,6 +11,8 @@
 
 #include "http_response_header.h"
 #include "network/io/socket_buffer.h"
+
+BEGIN_NS
 
 struct HttpRequestParams : public SmartPtr<HttpRequestParams>
 {
@@ -44,5 +46,7 @@ struct HttpRequestParams : public SmartPtr<HttpRequestParams>
         auto_redirect = false;
     }
 };
+
+END_NS
 
 #endif
