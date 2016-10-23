@@ -7,4 +7,3 @@ if test $# -gt 1; then
 else
   $p/build/realtime_server
 fi
-
